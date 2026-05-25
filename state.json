@@ -1,0 +1,12 @@
+{
+  "_comment": "Tracks which phase Luke is currently in. Edit and commit to transition phases. When baby arrives, set current_phase to 'phase2' and fill in baby_birth_date. When Luke is ready for the marathon build, set current_phase to 'phase3' and fill in phase3_start_date.",
+  "current_phase": "phase1",
+  "baby_birth_date": null,
+  "phase3_start_date": null,
+  "_phase_options": [
+    "phase1",
+    "phase2",
+    "phase3",
+    "paused"
+  ]
+}

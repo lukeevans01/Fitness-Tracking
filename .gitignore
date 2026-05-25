@@ -1,0 +1,17 @@
+# Never commit secrets. The Resend key lives in GitHub Actions secrets, not the repo.
+.secrets/
+*.key
+.env
+*.env.local
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/

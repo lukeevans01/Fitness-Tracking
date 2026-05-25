@@ -1,0 +1,194 @@
+{
+  "_comment": "Luke's fitness plan as structured data. Edit this file to change the plan. send_daily.py reads it to build each morning's email. Phase 1 is a 10-day rolling cycle starting on phase1_start_date.",
+
+  "phase1_start_date": "2026-05-25",
+  "phase1_cycle_length_days": 10,
+
+  "phase1_days": [
+    {
+      "day_num": 1,
+      "day_label": "Mon-equivalent",
+      "session_type": "Strength A1 — Lower, squat-focused",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "warm_up": "5-8 min: dynamic mobility, light cardio, hip activation",
+      "exercises": [
+        {"name": "Back Squat",                "sets_reps": "4 × 5",            "weight": "80 kg (RIR 3)",        "rest": "2:30"},
+        {"name": "Bulgarian Split Squat (DB)","sets_reps": "3 × 8 each leg",   "weight": "2 × 16 kg DB",         "rest": "90s"},
+        {"name": "Romanian Deadlift",         "sets_reps": "3 × 8",            "weight": "70 kg",                "rest": "2:00"},
+        {"name": "Walking Lunge (DB)",        "sets_reps": "3 × 10 each leg",  "weight": "2 × 14 kg DB",         "rest": "90s"},
+        {"name": "Standing Calf Raise",       "sets_reps": "4 × 12",           "weight": "Smith machine",        "rest": "60s"},
+        {"name": "Pallof Press",              "sets_reps": "3 × 10 each side", "weight": "Light cable",          "rest": "45s"}
+      ],
+      "short_version": "Drop to 2 sets per exercise. Skip Bulgarian split squats.",
+      "purpose": "First lift of the rolling 10-day template. Squat as main work, RDL as the secondary hinge. Pallof press transfers to single-leg running stance and squash strokes."
+    },
+    {
+      "day_num": 2,
+      "day_label": "Tue-equivalent",
+      "session_type": "Easy run 6-8 km + optional squash",
+      "session_kind": "run",
+      "duration_min": 40,
+      "run_details": {
+        "pace": "5:40-6:00/km",
+        "hr_target": "<150",
+        "duration": "35-45 min",
+        "distance": "6-8 km",
+        "effort": "Conversational"
+      },
+      "extras": "Optional squash in the evening (counts as your tempo session for the week).",
+      "short_version": "20-min walk + mobility, skip squash."
+    },
+    {
+      "day_num": 3,
+      "day_label": "Wed-equivalent",
+      "session_type": "Strength A2 — Upper, push-focused",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "warm_up": "5-8 min: dynamic mobility, light cardio, shoulder activation",
+      "exercises": [
+        {"name": "Barbell Bench Press",       "sets_reps": "4 × 6",            "weight": "65-70 kg (RIR 3)",     "rest": "2:00"},
+        {"name": "Standing Overhead Press",   "sets_reps": "3 × 8",            "weight": "32-35 kg",             "rest": "2:00"},
+        {"name": "Incline DB Press",          "sets_reps": "3 × 10",           "weight": "2 × 22 kg DB",         "rest": "90s"},
+        {"name": "Cable Tricep Pushdown",     "sets_reps": "3 × 12",           "weight": "Moderate",             "rest": "60s"},
+        {"name": "DB Lateral Raise",          "sets_reps": "3 × 12-15",        "weight": "2 × 8-10 kg",          "rest": "60s"},
+        {"name": "DB Hammer Curl",            "sets_reps": "3 × 10",           "weight": "2 × 14 kg",            "rest": "60s"},
+        {"name": "Hanging Leg Raise",         "sets_reps": "3 × 10",           "weight": "Bodyweight",           "rest": "60s"}
+      ],
+      "short_version": "Bench + OHP only, 3 sets each, skip accessories.",
+      "purpose": "Upper push day. Bench is the priority for the 100kg trajectory — focus on form, RIR 3, no grinders. OHP secondary."
+    },
+    {
+      "day_num": 4,
+      "day_label": "Thu-equivalent",
+      "session_type": "Easy run 6-8 km",
+      "session_kind": "run",
+      "duration_min": 40,
+      "run_details": {
+        "pace": "5:40-6:00/km",
+        "hr_target": "<150",
+        "duration": "35-45 min",
+        "distance": "6-8 km",
+        "effort": "Conversational"
+      },
+      "extras": "No squash today. If yesterday's was hard, replace this with a walk.",
+      "short_version": "20-min walk."
+    },
+    {
+      "day_num": 5,
+      "day_label": "Fri-equivalent",
+      "session_type": "Rest / optional mobility",
+      "session_kind": "rest",
+      "duration_min": 20,
+      "details": "Default: rest. Optional 20-min mobility flow: 90/90 hip switches (10/side), couch stretch (60s/side), deep squat hold (60s), cat-cow (10 reps), thoracic rotations (10/side), calf stretch (60s/side).",
+      "short_version": "Full rest is the default."
+    },
+    {
+      "day_num": 6,
+      "day_label": "Sat-equivalent",
+      "session_type": "Easy long run 12-14 km",
+      "session_kind": "run",
+      "duration_min": 75,
+      "run_details": {
+        "pace": "5:30-5:45/km",
+        "hr_target": "150-160",
+        "duration": "65-80 min",
+        "distance": "12-14 km",
+        "effort": "Conversational"
+      },
+      "extras": "Goal: time on feet, not speed. Optional last 2 km at marathon-pace feel (4:50/km) if you're feeling springy — easy to skip the MP segment.",
+      "short_version": "8-10 km easy. Don't push if you're not feeling it."
+    },
+    {
+      "day_num": 7,
+      "day_label": "Sun-equivalent",
+      "session_type": "Rest",
+      "session_kind": "rest",
+      "duration_min": 0,
+      "details": "Walk with partner or dog. Otherwise full rest.",
+      "short_version": "Full rest."
+    },
+    {
+      "day_num": 8,
+      "day_label": "Mon (week 2)",
+      "session_type": "Strength A3 — Full body athletic (lighter)",
+      "session_kind": "strength",
+      "duration_min": 50,
+      "warm_up": "5-8 min: dynamic mobility, light cardio, full-body activation",
+      "exercises": [
+        {"name": "Goblet Squat",              "sets_reps": "3 × 8",            "weight": "24-28 kg DB",          "rest": "90s"},
+        {"name": "Pull-Up",                   "sets_reps": "4 × 6-8",          "weight": "Bodyweight (+5kg if easy)", "rest": "2:00"},
+        {"name": "DB Bench Press",            "sets_reps": "3 × 10",           "weight": "2 × 24-26 kg DB",      "rest": "90s"},
+        {"name": "Single-Leg RDL (DB)",       "sets_reps": "3 × 8 each leg",   "weight": "2 × 12 kg DB",         "rest": "90s"},
+        {"name": "Seated Calf Raise",         "sets_reps": "3 × 15",           "weight": "Moderate",             "rest": "60s"},
+        {"name": "EZ-Bar Curl",               "sets_reps": "3 × 10",           "weight": "20-25 kg",             "rest": "60s"},
+        {"name": "Overhead Tricep Extension", "sets_reps": "3 × 12",           "weight": "Moderate",             "rest": "60s"},
+        {"name": "Cable Woodchopper",         "sets_reps": "3 × 10 each side", "weight": "Light-moderate",       "rest": "45s"}
+      ],
+      "short_version": "Pull-ups + DB bench + single-leg RDL only. 3 sets each.",
+      "purpose": "Lighter full-body session. Pull-ups are the key lift here — strict, controlled. Woodchopper trains rotational core for racket sports."
+    },
+    {
+      "day_num": 9,
+      "day_label": "Tue (week 2)",
+      "session_type": "Easy run 6 km + optional squash",
+      "session_kind": "run",
+      "duration_min": 35,
+      "run_details": {
+        "pace": "5:40-6:00/km",
+        "hr_target": "<150",
+        "duration": "30-35 min",
+        "distance": "6 km",
+        "effort": "Conversational"
+      },
+      "extras": "Optional squash evening.",
+      "short_version": "Walk + squash, or rest."
+    },
+    {
+      "day_num": 10,
+      "day_label": "Wed (week 2)",
+      "session_type": "Strength B1 — Lower, hinge-focused",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "warm_up": "5-8 min: dynamic mobility, light cardio, hip and hamstring activation",
+      "exercises": [
+        {"name": "Romanian Deadlift",         "sets_reps": "4 × 6",            "weight": "80 kg (RIR 3)",        "rest": "2:30"},
+        {"name": "Front Squat",               "sets_reps": "3 × 8",            "weight": "55-60 kg",             "rest": "2:00"},
+        {"name": "Reverse Lunge (Barbell)",   "sets_reps": "3 × 8 each leg",   "weight": "40-50 kg",             "rest": "90s"},
+        {"name": "Hip Thrust",                "sets_reps": "3 × 10",           "weight": "80-90 kg",             "rest": "90s"},
+        {"name": "Standing Calf Raise",       "sets_reps": "4 × 12",           "weight": "Smith machine",        "rest": "60s"},
+        {"name": "Side Plank w/ Reach-Through","sets_reps": "3 × 10 each side", "weight": "Bodyweight",          "rest": "45s"}
+      ],
+      "short_version": "RDL + hip thrust only, 3 sets each. Skip front squats.",
+      "purpose": "Hinge-dominant lower day. RDL is the key lift — directly supports running propulsion. Side plank trains frontal-plane stability for single-leg stance."
+    }
+  ],
+
+  "hard_rules_phase1": [
+    "If labour starts, stop. No 'one last session.'",
+    "Easy means easy — HR <150 on easy runs.",
+    "Sleep is the override: <6h = drop to a walk or skip.",
+    "No PB attempts."
+  ],
+
+  "phase2_menu": {
+    "preamble": "No calendar, no expectations. Open this on a Monday morning and remember: the marathon is months away. Recovery is the work right now.",
+    "grid": [
+      {"time": "15 min", "wrecked": "Skip or 5-min walk in fresh air.", "tired": "10-min walk + 5-min hip mobility.", "decent": "15-min brisk walk OR bodyweight circuit."},
+      {"time": "30 min", "wrecked": "20-min walk + 10-min mobility.", "tired": "20-min walk + bodyweight circuit OR easy bike spin.", "decent": "20-min easy run/walk (after wk 3) OR 25-min light gym."},
+      {"time": "45-60 min", "wrecked": "Skip the workout. Use it for a nap.", "tired": "30-min walk + 15-min full mobility flow.", "decent": "30-40 min easy run (after wk 3) OR full A1/A2 strength at 60% volume."}
+    ],
+    "readiness_for_phase3": [
+      "Can comfortably run 30-40 min continuously at easy pace (5:45-6:00/km), HR <150.",
+      "Can do two strength sessions in a week without lingering soreness.",
+      "Sleep is averaging 5+ hours, even if broken.",
+      "Mentally, you actually want to start training again."
+    ]
+  },
+
+  "phase3": {
+    "_comment": "Phase 3 plan to be written when Luke reaches ~6 weeks postpartum readiness. Will be a 17-week structured marathon build through 22 Nov 2026.",
+    "race_date": "2026-11-22",
+    "weeks": []
+  }
+}
