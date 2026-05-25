@@ -1,11 +1,10 @@
 name: Daily fitness email
 
-# Cron is UTC. We fire at both 03:30 UTC (= 05:30 CEST, summer) and 04:30 UTC
-# (= 05:30 CET, winter). The script checks Amsterdam local time and exits
-# silently if it's not within 30 min of 05:30 local — so DST is handled for free.
+# Cron is UTC. 19:00 Amsterdam = 17:00 UTC (CEST, summer) or 18:00 UTC (CET, winter).
+# Fire both; the script time-gates on Amsterdam local time so DST is handled for free.
 on:
   schedule:
-    - cron: '30 3,4 * * *'
+    - cron: '0 17,18 * * *'
   workflow_dispatch: {} # allow manual runs from the Actions tab for testing
 
 jobs:
@@ -24,6 +23,7 @@ jobs:
       - name: Send daily fitness email
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
           TO_EMAIL: ${{ vars.TO_EMAIL || 'levans092@gmail.com' }}
           FROM_EMAIL: ${{ vars.FROM_EMAIL }}
         run: python3 send_daily.py

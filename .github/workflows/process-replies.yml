@@ -1,0 +1,41 @@
+name: Process feedback replies
+
+# Poll every 15 min during 19:30–05:30 Amsterdam.
+# CEST (UTC+2): 17:30–03:30 UTC. CET (UTC+1): 18:30–04:30 UTC.
+# Union covers 17:30–04:30 UTC — the script time-gates on Amsterdam local time.
+on:
+  schedule:
+    - cron: '*/15 17-23 * * *'
+    - cron: '*/15 0-4 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  poll-and-process:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Poll and process replies
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          TO_EMAIL: levans092@gmail.com
+          FROM_EMAIL: "Luke's Fitness Bot <onboarding@resend.dev>"
+        run: python3 process_replies.py
+
+      - name: Commit changes if any
+        run: |
+          git config user.name "fitness-bot"
+          git config user.email "bot@noreply"
+          git add overrides.json feedback_log.jsonl state.json
+          git diff --cached --quiet || git commit -m "feedback: overrides/state updated ($(date -u +%FT%TZ))"
+          git push

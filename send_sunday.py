@@ -25,6 +25,7 @@ TZ_AMSTERDAM = ZoneInfo("Europe/Amsterdam")
 API_KEY = os.environ.get("RESEND_API_KEY")
 TO_EMAIL = os.environ.get("TO_EMAIL") or "levans092@gmail.com"
 FROM_EMAIL = os.environ.get("FROM_EMAIL") or "Luke's Fitness Bot <onboarding@resend.dev>"
+GMAIL_USER = os.environ.get("GMAIL_USER") or ""
 RESEND_URL = "https://api.resend.com/emails"
 
 CSS_BASE = """font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; color: #222; max-width: 640px; line-height: 1.5;"""
@@ -147,6 +148,8 @@ def send_via_resend(subject: str, html: str, text: str) -> bool:
         "html": html,
         "text": text,
     }
+    if GMAIL_USER:
+        payload["reply_to"] = [GMAIL_USER]
     result = subprocess.run(
         [
             "curl", "-s", "-w", "\nHTTP_STATUS:%{http_code}\n",

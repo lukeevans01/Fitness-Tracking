@@ -27,6 +27,7 @@ TZ_AMSTERDAM = ZoneInfo("Europe/Amsterdam")
 API_KEY = os.environ.get("RESEND_API_KEY")
 TO_EMAIL = os.environ.get("TO_EMAIL") or "levans092@gmail.com"
 FROM_EMAIL = os.environ.get("FROM_EMAIL") or "Luke's Fitness Bot <onboarding@resend.dev>"
+GMAIL_USER = os.environ.get("GMAIL_USER") or ""
 RESEND_URL = "https://api.resend.com/emails"
 
 
@@ -37,17 +38,17 @@ def load_json(path: Path) -> dict:
 
 def check_local_time_window():
     """We may run from multiple UTC cron entries (to cover DST). Only send if
-    Amsterdam local time is within 30 min of 05:30. Manual workflow_dispatch
+    Amsterdam local time is within 30 min of 19:00. Manual workflow_dispatch
     runs bypass the gate so testing is easy."""
     if os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch":
         print("[note] Manual workflow_dispatch — bypassing time gate for test send.")
         return
     now = datetime.now(TZ_AMSTERDAM)
-    target_minutes = 5 * 60 + 30
+    target_minutes = 19 * 60
     now_minutes = now.hour * 60 + now.minute
     diff = abs(now_minutes - target_minutes)
     if diff > 30:
-        print(f"[skip] Amsterdam local time {now.strftime('%H:%M')} is outside 05:30 ±30min window.")
+        print(f"[skip] Amsterdam local time {now.strftime('%H:%M')} is outside 19:00 ±30min window.")
         sys.exit(0)
 
 
@@ -124,7 +125,7 @@ def build_phase1_html(day: dict, tomorrow: dict, day_num: int, today: date, hard
 
     if day["session_kind"] == "strength":
         body = f"""
-<h3 style="color: #1F3A5F; border-bottom: 1px solid #eee; padding-bottom: 4px;">Today's session</h3>
+<h3 style="color: #1F3A5F; border-bottom: 1px solid #eee; padding-bottom: 4px;">Tomorrow's session</h3>
 <p style="margin: 0 0 10px 0;"><em>Warm-up: {day.get('warm_up', '')}. Then:</em></p>
 {html_exercise_table(day['exercises'])}
 <p style="font-size: 13px; color: #555; margin-top: 12px;">RIR 3 = leave 3 reps in the tank on top sets. No grinders.</p>
@@ -138,7 +139,7 @@ def build_phase1_html(day: dict, tomorrow: dict, day_num: int, today: date, hard
     elif day["session_kind"] == "run":
         r = day["run_details"]
         body = f"""
-<h3 style="color: #1F3A5F; border-bottom: 1px solid #eee; padding-bottom: 4px;">Today's session</h3>
+<h3 style="color: #1F3A5F; border-bottom: 1px solid #eee; padding-bottom: 4px;">Tomorrow's session</h3>
 <table style="border-collapse: collapse; font-size: 14px; margin: 8px 0;">
   <tr><td style="padding: 4px 12px 4px 0; color: #555;">Distance</td><td style="padding: 4px 0; font-weight: 500;">{r.get('distance', '')}</td></tr>
   <tr><td style="padding: 4px 12px 4px 0; color: #555;">Duration</td><td style="padding: 4px 0; font-weight: 500;">{r.get('duration', '')}</td></tr>
@@ -152,18 +153,18 @@ def build_phase1_html(day: dict, tomorrow: dict, day_num: int, today: date, hard
         body += html_callout_yellow(day['short_version'])
     else:  # rest
         body = f"""
-<h3 style="color: #1F3A5F; border-bottom: 1px solid #eee; padding-bottom: 4px;">Today: {day['session_type']}</h3>
+<h3 style="color: #1F3A5F; border-bottom: 1px solid #eee; padding-bottom: 4px;">Tomorrow: {day['session_type']}</h3>
 <p>{day.get('details', '')}</p>
 {html_callout_yellow(day['short_version'])}
 """
 
-    # Tomorrow preview
-    tomorrow_date = today + timedelta(days=1)
-    tomorrow_str = tomorrow_date.strftime("%a %d %b")
-    tomorrow_num = tomorrow["day_num"]
+    # Day-after-tomorrow preview
+    day_after_date = today + timedelta(days=1)
+    day_after_str = day_after_date.strftime("%a %d %b")
+    day_after_num = tomorrow["day_num"]
     body += f"""
-<h3 style="color: #1F3A5F; border-bottom: 1px solid #eee; padding-bottom: 4px;">Tomorrow</h3>
-<p><strong>{tomorrow_str} (Day {tomorrow_num}):</strong> {tomorrow['session_type']}.</p>
+<h3 style="color: #1F3A5F; border-bottom: 1px solid #eee; padding-bottom: 4px;">Day after tomorrow</h3>
+<p><strong>{day_after_str} (Day {day_after_num}):</strong> {tomorrow['session_type']}.</p>
 """
 
     body += html_callout_green(hard_rules)
@@ -202,9 +203,9 @@ def build_phase1_text(day: dict, tomorrow: dict, day_num: int, today: date, hard
     lines.append(f"Short version: {day['short_version']}")
     lines.append("")
 
-    tomorrow_date = today + timedelta(days=1)
-    tomorrow_str = tomorrow_date.strftime("%a %d %b")
-    lines.append(f"TOMORROW: {tomorrow_str} (Day {tomorrow['day_num']}) — {tomorrow['session_type']}")
+    day_after_date = today + timedelta(days=1)
+    day_after_str = day_after_date.strftime("%a %d %b")
+    lines.append(f"DAY AFTER TOMORROW: {day_after_str} (Day {tomorrow['day_num']}) — {tomorrow['session_type']}")
     lines.append("")
     lines.append("HARD RULES:")
     for r in hard_rules:
@@ -302,6 +303,8 @@ def send_via_resend(subject: str, html: str, text: str) -> bool:
         "html": html,
         "text": text,
     }
+    if GMAIL_USER:
+        payload["reply_to"] = [GMAIL_USER]
     result = subprocess.run(
         [
             "curl", "-s", "-w", "\nHTTP_STATUS:%{http_code}\n",
@@ -329,22 +332,32 @@ def main():
     phase = state["current_phase"]
 
     today_local = datetime.now(TZ_AMSTERDAM).date()
-    date_str = today_local.strftime("%a %d %b")
+    date_str = today_local.strftime("%a %d %b")  # used by phase2/3
 
     if phase == "phase1":
+        # Email is sent at 19:00 as a preview of tomorrow's session.
+        target_date = today_local + timedelta(days=1)
         start = date.fromisoformat(plan["phase1_start_date"])
-        days_in = (today_local - start).days
+        days_in = (target_date - start).days
         if days_in < 0:
-            sys.exit(f"Today {today_local} is before phase1 start {start}; nothing to send.")
+            sys.exit(f"Target date {target_date} is before phase1 start {start}; nothing to send.")
         cycle = plan["phase1_cycle_length_days"]
         day_num = (days_in % cycle) + 1
-        tomorrow_num = ((days_in + 1) % cycle) + 1
+        day_after_num = ((days_in + 1) % cycle) + 1
         day = next(d for d in plan["phase1_days"] if d["day_num"] == day_num)
-        tomorrow = next(d for d in plan["phase1_days"] if d["day_num"] == tomorrow_num)
+        day_after = next(d for d in plan["phase1_days"] if d["day_num"] == day_after_num)
 
-        subject = f"Fitness plan — {date_str} (Day {day_num} of Phase 1) — {day['session_type']}"
-        html = build_phase1_html(day, tomorrow, day_num, today_local, plan["hard_rules_phase1"])
-        text = build_phase1_text(day, tomorrow, day_num, today_local, plan["hard_rules_phase1"])
+        # Check for a feedback override for target_date
+        overrides_data = load_json(ROOT / "overrides.json")
+        override = overrides_data.get("overrides", {}).get(target_date.isoformat())
+        if override:
+            day = override["session"]
+            print(f"[override] Using feedback override for {target_date.isoformat()}")
+
+        date_str = target_date.strftime("%a %d %b")
+        subject = f"Fitness plan — {date_str} (Day {day_num}) — {day['session_type']}"
+        html = build_phase1_html(day, day_after, day_num, target_date, plan["hard_rules_phase1"])
+        text = build_phase1_text(day, day_after, day_num, target_date, plan["hard_rules_phase1"])
 
     elif phase == "phase2":
         # Send only on Mondays (weekday == 0)
