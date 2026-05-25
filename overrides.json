@@ -1,4 +1,53 @@
 {
   "_comment": "Per-date session overrides from feedback replies. Auto-cleaned of entries older than 7 days on each run.",
-  "overrides": {}
+  "overrides": {
+    "2026-05-26": {
+      "applied_at": "2026-05-25T12:58:14.434388+02:00",
+      "feedback_source": "reply: \"I didn't do anything on monday the 25th of May. Update tuesday the 26th\\nsession with a full body strength one, bear in mind I might have squash in\\nthe evening\\n\\nOn Mon, May 25, 2026 at 12:35\\u202fPM Luke's \"",
+      "session": {
+        "session_type": "Full Body Strength",
+        "session_kind": "strength",
+        "duration_min": 60,
+        "warm_up": "Dynamic warm-up, light cardio, mobility drills (10 min)",
+        "exercises": [
+          {
+            "name": "Back Squat",
+            "sets_reps": "3 sets of 5-8 reps",
+            "weight": "80-90kg (RIR 3)",
+            "rest": "2-3 min"
+          },
+          {
+            "name": "Barbell Bench Press",
+            "sets_reps": "3 sets of 5-8 reps",
+            "weight": "60-70kg (RIR 3)",
+            "rest": "2-3 min"
+          },
+          {
+            "name": "Romanian Deadlift (RDL)",
+            "sets_reps": "3 sets of 6-10 reps",
+            "weight": "75-85kg (RIR 3)",
+            "rest": "2 min"
+          },
+          {
+            "name": "Dumbbell Rows",
+            "sets_reps": "3 sets of 8-12 reps/arm",
+            "weight": "25-35kg/arm (RIR 3)",
+            "rest": "90 sec"
+          },
+          {
+            "name": "Plank",
+            "sets_reps": "3 sets of 30-60 sec hold",
+            "weight": "Bodyweight",
+            "rest": "60 sec"
+          }
+        ],
+        "run_details": null,
+        "details": null,
+        "extras": "Optional squash in the evening. Prioritize recovery if playing squash.",
+        "short_version": "30-min strength: Back Squat (3x5-8), Bench Press (3x5-8), Plank (3x30-60s). Skip squash.",
+        "purpose": "To incorporate a full-body strength session as requested, maintaining strength stimulus while managing fatigue for potential squash.",
+        "coach_note": "Replaced the easy run with a full-body strength session to accommodate your request and missed Monday session."
+      }
+    }
+  }
 }
