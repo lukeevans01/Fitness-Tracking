@@ -6,7 +6,7 @@ import os
 import subprocess
 import sys
 
-_GEMINI_MODEL = os.environ.get("GEMINI_MODEL") or "gemini-2.0-flash"
+_GEMINI_MODEL = os.environ.get("GEMINI_MODEL") or "gemini-2.5-flash"
 GEMINI_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/"
     "{model}:generateContent?key={{key}}"
