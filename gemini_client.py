@@ -6,10 +6,11 @@ import os
 import subprocess
 import sys
 
+_GEMINI_MODEL = os.environ.get("GEMINI_MODEL") or "gemini-2.0-flash"
 GEMINI_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/"
-    "gemini-1.5-flash:generateContent?key={key}"
-)
+    "{model}:generateContent?key={{key}}"
+).format(model=_GEMINI_MODEL)
 
 _COACH_CONTEXT = """\
 You are a strength-and-marathon coach for Luke Evans. Your job is to take his
