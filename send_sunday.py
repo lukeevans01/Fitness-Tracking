@@ -31,7 +31,11 @@ CSS_BASE = """font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvet
 
 
 def check_local_time_window():
-    """Only send if Amsterdam local time is within 30 min of 18:00 on Sunday."""
+    """Only send if Amsterdam local time is within 30 min of 18:00 on Sunday.
+    Manual workflow_dispatch runs bypass the gate for testing."""
+    if os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch":
+        print("[note] Manual workflow_dispatch — bypassing time gate for test send.")
+        return
     now = datetime.now(TZ_AMSTERDAM)
     if now.weekday() != 6:  # 6 = Sunday
         print(f"[skip] Today is {now.strftime('%A')}, not Sunday.")

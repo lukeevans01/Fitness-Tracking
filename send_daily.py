@@ -37,7 +37,11 @@ def load_json(path: Path) -> dict:
 
 def check_local_time_window():
     """We may run from multiple UTC cron entries (to cover DST). Only send if
-    Amsterdam local time is within 30 min of 05:30."""
+    Amsterdam local time is within 30 min of 05:30. Manual workflow_dispatch
+    runs bypass the gate so testing is easy."""
+    if os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch":
+        print("[note] Manual workflow_dispatch — bypassing time gate for test send.")
+        return
     now = datetime.now(TZ_AMSTERDAM)
     target_minutes = 5 * 60 + 30
     now_minutes = now.hour * 60 + now.minute
