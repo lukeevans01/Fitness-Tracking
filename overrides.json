@@ -2,12 +2,12 @@
   "_comment": "Per-date session overrides from feedback replies. Auto-cleaned of entries older than 7 days on each run.",
   "overrides": {
     "2026-05-26": {
-      "applied_at": "2026-05-25T12:58:14.434388+02:00",
-      "feedback_source": "reply: \"I didn't do anything on monday the 25th of May. Update tuesday the 26th\\nsession with a full body strength one, bear in mind I might have squash in\\nthe evening\\n\\nOn Mon, May 25, 2026 at 12:35\\u202fPM Luke's \"",
+      "applied_at": "2026-05-25T13:02:41.008339+02:00",
+      "feedback_source": "reply: \"Add a bicep exercise and another lower exercise, ensure they complete each\\nother and complete a well rounded workout routine\\n\\nOn Mon, May 25, 2026 at 12:58\\u202fPM Luke's Fitness Bot <onboarding@resend.dev\"",
       "session": {
         "session_type": "Full Body Strength",
         "session_kind": "strength",
-        "duration_min": 60,
+        "duration_min": 75,
         "warm_up": "Dynamic warm-up, light cardio, mobility drills (10 min)",
         "exercises": [
           {
@@ -35,6 +35,18 @@
             "rest": "90 sec"
           },
           {
+            "name": "Dumbbell Bicep Curls",
+            "sets_reps": "3 sets of 8-12 reps/arm",
+            "weight": "12-18kg/arm (RIR 3)",
+            "rest": "60-90 sec"
+          },
+          {
+            "name": "Standing Calf Raises",
+            "sets_reps": "3 sets of 10-15 reps",
+            "weight": "20-30kg (RIR 3)",
+            "rest": "60-90 sec"
+          },
+          {
             "name": "Plank",
             "sets_reps": "3 sets of 30-60 sec hold",
             "weight": "Bodyweight",
@@ -44,9 +56,9 @@
         "run_details": null,
         "details": null,
         "extras": "Optional squash in the evening. Prioritize recovery if playing squash.",
-        "short_version": "30-min strength: Back Squat (3x5-8), Bench Press (3x5-8), Plank (3x30-60s). Skip squash.",
+        "short_version": "40-min strength: Back Squat (3x5-8), Bench Press (3x5-8), RDL (3x6-10), Plank (3x30-60s). Skip squash.",
         "purpose": "To incorporate a full-body strength session as requested, maintaining strength stimulus while managing fatigue for potential squash.",
-        "coach_note": "Replaced the easy run with a full-body strength session to accommodate your request and missed Monday session."
+        "coach_note": "Added Dumbbell Bicep Curls and Standing Calf Raises to address your request for a more well-rounded session, which extends the total duration."
       }
     }
   }
