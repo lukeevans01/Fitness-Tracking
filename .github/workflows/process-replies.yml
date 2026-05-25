@@ -1,12 +1,10 @@
 name: Process feedback replies
 
-# Poll every 15 min during 19:30–05:30 Amsterdam.
-# CEST (UTC+2): 17:30–03:30 UTC. CET (UTC+1): 18:30–04:30 UTC.
-# Union covers 17:30–04:30 UTC — the script time-gates on Amsterdam local time.
+# Poll every 30 min, 24/7. No time window — replies are useful any time of day.
+# 30-min interval keeps usage ~1,440 min/month, within the 2,000 min free tier.
 on:
   schedule:
-    - cron: '*/15 17-23 * * *'
-    - cron: '*/15 0-4 * * *'
+    - cron: '*/30 * * * *'
   workflow_dispatch: {}
 
 jobs:

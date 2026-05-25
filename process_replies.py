@@ -433,15 +433,6 @@ def main():
         if not val:
             sys.exit(f"{name} env var not set.")
 
-    # Time gate: only poll during 19:30–05:30 Amsterdam. Bypass on workflow_dispatch.
-    if os.environ.get("GITHUB_EVENT_NAME") != "workflow_dispatch":
-        now = datetime.now(TZ_AMSTERDAM)
-        cur = now.hour * 60 + now.minute
-        in_window = cur >= (19 * 60 + 30) or cur <= (5 * 60 + 30)
-        if not in_window:
-            print(f"[skip] Amsterdam time {now.strftime('%H:%M')} is outside polling window (19:30–05:30).")
-            return
-
     state = _load_json(ROOT / "state.json")
     phase = state.get("current_phase", "phase1")
 
