@@ -38,7 +38,7 @@ Phase becomes `marathon_build` when Phase 3 starts (~2026-08-04).
 Reset each Monday. Gemini uses these to flag overload.
 
 ```
-week_start: 2026-05-25
+week_start: 2026-05-27
 strength_sessions: 0
 run_sessions: 0
 run_km_total: 0.0

@@ -1,0 +1,24 @@
+{
+  "week_label": "27 May \u2013 02 Jun 2026",
+  "week_start": "2026-05-27",
+  "expires": "2026-06-03",
+  "options": {
+    "A": {
+      "label": "Continue as planned",
+      "sessions": "Wed 27 May: Strength A2 \u2014 Upper, push-focused (60 min)\nThu 28 May: Easy run 6-8 km (40 min)\nFri 29 May: Rest / optional mobility (20 min)\nSat 30 May: Easy long run 12-14 km (75 min)\nSun 31 May: Rest (0 min)\nMon 01 Jun: Strength A3 \u2014 Full body athletic (lighter) (50 min)\nTue 02 Jun: Easy run 6 km + optional squash (35 min)",
+      "rationale": "Maintains current training load and structure as scheduled."
+    },
+    "B": {
+      "label": "Conservative Progression",
+      "sessions": "Wed 27 May: Strength A2 \u2014 Upper, push-focused (60 min)\nThu 28 May: Easy run 6-8 km (40 min)\nFri 29 May: Rest / optional mobility (20 min)\nSat 30 May: Easy long run 13-15 km (80 min)\nSun 31 May: Rest (0 min)\nMon 01 Jun: Strength A3 \u2014 Full body athletic (lighter) (50 min)\nTue 02 Jun: Easy run 6 km + optional squash (35 min)",
+      "rationale": "Applies a minimal progression to the long run, given the absence of specific performance data from last week."
+    },
+    "C": {
+      "label": "Recovery Week",
+      "sessions": "Wed 27 May: Rest (0 min)\nThu 28 May: Easy run 5 km (30 min)\nFri 29 May: Rest (0 min)\nSat 30 May: Easy run 8 km (50 min)\nSun 31 May: Rest (0 min)\nMon 01 Jun: Rest (0 min)\nTue 02 Jun: Easy run 5 km + optional squash (30 min)",
+      "rationale": "Provides a reduced training load to prepare for or manage the imminent onset of sleep deprivation following the baby's birth."
+    }
+  },
+  "recommendation": "A",
+  "chosen": null
+}
