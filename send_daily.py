@@ -104,6 +104,20 @@ def html_callout_yellow(text: str) -> str:
 </div>"""
 
 
+def html_food_reminder() -> str:
+    return """
+<div style="border-top: 1px solid #EEE; margin-top: 28px; padding-top: 20px;">
+  <div style="font-size: 15px; font-weight: 600; color: #1F3A5F; margin-bottom: 8px;">Today's food log</div>
+  <p style="font-size: 13px; color: #555; margin: 0 0 12px 0;">Reply with what you ate today — your nutrition coach will flag anything worth adjusting around training.</p>
+  <table style="font-size: 13px; color: #444; border-collapse: collapse; width: 100%;">
+    <tr><td style="padding: 5px 14px 5px 0; color: #888; white-space: nowrap;">Breakfast</td><td style="padding: 5px 0; border-bottom: 1px solid #EEE; width: 100%;"></td></tr>
+    <tr><td style="padding: 5px 14px 5px 0; color: #888; white-space: nowrap;">Lunch</td><td style="padding: 5px 0; border-bottom: 1px solid #EEE;"></td></tr>
+    <tr><td style="padding: 5px 14px 5px 0; color: #888; white-space: nowrap;">Dinner</td><td style="padding: 5px 0; border-bottom: 1px solid #EEE;"></td></tr>
+    <tr><td style="padding: 5px 14px 5px 0; color: #888; white-space: nowrap;">Snacks</td><td style="padding: 5px 0;"></td></tr>
+  </table>
+</div>"""
+
+
 def html_callout_green(rules: list) -> str:
     items = "\n".join(f"    <li>{r}</li>" for r in rules)
     return f"""
@@ -169,6 +183,7 @@ def build_phase1_html(day: dict, tomorrow: dict, day_num: int, today: date, hard
 
     body += html_callout_green(hard_rules)
     body += '<p style="color: #888; font-size: 13px; margin-top: 24px;">Where you are: Phase 1, pre-baby maintenance. Sub-3:25 marathon target for 22 Nov 2026.</p>'
+    body += html_food_reminder()
 
     return f"<!DOCTYPE html><html><body style=\"{CSS_BASE}\">{header}{body}</body></html>"
 
@@ -212,6 +227,15 @@ def build_phase1_text(day: dict, tomorrow: dict, day_num: int, today: date, hard
         lines.append(f"  - {r}")
     lines.append("")
     lines.append("Where you are: Phase 1, pre-baby maintenance. Sub-3:25 marathon target 22 Nov 2026.")
+    lines.append("")
+    lines.append("─" * 70)
+    lines.append("TODAY'S FOOD LOG")
+    lines.append("Reply with what you ate — your nutrition coach will flag anything worth adjusting.")
+    lines.append("")
+    lines.append("  Breakfast:")
+    lines.append("  Lunch:")
+    lines.append("  Dinner:")
+    lines.append("  Snacks:")
 
     return "\n".join(lines)
 
