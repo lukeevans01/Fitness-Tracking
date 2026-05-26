@@ -20,6 +20,21 @@ _KEY_LIFTS = {
 }
 
 
+def _parse_strava_date(value: str) -> date | None:
+    """Parse Strava activity date — tries ISO then the 'May 24, 2026, 5:31:14 AM' export format."""
+    value = value.strip()
+    try:
+        return datetime.strptime(value[:10], "%Y-%m-%d").date()
+    except ValueError:
+        pass
+    for fmt in ("%b %d, %Y, %I:%M:%S %p", "%b %d, %Y"):
+        try:
+            return datetime.strptime(value, fmt).date()
+        except ValueError:
+            continue
+    return None
+
+
 def _parse_duration_seconds(value: str) -> float:
     """Parse 'HH:MM:SS' or raw seconds string to float seconds."""
     value = value.strip()
@@ -57,11 +72,8 @@ def build_stats(days: int = 7) -> dict:
                     if (row.get("Activity Type") or "").strip().lower() not in ("run", "running"):
                         continue
                     date_str = row.get("Activity Date") or row.get("Start Date") or ""
-                    try:
-                        act_date = datetime.strptime(date_str[:10], "%Y-%m-%d").date()
-                    except ValueError:
-                        continue
-                    if act_date < cutoff:
+                    act_date = _parse_strava_date(date_str)
+                    if act_date is None or act_date < cutoff:
                         continue
                     dist = float(row.get("Distance") or 0)
                     run_km_total += dist if dist < 200 else dist / 1000
@@ -113,9 +125,8 @@ def build_summary(days: int = 14) -> str:
                         or row.get("Start Date")
                         or ""
                     )
-                    try:
-                        act_date = datetime.strptime(date_str[:10], "%Y-%m-%d").date()
-                    except ValueError:
+                    act_date = _parse_strava_date(date_str)
+                    if act_date is None:
                         continue
                     if act_date < cutoff:
                         continue
