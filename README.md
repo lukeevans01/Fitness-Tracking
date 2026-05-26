@@ -1,6 +1,6 @@
 # Fitness emails — autonomous daily delivery + feedback loop
 
-A GitHub Actions cron that sends Luke's daily fitness plan email via Resend at **19:00 Amsterdam time every evening** (previewing the next morning's session), without anything on his machine needing to be running. Replies are processed via Gemini AI within ~15 minutes.
+A GitHub Actions cron that sends Luke's daily fitness plan email via Resend at **19:00 Amsterdam time every evening** (previewing the next morning's session), without anything on his machine needing to be running. Replies are processed via Gemini AI within ~30 minutes.
 
 ## What's in here
 
@@ -21,7 +21,7 @@ fitness-emails/
 ├── .github/workflows/
 │   ├── daily-email.yml        # cron: 17:00 + 18:00 UTC every day (19:00 Amsterdam, DST-safe)
 │   ├── sunday-reminder.yml    # cron: 16:00 + 17:00 UTC every Sunday (DST-safe)
-│   └── process-replies.yml    # cron: every 15 min, 17:30–04:30 UTC (19:30–05:30 Amsterdam)
+│   └── process-replies.yml    # cron: every 30 min, 24/7
 └── .gitignore
 ```
 
@@ -94,11 +94,11 @@ In Cowork → Scheduled section → disable both `fitness-daily-email` and `fitn
 
 ## Day-to-day operation
 
-**Nothing. The cron runs itself.** GitHub Actions sends the evening preview at 19:00 Amsterdam time, then polls every 15 minutes for replies until 05:30 the following morning.
+**Nothing. The cron runs itself.** GitHub Actions sends the evening preview at 19:00 Amsterdam time, then polls every 30 minutes 24/7 for replies.
 
 ## Feedback loop — adjusting tomorrow's session
 
-Reply to any daily email from `levans092@gmail.com` in natural language. The bot picks it up within 15 minutes, calls Gemini, and sends a `[Updated]` replacement email.
+Reply to any daily email from `levans092@gmail.com` in natural language. The bot picks it up within 30 minutes, calls Gemini, and sends a `[Updated]` replacement email.
 
 **Special reply commands:**
 
@@ -106,8 +106,8 @@ Reply to any daily email from `levans092@gmail.com` in natural language. The bot
 |---|---|
 | Anything natural | Gemini revises the session; `[Updated]` email arrives |
 | `revert` | Deletes any override, sends back the original template session |
-| `switch to phase 2` / `baby born` | Transitions to Phase 2 (daily emails stop; Monday digest starts) |
-| `switch to phase 3` / `I'm ready` | Transitions to Phase 3 |
+| `survival mode` / `pause training` | Enters survival mode — training paused, daily emails stop |
+| `I'm back` / `resume training` | Exits survival mode — training resumes toward same goal |
 | `pause` | Pauses all emails |
 
 Multiple replies in one evening are fine — each one overwrites the previous override; Gemini sees the prior change as context.
@@ -120,44 +120,17 @@ Multiple replies in one evening are fine — each one overwrites the previous ov
 
 **If Gemini fails:** The bot sends you a plain notice with the error text. Reply again once the issue is resolved, or reply `revert` to stay on the template.
 
-## When baby arrives (Phase 1 → Phase 2)
+## Pausing training (survival mode)
 
-**Option A — email reply (easiest):** Reply to any fitness email with `baby born` or `switch to phase 2`. The bot will update `state.json`, commit it, and confirm by email.
+**Option A — email reply:** Reply to any fitness email with `survival mode` or `pause training`. The bot updates `adaptation_state.md`, commits it, and confirms by email. Daily emails stop.
 
-**Option B — edit directly:** Edit `state.json` on your Mac:
+**Option B — edit directly:** Edit `adaptation_state.md` and set `mode: survival`. Commit and push.
 
-```json
-{
-  "current_phase": "phase2",
-  "baby_birth_date": "2026-05-27",
-  "phase3_start_date": null
-}
-```
-
-Then commit and push:
-
-```bash
-cd "/path/to/fitness-emails"
-git add state.json
-git commit -m "Baby arrived — switch to Phase 2"
-git push
-```
-
-The next evening's run will see `phase2` and stop sending daily session emails. Phase 2 sends a Monday-only weekly digest instead.
+To resume: reply `I'm back` or `resume training`. Training picks up toward the same goal (sub-3:25, San Sebastián).
 
 ## When ready for Phase 3 (marathon build)
 
-Open Cowork, say "I'm ready for Phase 3" — I'll build the week-by-week Phase 3 plan and write it into `plan_template.json` under `phase3.weeks`. Then update `state.json`:
-
-```json
-{
-  "current_phase": "phase3",
-  "baby_birth_date": "2026-05-27",
-  "phase3_start_date": "2026-07-06"
-}
-```
-
-Commit and push. Daily emails resume with Phase 3 sessions looked up by date.
+Open Claude Code, say "build Phase 3" — I'll write the 17-week block into `plan_template.json` under `phase3.weeks`. Then update `adaptation_state.md` to set `phase: marathon_build` and `cycle_start_date` to the start date. Commit and push. Daily emails continue with the Phase 3 week plan.
 
 ## Weekly plan adjustments
 
@@ -192,7 +165,7 @@ Note: the script gates on Amsterdam local time being near 19:00. If you're testi
 ## Cost
 
 - Resend free tier: 3,000 emails/month. You'll use ~30.
-- GitHub Actions free tier: 2,000 minutes/month for private repos. Each run takes ~30 seconds. You'll use ~10 minutes/month.
+- GitHub Actions free tier: 2,000 minutes/month for private repos. Poll runs (30 min intervals, 24/7) use ~1,440 min/month. Headroom: ~560 min/month.
 
 Total: $0/month, indefinitely.
 

@@ -1,15 +1,17 @@
-name: Sunday fitness check-in
+name: Sunday weekly summary
 
-# 18:00 Amsterdam = 16:00 UTC (CEST) or 17:00 UTC (CET). Fire both; script gates on local time.
+# 08:00 Amsterdam = 06:00 UTC (CEST) or 07:00 UTC (CET). Fire both; script gates on local time.
 on:
   schedule:
-    - cron: '0 16,17 * * 0'
+    - cron: '0 6,7 * * 0'
   workflow_dispatch: {}
 
 jobs:
   send-email:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: write
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
@@ -19,10 +21,19 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Send Sunday reminder
+      - name: Send Sunday summary
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           TO_EMAIL: ${{ vars.TO_EMAIL || 'levans092@gmail.com' }}
           FROM_EMAIL: ${{ vars.FROM_EMAIL }}
         run: python3 send_sunday.py
+
+      - name: Commit plan files
+        run: |
+          git config user.name "fitness-bot"
+          git config user.email "bot@noreply"
+          git add plans/pending-choice.json plans/current-week.md adaptation_state.md
+          git diff --cached --quiet || git commit -m "plan: weekly summary + options updated ($(date -u +%FT%TZ))"
+          git push

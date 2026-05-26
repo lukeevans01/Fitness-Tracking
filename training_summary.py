@@ -38,6 +38,62 @@ def _parse_duration_seconds(value: str) -> float:
         return 0.0
 
 
+def build_stats(days: int = 7) -> dict:
+    """Return structured training stats for the last `days` days.
+
+    Keys: run_sessions, run_km_total, strength_sessions.
+    Used to update adaptation_state.md weekly counters.
+    """
+    cutoff = date.today() - timedelta(days=days)
+    run_sessions = 0
+    run_km_total = 0.0
+    strength_sessions = 0
+
+    if STRAVA_CSV.exists():
+        try:
+            with open(STRAVA_CSV, newline="", encoding="utf-8-sig") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    if (row.get("Activity Type") or "").strip().lower() not in ("run", "running"):
+                        continue
+                    date_str = row.get("Activity Date") or row.get("Start Date") or ""
+                    try:
+                        act_date = datetime.strptime(date_str[:10], "%Y-%m-%d").date()
+                    except ValueError:
+                        continue
+                    if act_date < cutoff:
+                        continue
+                    dist = float(row.get("Distance") or 0)
+                    run_km_total += dist if dist < 200 else dist / 1000
+                    run_sessions += 1
+        except Exception:
+            pass
+
+    if STRONG_CSV.exists():
+        seen_dates: set[date] = set()
+        try:
+            with open(STRONG_CSV, newline="", encoding="utf-8-sig") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    date_str = (row.get("Date") or "")[:10]
+                    try:
+                        act_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+                    except ValueError:
+                        continue
+                    if act_date < cutoff or act_date in seen_dates:
+                        continue
+                    seen_dates.add(act_date)
+                    strength_sessions += 1
+        except Exception:
+            pass
+
+    return {
+        "run_sessions": run_sessions,
+        "run_km_total": round(run_km_total, 1),
+        "strength_sessions": strength_sessions,
+    }
+
+
 def build_summary(days: int = 14) -> str:
     cutoff = date.today() - timedelta(days=days)
     lines = []

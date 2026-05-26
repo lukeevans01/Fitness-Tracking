@@ -1,0 +1,31 @@
+---
+schema_version: 1
+last_updated: 2026-05-25
+---
+
+# Race calendar
+
+## Primary goal
+
+| Date | Race | Distance | Target | Status |
+|---|---|---|---|---|
+| 2026-11-22 | San Sebastián marathon | 42.2 km | Sub-3:25 (4:51/km) | Registered |
+
+Current PB: 3:28:58 (Nice-Cannes, Nov 2025). Gap to target: ~4 min.
+
+## Tune-ups (placeholders — to be confirmed)
+
+| Date | Race | Distance | Role |
+|---|---|---|---|
+| TBC (Aug/Sep 2026) | Half-marathon tune-up 1 | 21.1 km | Fitness benchmark, ~8 weeks before goal |
+| TBC (Oct 2026) | Half-marathon tune-up 2 | 21.1 km | Race rehearsal, ~4-5 weeks before goal |
+
+Tune-ups serve two purposes: (1) calibrate marathon-pace feel against recent fitness, (2) practice race-day logistics. Do not race them — run at marathon effort or slightly faster.
+
+## Key dates
+
+| Date | Milestone |
+|---|---|
+| ~2026-08-04 | Target Phase 3 marathon build start (14+ weeks out) |
+| ~2026-10-11 | Begin taper (~6 weeks before race) |
+| 2026-11-22 | Race day |

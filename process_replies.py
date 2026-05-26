@@ -23,7 +23,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-import gemini_client
+import coach_orchestrator
 import training_summary as ts
 from send_daily import (
     CSS_BASE,
@@ -41,13 +41,30 @@ TO_EMAIL = os.environ.get("TO_EMAIL") or "levans092@gmail.com"
 FROM_EMAIL = os.environ.get("FROM_EMAIL") or "Luke's Fitness Bot <onboarding@resend.dev>"
 RESEND_URL = "https://api.resend.com/emails"
 
-# Patterns that trigger a phase transition rather than a Gemini call.
-# Ordered from most specific to least so "phase 3" doesn't match "phase 2" prefix.
-_PHASE_PATTERNS = [
-    (r"\bswitch\s+to\s+phase\s*3\b|\bphase\s*3\b|\bready\s+for\s+phase\s*3\b|\bi.?m\s+ready\b", "phase3"),
-    (r"\bswitch\s+to\s+phase\s*2\b|\bphase\s*2\b|\bbaby\s+born\b|\bbaby\s+arrived\b", "phase2"),
-    (r"\bpause\b|\bpaused\b", "paused"),
-]
+_RE_SURVIVAL_ENTER = re.compile(
+    r"\bsurvival\s+mode\b|\bpause\s+training\b|\bbaby\s+born\b|\bbaby\s+arrived\b",
+    re.IGNORECASE,
+)
+_RE_SURVIVAL_EXIT = re.compile(
+    r"\bi.?m\s+back\b|\bresume\s+training\b",
+    re.IGNORECASE,
+)
+_RE_PAUSE_ALL = re.compile(r"^\s*pause\s*$", re.IGNORECASE)
+_RE_WEEK_CHOICE = re.compile(r"^\s*([ABC])\s*[.!?]?\s*$", re.IGNORECASE)
+
+_MODE_NOTICES = {
+    "survival": (
+        "Survival mode active. Daily emails paused.\n\n"
+        "Reply 'I'm back' or 'resume training' when you're ready to pick up training again."
+    ),
+    "normal": (
+        "Back in training. Daily emails will resume tonight.\n\n"
+        "Training continues toward sub-3:25 at San Sebastián (22 Nov 2026)."
+    ),
+    "paused": (
+        "All emails paused. Edit state.json and set mode to 'normal' to resume."
+    ),
+}
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -77,6 +94,12 @@ def _save_overrides(overrides: dict) -> None:
     )
     with open(ROOT / "overrides.json", "w") as f:
         json.dump(overrides, f, indent=2)
+        f.write("\n")
+
+
+def _save_state(state: dict) -> None:
+    with open(ROOT / "state.json", "w") as f:
+        json.dump(state, f, indent=2)
         f.write("\n")
 
 
@@ -172,6 +195,91 @@ def _get_current_session(target_date: date, plan: dict, overrides: dict) -> tupl
 
 
 # ──────────────────────────────────────────────────────────────────────────
+# Mode management (survival / normal / paused)
+# ──────────────────────────────────────────────────────────────────────────
+
+def _detect_mode_command(text: str) -> str | None:
+    """Return 'survival', 'normal', 'paused', or None."""
+    if _RE_SURVIVAL_ENTER.search(text):
+        return "survival"
+    if _RE_SURVIVAL_EXIT.search(text):
+        return "normal"
+    if _RE_PAUSE_ALL.match(text):
+        return "paused"
+    return None
+
+
+def _apply_mode_change(new_mode: str, state: dict, today_local: date) -> None:
+    prev_mode = state.get("mode", "normal")
+    state["mode"] = new_mode
+    # Keep current_phase in sync so send_daily.py pauses/resumes correctly
+    if new_mode in ("survival", "paused"):
+        state["current_phase"] = "paused"
+    elif new_mode == "normal":
+        state["current_phase"] = "phase1"
+    _save_state(state)
+    _update_adaptation_state_mode(new_mode, prev_mode, today_local)
+    print(f"[mode] {prev_mode} → {new_mode}")
+
+
+def _update_adaptation_state_mode(new_mode: str, prev_mode: str, today_local: date) -> None:
+    path = ROOT / "adaptation_state.md"
+    if not path.exists():
+        return
+    today_iso = today_local.isoformat()
+    content = path.read_text()
+    content = re.sub(r"(?m)^mode: \S+", f"mode: {new_mode}", content)
+    content = re.sub(r"(?m)^last_updated: \S+", f"last_updated: {today_iso}", content)
+    if new_mode == "survival" and prev_mode != "survival":
+        # Replace placeholder row with real entry
+        content = content.replace("| — | — | — |", f"| {today_iso} | — | — |", 1)
+    elif new_mode == "normal" and prev_mode == "survival":
+        # Close the most recent open survival entry
+        content = re.sub(
+            r"(\| \d{4}-\d{2}-\d{2}) \| — \| — \|",
+            rf"\1 | {today_iso} | — |",
+            content,
+            count=1,
+        )
+    path.write_text(content)
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# Week-plan choice (A/B/C from Sunday summary)
+# ──────────────────────────────────────────────────────────────────────────
+
+def _apply_week_choice(letter: str, state: dict, today_local: date) -> str | None:
+    """Record Luke's A/B/C pick. Returns confirmation text, or None if no valid pending choice."""
+    path = ROOT / "plans" / "pending-choice.json"
+    if not path.exists():
+        return None
+    try:
+        with open(path) as f:
+            pending = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return None
+    expires = date.fromisoformat(pending.get("expires", "2000-01-01"))
+    if today_local > expires:
+        return None
+    letter_upper = letter.upper()
+    opt = pending.get("options", {}).get(letter_upper)
+    if not opt:
+        return None
+    state["week_choice"] = opt["sessions"]
+    state["week_choice_label"] = f"Option {letter_upper} — {opt['label']}"
+    _save_state(state)
+    pending["chosen"] = letter_upper
+    with open(path, "w") as f:
+        json.dump(pending, f, indent=2)
+        f.write("\n")
+    return (
+        f"Week plan confirmed: Option {letter_upper} — {opt['label']}\n\n"
+        f"{opt['sessions']}\n\n"
+        f"{opt['rationale']}"
+    )
+
+
+# ──────────────────────────────────────────────────────────────────────────
 # Sending
 # ──────────────────────────────────────────────────────────────────────────
 
@@ -232,8 +340,7 @@ def _build_replacement_email(
     try:
         base_html = build_phase1_html(session, day_after, day_num, target_date, hard_rules)
         base_text = build_phase1_text(session, day_after, day_num, target_date, hard_rules)
-    except Exception as exc:
-        # Fallback: plain-text only if renderer fails (e.g. unexpected session shape)
+    except Exception:
         fallback_body = f"Coach note: {coach_note}\n\nSession: {json.dumps(session, indent=2)}"
         return (
             f"[Updated] Fitness plan — {date_str} — {session.get('session_type', '')}",
@@ -241,7 +348,6 @@ def _build_replacement_email(
             fallback_body,
         )
 
-    # Inject coach note immediately after <body ...>
     body_tag_end = base_html.index(">", base_html.index("<body")) + 1
     full_html = base_html[:body_tag_end] + note_html + base_html[body_tag_end:]
     full_text = note_text + base_text
@@ -254,76 +360,26 @@ def _build_replacement_email(
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# Phase transitions
-# ──────────────────────────────────────────────────────────────────────────
-
-def _detect_phase_transition(text: str) -> str | None:
-    lower = text.lower()
-    for pattern, phase in _PHASE_PATTERNS:
-        if re.search(pattern, lower):
-            return phase
-    return None
-
-
-def _apply_phase_transition(target_phase: str, state: dict, today_local: date) -> None:
-    state["current_phase"] = target_phase
-    if target_phase == "phase2" and not state.get("baby_birth_date"):
-        state["baby_birth_date"] = today_local.isoformat()
-        print(f"[phase] Set baby_birth_date to {today_local.isoformat()}")
-    with open(ROOT / "state.json", "w") as f:
-        json.dump(state, f, indent=2)
-        f.write("\n")
-    print(f"[phase] Transitioned to {target_phase}")
-
-
-# ──────────────────────────────────────────────────────────────────────────
-# Core message handler
+# Core message handler (training feedback only — mode commands handled in main)
 # ──────────────────────────────────────────────────────────────────────────
 
 def _process_message(
     mail: imaplib.IMAP4_SSL,
     msg_id: bytes,
+    msg,
+    reply_text: str,
+    message_id: str,
+    from_addr: str,
     plan: dict,
-    state: dict,
     overrides: dict,
     tomorrow: date,
+    week_context: str = "",
 ) -> None:
-    _, data = mail.fetch(msg_id, "(RFC822)")
-    raw = data[0][1]
-    msg = email_lib.message_from_bytes(raw)
-
-    subject = _decode_header(msg.get("Subject", ""))
-    from_addr = _decode_header(msg.get("From", ""))
-    message_id = msg.get("Message-ID", "")
-    full_body = _get_plain_body(msg)
-    reply_text = _strip_quoted_history(full_body)
-
     print(f"[msg] From: {from_addr}")
-    print(f"[msg] Subject: {subject}")
+    print(f"[msg] Subject: {_decode_header(msg.get('Subject', ''))}")
     print(f"[msg] Body (stripped, first 200): {reply_text[:200]!r}")
 
-    today_local = datetime.now(TZ_AMSTERDAM).date()
     tomorrow_iso = tomorrow.isoformat()
-
-    # ── Phase transition ──────────────────────────────────────────────────
-    target_phase = _detect_phase_transition(reply_text)
-    if target_phase:
-        _apply_phase_transition(target_phase, state, today_local)
-        mail.store(msg_id, "+FLAGS", "\\Seen")
-        _send_plain_notice(
-            f"Phase transition confirmed: {target_phase}",
-            f"Done. Switched to {target_phase}.\n\n"
-            "If this was a mistake, edit state.json directly and push.",
-        )
-        _append_feedback_log({
-            "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
-            "message_id": message_id,
-            "from_address": from_addr,
-            "reply_text": reply_text,
-            "action": f"phase_transition:{target_phase}",
-            "override_applied": False,
-        })
-        return
 
     # ── Revert ───────────────────────────────────────────────────────────
     if re.search(r"\brevert\b", reply_text, re.IGNORECASE):
@@ -339,7 +395,7 @@ def _process_message(
                 f"[Reverted] Fitness plan — {date_str} "
                 f"(Day {day_num}) — {original_session['session_type']}"
             )
-            print(f"[revert] Removed override for {tomorrow_iso}, sent original session.")
+            print(f"[revert] Removed override for {tomorrow_iso}.")
         else:
             subj = f"[Revert] No override active for {tomorrow_iso}"
             html = (
@@ -367,12 +423,15 @@ def _process_message(
     prev_override = overrides.get("overrides", {}).get(tomorrow_iso, {}).get("session")
     training_text = ts.build_summary(days=14)
 
+    domain = coach_orchestrator.infer_domain(current_session.get("session_kind", "strength"))
     try:
-        new_session = gemini_client.generate_session(
+        new_session = coach_orchestrator.generate_session(
+            domain=domain,
             reply_text=reply_text,
             current_session=current_session,
-            recent_training_summary=training_text,
+            training_summary=training_text,
             previous_override=prev_override,
+            week_context=week_context,
         )
     except (ValueError, RuntimeError) as exc:
         error_msg = str(exc)
@@ -393,7 +452,6 @@ def _process_message(
         )
         return
 
-    # Write override
     overrides.setdefault("overrides", {})[tomorrow_iso] = {
         "applied_at": datetime.now(TZ_AMSTERDAM).isoformat(),
         "feedback_source": f"reply: {reply_text[:200]!r}",
@@ -434,19 +492,17 @@ def main():
             sys.exit(f"{name} env var not set.")
 
     state = _load_json(ROOT / "state.json")
-    phase = state.get("current_phase", "phase1")
+    mode = state.get("mode", "normal")
 
-    if phase == "phase2":
-        print("[skip] Phase 2 active — feedback loop disabled. Switching phases via email still works.")
-        # Still check for phase-transition commands even in phase2
-    elif phase == "paused":
-        print("[skip] Phase paused — feedback loop disabled.")
+    if mode == "paused":
+        print("[skip] All emails paused.")
         return
 
     plan = _load_json(ROOT / "plan_template.json")
     overrides = _load_overrides()
 
     today_local = datetime.now(TZ_AMSTERDAM).date()
+    coach_orchestrator.sync_taper_state(today_local)
     tomorrow = today_local + timedelta(days=1)
 
     print(f"[poll] Connecting to imap.gmail.com as {GMAIL_USER} ...")
@@ -457,37 +513,70 @@ def main():
         sys.exit(f"IMAP login failed: {exc}")
 
     mail.select("INBOX")
-    _, data = mail.search(None, f'UNSEEN FROM "levans092@gmail.com"')
+    _, data = mail.search(None, 'UNSEEN FROM "levans092@gmail.com"')
     msg_ids = data[0].split() if data[0] else []
     print(f"[poll] {len(msg_ids)} unread message(s) from levans092@gmail.com")
 
     for msg_id in msg_ids:
-        if phase == "phase2":
-            # In phase2 only handle phase-transition commands; ignore training feedback
-            _, raw_data = mail.fetch(msg_id, "(RFC822)")
-            msg = email_lib.message_from_bytes(raw_data[0][1])
-            reply_text = _strip_quoted_history(_get_plain_body(msg))
-            target_phase = _detect_phase_transition(reply_text)
-            if target_phase:
-                _apply_phase_transition(target_phase, state, today_local)
-                mail.store(msg_id, "+FLAGS", "\\Seen")
-                _send_plain_notice(
-                    f"Phase transition confirmed: {target_phase}",
-                    f"Done. Switched to {target_phase}.",
-                )
-                _append_feedback_log({
-                    "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
-                    "message_id": msg.get("Message-ID", ""),
-                    "from_address": _decode_header(msg.get("From", "")),
-                    "reply_text": reply_text,
-                    "action": f"phase_transition:{target_phase}",
-                    "override_applied": False,
-                })
+        _, raw_data = mail.fetch(msg_id, "(RFC822)")
+        msg = email_lib.message_from_bytes(raw_data[0][1])
+        reply_text = _strip_quoted_history(_get_plain_body(msg))
+        message_id = msg.get("Message-ID", "")
+        from_addr = _decode_header(msg.get("From", ""))
+
+        # Mode commands work regardless of current mode (enter, exit, pause)
+        new_mode = _detect_mode_command(reply_text)
+        if new_mode is not None:
+            _apply_mode_change(new_mode, state, today_local)
+            mode = new_mode
+            mail.store(msg_id, "+FLAGS", "\\Seen")
+            _send_plain_notice(f"Mode update: {new_mode}", _MODE_NOTICES[new_mode])
+            _append_feedback_log({
+                "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+                "message_id": message_id,
+                "from_address": from_addr,
+                "reply_text": reply_text,
+                "action": f"mode_change:{new_mode}",
+                "override_applied": False,
+            })
+            continue
+
+        # A/B/C week-plan choice from Sunday summary
+        m = _RE_WEEK_CHOICE.match(reply_text)
+        if m:
+            letter = m.group(1).upper()
+            confirmation = _apply_week_choice(letter, state, today_local)
+            mail.store(msg_id, "+FLAGS", "\\Seen")
+            if confirmation:
+                _send_plain_notice(f"Week plan: Option {letter}", confirmation)
+                print(f"[choice] Week option {letter} saved.")
             else:
-                mail.store(msg_id, "+FLAGS", "\\Seen")
-                print(f"[skip] Phase 2: ignored non-transition message.")
-        else:
-            _process_message(mail, msg_id, plan, state, overrides, tomorrow)
+                _send_plain_notice(
+                    "Week plan — no pending choice",
+                    "No pending week plan found (or it has expired). "
+                    "Wait for Sunday's summary to choose a plan.",
+                )
+            _append_feedback_log({
+                "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+                "message_id": message_id,
+                "from_address": from_addr,
+                "reply_text": reply_text,
+                "action": f"week_choice:{letter}",
+                "override_applied": False,
+            })
+            continue
+
+        # In survival mode: ignore training feedback
+        if mode == "survival":
+            mail.store(msg_id, "+FLAGS", "\\Seen")
+            print("[skip] Survival mode: ignored training feedback.")
+            continue
+
+        _process_message(
+            mail, msg_id, msg, reply_text, message_id, from_addr,
+            plan, overrides, tomorrow,
+            week_context=state.get("week_choice", ""),
+        )
 
     mail.logout()
 

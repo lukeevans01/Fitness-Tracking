@@ -4,313 +4,246 @@ This document is the complete context for picking up work on Luke Evans's person
 
 **Repo:** https://github.com/lukeevans01/Fitness-Tracking (private)
 
-**Status as of 2026-05-25: fully live.** Daily 19:00 evening emails + feedback loop both running on GitHub Actions cron. No machine needs to be running. Cost: £0/month.
+**Status as of 2026-05-26: fully live.** Daily 19:00 emails, Sunday weekly summaries, and the feedback loop all run on GitHub Actions cron. No machine needs to be running. Cost: £0/month.
 
 ---
 
 ## 1. The goal
 
-The system does three things:
+The system does five things:
 
 1. Sends Luke an email at **19:00 Amsterdam time every evening** with tomorrow's recommended workout — full session details (exercises, sets, reps, weights, rest times for strength; pace, distance, HR targets for runs).
-2. Lets Luke **reply to that email in natural language** ("swap to full body", "I'm wrecked, make it shorter", "make this a run not a lift") to adjust the plan.
-3. Processes the reply via the **Google Gemini API** (free tier), regenerates the session with the feedback baked in, and sends a **replacement email** within ~30 minutes.
+2. Sends a **Sunday 08:00 weekly summary** with a review of last week and three plan options for the coming week (A/B/C), with a recommendation.
+3. Lets Luke **reply with A, B, or C** to lock in the week plan. That choice is stored and passed to Gemini as context when adjusting individual sessions.
+4. Lets Luke **reply to any session email in natural language** to adjust the plan. Gemini revises the session and sends a replacement within ~30 minutes.
+5. Handles **survival mode** — when the baby is born or Luke is otherwise unable to train, one reply pauses all coaching emails. Resume with "I'm back".
 
 Whatever's most recent in `overrides.json` is what Luke does at 06:00 the next morning.
 
-The system runs entirely on free infrastructure: GitHub Actions cron, Resend free tier, Gemini free tier, dedicated free Gmail account.
+---
+
+## 2. Luke's situation
+
+Luke is an amateur marathoner aiming for **sub-3:25 at San Sebastián marathon on 22 November 2026**. His current PB is 3:28:58 (Nice-Cannes, Nov 2025). His first baby was born ~late May 2026.
+
+**Key facts Gemini always gets:**
+- 32 years old, 4+ years strength training, 8 years Strava history
+- Squash Tuesday evenings (treated as intensity — not added on top of run days)
+- Sleep deprivation ongoing from late May 2026
+- Hard rules: sleep <6h → short version or skip; no PBs in training; if Luke says wrecked, believe him
+
+**Critical training insight:** Luke's natural pace drifts into the grey zone — self-described easy runs were 5:30–5:45/km at HR 155–170 in 2025 (86% of km were moderate, 0% truly easy). Sub-3:25 hinges on fixing this. The system specifies easy runs at HR <150 and 5:35–6:00/km, deliberately slower than what feels right.
 
 ---
 
-## 2. Why this exists — Luke's situation
-
-Luke is an amateur marathoner aiming for **sub-3:25 at San Sebastián marathon on 22 November 2026**. His current PB is 3:28:58 (Nice-Cannes, Nov 2025). His first baby was due 25 May 2026. The fitness plan phases around the baby:
-
-- **Phase 1** (pre-birth): pre-baby maintenance. 10-day rolling template.
-- **Phase 2** (birth → ~6 weeks postpartum): no calendar — menu of opportunistic sessions. Daily email pauses to a weekly Monday digest. Feedback loop disabled.
-- **Phase 3** (~6 weeks postpartum → race): 17-week structured marathon build. Not yet written.
-
-Luke trains in the mornings (typically 06:00–11:00). Plays squash Tuesday evenings. Has 4+ years of data in the Strong app and 8 years on Strava — both CSVs are in the workspace.
-
-**Critical training insight from the Phase 0 analysis:** Luke's natural pace drifts into the "grey zone" — his self-described easy runs are 5:30-5:45/km at HR 155-170, which is moderate, not easy. In his 2025 marathon block, 86% of km were moderate and 0% were truly easy. The sub-3:25 target hinges on fixing this. The system specifies easy runs at HR <150 and 5:35-6:00/km pace, deliberately slower than what feels right.
-
----
-
-## 3. Current state of the repo
-
-### 3.1 What is live
-
-Everything is built and verified end-to-end as of 2026-05-25:
-
-- **19:00 evening email** fires daily, previewing tomorrow's Phase 1 session. Reply-To is set to the bot Gmail so replies route automatically.
-- **Feedback loop** polls Gmail every 30 minutes, 24/7. Replies trigger a Gemini call; a `[Updated]` replacement email arrives within ~30 minutes. Multiple replies in one evening are supported — latest override always wins, with the prior override passed to Gemini as context.
-- **Commit-back** — `process-replies.yml` commits `overrides.json`, `feedback_log.jsonl`, and `state.json` back to the repo after each run so state persists across ephemeral Actions runners.
-- **Sunday 18:00 reminder** asks for data refresh and weekly feedback.
-- All three GitHub Actions workflows are live and cron-scheduled.
-
-### 3.2 File structure
+## 3. File structure
 
 ```
-Fitness-Tracking/
-├── send_daily.py              # Builds + sends tomorrow's session preview at 19:00
-├── send_sunday.py             # Sunday 18:00 data-refresh reminder
-├── process_replies.py         # Polls Gmail IMAP, calls Gemini, sends replacement emails
+fitness-emails/
+├── send_daily.py              # Builds + sends tomorrow's session at 19:00
+├── send_sunday.py             # Sunday 08:00 weekly summary with A/B/C options
+├── process_replies.py         # Polls Gmail IMAP, routes all replies, calls Gemini
 ├── gemini_client.py           # Gemini 2.5 Flash REST wrapper (curl via subprocess)
-├── training_summary.py        # Reads data/strava.csv + data/strong.csv → compact text for Gemini
-├── plan_template.json         # All session data: Phase 1 10-day cycle, Phase 2 menu, Phase 3 placeholder
-├── state.json                 # current_phase, baby_birth_date, phase3_start_date
-├── overrides.json             # Per-date session overrides from feedback. Auto-cleaned >7 days old.
+├── coach_orchestrator.py      # Routes sessions to specialists; taper detection
+├── training_summary.py        # strava.csv + strong.csv → compact text for Gemini
+├── plan_template.json         # All session data: 10-day Phase 1 cycle
+├── state.json                 # mode, week_choice, week_choice_label
+├── overrides.json             # Per-date session overrides. Auto-cleaned >7 days.
 ├── feedback_log.jsonl         # Append-only log of all feedback received
+├── adaptation_state.md        # Human-readable state: mode, phase, weekly counters, taper
+├── race_calendar.md           # Race schedule: San Sebastián 22 Nov 2026, tune-ups
+├── muscle_taxonomy.md         # Muscle groups mapped to plan exercises
+├── specialists/
+│   ├── __init__.py
+│   ├── running.py             # Running coaching context for Gemini
+│   ├── lifting.py             # Strength coaching context for Gemini
+│   ├── mobility.py            # Rest/mobility coaching context for Gemini
+│   └── nutrition.py           # Nutrition coaching context for Gemini
 ├── data/
 │   ├── strava.csv             # Luke overwrites weekly (Strava full-history export)
-│   └── strong.csv             # Luke overwrites weekly (Strong export)
-├── .github/workflows/
-│   ├── daily-email.yml        # Cron: 17:00 + 18:00 UTC (= 19:00 Amsterdam, DST-safe)
-│   ├── sunday-reminder.yml    # Cron: 16:00 + 17:00 UTC Sundays
-│   └── process-replies.yml    # Cron: every 30 min, 24/7
-├── README.md
-└── HANDOVER.md
+│   ├── strong.csv             # Luke overwrites weekly (Strong export)
+│   └── food_lookup_cache.json # Open Food Facts cache (auto-populated)
+├── plans/
+│   ├── current-week.md        # Coming week sessions (auto-written each Sunday)
+│   └── pending-choice.json    # A/B/C options from latest Sunday summary
+├── nutrition_log/.gitkeep     # Directory for future nutrition tracking
+├── mobility_log/.gitkeep      # Directory for future mobility tracking
+└── .github/workflows/
+    ├── daily-email.yml        # Cron: 17:00 + 18:00 UTC (= 19:00 Amsterdam, DST-safe)
+    ├── sunday-reminder.yml    # Cron: 06:00 + 07:00 UTC Sundays; commits plan files
+    └── process-replies.yml    # Cron: every 30 min, 24/7; commits state files
 ```
-
-### 3.3 Behaviour and known quirks
-
-**Resend integration via curl, not requests/urllib.** Resend's API sits behind Cloudflare, which blocks Python urllib's default user-agent (HTTP 403 error 1010). All scripts shell out to curl via `subprocess.run`. **Do not** replace this with `requests` or `urllib`. Python is used only to build the JSON payload safely.
-
-**Gemini integration also via curl.** Same pattern for consistency, even though Gemini is not behind Cloudflare.
-
-**Empty env vars treated as missing.** Always use `os.environ.get(KEY) or "default"`, never `os.environ.get(KEY, "default")`. GitHub Actions injects an empty string for unset `${{ vars.X }}` variables; the `or` pattern handles this correctly.
-
-**Time gate on `send_daily.py` (19:00 ±30 min), bypassed on `workflow_dispatch`.** `process_replies.py` has no time gate — it polls 24/7 so replies land any time Luke wants to adjust, including after his morning session.
-
-**DST handling on daily-email and sunday-reminder.** Both fire at two UTC times (CEST and CET equivalent). The local-time gate in the script decides which one actually runs.
-
-**`target_date = today + 1 day` in `send_daily.py`.** The evening email always previews tomorrow's session. The day-after-tomorrow is shown as a preview within that email.
-
-**`process_replies.py` always targets tomorrow.** Replies affect the day after today, regardless of time of day. A reply at 09:00 on Tuesday updates Wednesday's session. This is correct — by the time Luke replies after his morning session, today's session is already done.
-
-**Phase 2 feedback loop.** Phase 2 disables training feedback (no daily sessions to adjust), but phase-transition commands ("switch to phase 3", "I'm ready") still work via email reply.
-
-**Gemini model.** `gemini-1.5-flash` and `gemini-2.0-flash` are both unavailable to new Google AI Studio accounts. The model is `gemini-2.5-flash`. It's configurable via `GEMINI_MODEL` env var (GitHub Actions variable) if it needs changing again without a code deploy.
-
-**Polling cost budget.** 30-min intervals 24/7 = ~1,440 GitHub Actions minutes/month. Free tier is 2,000 min/month for private repos. Current headroom: ~560 min/month.
-
-### 3.4 Secrets and credentials
-
-All set in the GitHub repo (Settings → Secrets and variables → Actions):
-
-| Secret | Purpose |
-|---|---|
-| `RESEND_API_KEY` | Resend email sending API |
-| `GMAIL_USER` | Bot Gmail address (for IMAP polling + Reply-To header) |
-| `GMAIL_APP_PASSWORD` | 16-char App Password for IMAP login |
-| `GEMINI_API_KEY` | Gemini API key from Google AI Studio |
-
-The Resend key is also stored locally at `/Users/luke.evans/Documents/Claude/Projects/Fitness App/.secrets/resend_api_key.txt` (gitignored). Keep in sync if rotated.
 
 ---
 
-## 4. How the feedback loop works
+## 4. How the system works end-to-end
 
-```
-19:00 Amsterdam
-┌─────────────────────┐
-│ daily-email.yml     │  Builds tomorrow's session from plan_template.json
-│ (GitHub Actions)    │  Checks overrides.json first — uses override if present
-└──────────┬──────────┘  Sets Reply-To: bot Gmail
-           │
-           ▼
-   levans092@gmail.com
-           │
-           │ Luke replies in natural language
-           ▼
-   bot Gmail (IMAP)
-           │
-           │ process-replies.yml polls every 30 min, 24/7
-           ▼
-┌─────────────────────────┐
-│ process_replies.py      │
-│ - strips quoted history │
-│ - checks for special    │
-│   commands (revert,     │
-│   phase transitions)    │
-│ - calls Gemini 2.5 Flash│
-│ - validates JSON schema │
-│ - writes overrides.json │
-│ - appends feedback_log  │
-│ - sends [Updated] email │
-│ - commits files back    │
-└─────────────────────────┘
-```
+### 4.1 Evening email (19:00)
 
-**Special reply commands:**
+`daily-email.yml` → `send_daily.py` → builds tomorrow's session from `plan_template.json` (checking `overrides.json` first) → sends via Resend with Reply-To pointing to bot Gmail.
+
+### 4.2 Sunday summary (08:00)
+
+`sunday-reminder.yml` → `send_sunday.py`:
+1. Reads `adaptation_state.md`, skips if mode is survival/paused
+2. Calls `training_summary.build_stats(days=7)` → syncs weekly counters into `adaptation_state.md`
+3. Calls `_compute_standard_week()` → writes `plans/current-week.md`
+4. Calls `coach_orchestrator.generate_weekly_summary()` via Gemini → three week options (A/B/C)
+5. Sends email with option cards, recommended one highlighted
+6. Saves `plans/pending-choice.json` with the full A/B/C options + expiry
+7. Commits `plans/pending-choice.json`, `plans/current-week.md`, `adaptation_state.md` back to repo
+
+### 4.3 Reply handling (every 30 min)
+
+`process-replies.yml` → `process_replies.py`:
 
 | Reply contains | Action |
 |---|---|
-| Natural language feedback | Gemini revises session; `[Updated]` email sent |
-| `revert` | Deletes override for tomorrow; sends original template session |
-| `switch to phase 2` / `baby born` | Transitions to Phase 2, sets `baby_birth_date` to today |
-| `switch to phase 3` / `I'm ready` | Transitions to Phase 3 |
-| `pause` | Sets phase to `paused` |
+| `survival mode` / `baby born` / `baby arrived` / `pause training` | Activates survival mode — daily emails stop |
+| `I'm back` / `resume training` | Exits survival mode — daily emails resume |
+| `pause` (exact) | Pauses all emails |
+| `A`, `B`, or `C` (only) | Saves week plan choice to `state.json` |
+| `revert` | Removes tomorrow's override; restores template session |
+| Natural language feedback | Gemini revises tomorrow's session; `[Updated]` email sent |
 
-Phase transitions commit `state.json` back to the repo automatically.
+The week choice (`state["week_choice"]`) is passed as context to Gemini on every subsequent session adjustment, so it knows the broader plan for the week.
+
+### 4.4 Gemini routing
+
+`coach_orchestrator.generate_session()` routes to the right specialist based on `session_kind`:
+- `strength` → `specialists/lifting.py`
+- `run` → `specialists/running.py`
+- `rest` → `specialists/mobility.py`
+- `nutrition` (explicit, not from session_kind) → `specialists/nutrition.py`
+
+Each specialist provides a `system_context()` string injected into the prompt. Nutrition replies also trigger Open Food Facts lookup for any food words mentioned (`specialists/nutrition_lookup.py`).
+
+### 4.5 Taper detection
+
+`coach_orchestrator` auto-detects when within 28 days of race day (22 Nov 2026). Once active, a prescriptive taper block is injected into every Gemini prompt:
+- No volume increases; cap at 70% of standard
+- Strength: RIR 4, 2–3 sets/compound, skip accessories
+- Running: easy only (HR <150, 5:35–6:00/km); one 15–20 min MP segment/week allowed
+- Race week (≤7 days): easy runs 20–30 min max; no strength; full rest day before race
+
+`sync_taper_state()` updates `adaptation_state.md` taper fields and is called at the start of both `send_sunday.py` and `process_replies.py`.
 
 ---
 
-## 5. Decisions made
+## 5. Key code patterns
 
-| Decision | What was implemented | Why |
+**Resend + Gemini via curl, not requests/urllib.** Cloudflare blocks Python urllib's user-agent (HTTP 403). All HTTP is via `subprocess.run(["curl", ...])`. Do not replace with `requests`.
+
+**Empty env vars treated as missing.** Always use `os.environ.get(KEY) or "default"`, never `os.environ.get(KEY, "default")`. GitHub Actions injects `""` for unset variables; `or` handles this.
+
+**`target_date = today + 1`** in both `send_daily.py` and `process_replies.py`. Evening email previews tomorrow. Replies always adjust the day after today.
+
+**Multiple replies chain.** Each Gemini call receives the prior override as `previous_override`. Latest override always wins.
+
+**Gemini model.** `gemini-2.5-flash` via Google AI Studio free tier. Override via `GEMINI_MODEL` GitHub Actions variable (no code deploy needed).
+
+**Python f-strings <3.12.** GitHub Actions uses Python 3.11. Backslashes inside f-string expressions are a syntax error — extract to variables first.
+
+---
+
+## 6. Survival mode
+
+Replaces the old Phase 2/Phase 3 distinction. Much simpler.
+
+**Enter:** Reply with `baby born`, `survival mode`, `baby arrived`, or `pause training`. Or edit `state.json` directly.
+
+**Effect:** `state["mode"]` → `"survival"`, `current_phase` → `"paused"`. Daily emails stop. Weekly Sunday summary continues (so Luke stays aware of the plan). Survival mode log entry written to `adaptation_state.md`.
+
+**Exit:** Reply with `I'm back` or `resume training`. Training picks up immediately from the Phase 1 10-day cycle. Goal and race date are unchanged.
+
+**Pause everything:** Reply with exactly `pause`. Both daily and Sunday emails stop.
+
+---
+
+## 7. Training data
+
+`training_summary.py` reads `data/strava.csv` and `data/strong.csv`:
+- `build_summary(days=14)` → ~800-token text block for Gemini (runs + key lifts)
+- `build_stats(days=7)` → `{run_sessions, run_km_total, strength_sessions}` for adaptation_state.md
+
+Luke overwrites these weekly per the Sunday prompt: export from Strava (full history → strava.csv) and Strong (strong.csv), commit and push.
+
+---
+
+## 8. state.json fields
+
+| Field | Purpose |
+|---|---|
+| `mode` | `normal` / `survival` / `paused` |
+| `current_phase` | `phase1` / `paused` — kept in sync for `send_daily.py` |
+| `baby_birth_date` | Set when survival mode entered |
+| `week_choice` | Sessions text from Luke's A/B/C pick (passed to Gemini as week context) |
+| `week_choice_label` | Human label e.g. "Option B — Recovery focus" |
+
+---
+
+## 9. Secrets and variables
+
+| Secret | Purpose |
+|---|---|
+| `RESEND_API_KEY` | Resend email API |
+| `GMAIL_USER` | Bot Gmail address (IMAP + Reply-To) |
+| `GMAIL_APP_PASSWORD` | 16-char App Password |
+| `GEMINI_API_KEY` | Google AI Studio key |
+
+| Variable | Default | Purpose |
 |---|---|---|
-| Inbound email | Dedicated Gmail + IMAP polling | Free, no domain needed |
-| LLM | Gemini 2.5 Flash via Google AI Studio | Free tier, capable enough; 1.5 and 2.0 Flash unavailable for new accounts |
-| Generation model | Hybrid — template default, LLM only on feedback | Predictable plan + minimal LLM cost |
-| Multiple replies | Latest override always wins; prior override passed to Gemini as context | Lets Luke refine iteratively |
-| Replacement email | Includes `coach_note` from Gemini at top | Essential UX — Luke sees what changed and why |
-| Revert | Reply `revert` deletes override and sends original | Simple escape hatch |
-| Polling window | 24/7 at 30-min intervals (no time gate) | Luke may reply after morning session to adjust the next day |
-| Polling interval | 30 min (not 15 min) | 15 min × 24h exceeds GitHub free-tier minute budget |
-| Adjustment scope | Just that day (no auto-rebalance of week) | Simplest mental model |
-| Override TTL | Auto-clean entries older than 7 days | Prevents stale data accumulation |
-| Phase 2 feedback | Disabled for training; phase transitions still work | No daily sessions to adjust in Phase 2 |
-| Phase 3 feedback | Same architecture as Phase 1 | Full feedback loop when marathon build is active |
-| Failure mode | Log error, skip replacement, send plain notice to Luke | Don't silently fail; let Luke decide whether to retry |
-| Outbound from | `Luke's Fitness Bot <onboarding@resend.dev>` | Already works; domain verification is future work |
-| Reply-To header | Set to bot Gmail on all outbound emails | Replies route automatically |
+| `TO_EMAIL` | `levans092@gmail.com` | Recipient |
+| `FROM_EMAIL` | `Luke's Fitness Bot <onboarding@resend.dev>` | Sender display name |
+| `GEMINI_MODEL` | `gemini-2.5-flash` | Override without code deploy |
 
 ---
 
-## 6. Phase transitions
+## 10. Workflow commit strategy
 
-### Phase 1 → Phase 2 (when baby arrives)
+| Workflow | Files committed |
+|---|---|
+| `sunday-reminder.yml` | `plans/pending-choice.json`, `plans/current-week.md`, `adaptation_state.md` |
+| `process-replies.yml` | `overrides.json`, `feedback_log.jsonl`, `state.json`, `adaptation_state.md`, `plans/pending-choice.json` |
 
-**Option A — email reply:** Reply to any fitness email with `baby born` or `switch to phase 2`. The bot sets `baby_birth_date` to today, commits `state.json`, and confirms by email.
-
-**Option B — direct edit:** Edit `state.json`, commit, push.
-
-```json
-{
-  "current_phase": "phase2",
-  "baby_birth_date": "2026-05-27",
-  "phase3_start_date": null
-}
-```
-
-Effect: daily emails stop. Monday-only weekly digest begins.
-
-### Phase 2 → Phase 3 (when ready for marathon build)
-
-**Option A — email reply:** Reply with `I'm ready` or `switch to phase 3`.
-
-**Option B — direct edit:** Set `current_phase` to `phase3` and `phase3_start_date` to the start date. Then open Cowork and say "build Phase 3" — Claude will write the 17-week block into `plan_template.json["phase3"]["weeks"]`.
-
-Phase 3 needs ~14 weeks minimum before race day (22 Nov 2026). Target start: ~4 Aug 2026.
+Always `git pull --rebase` before pushing manual fixes — the bot commits frequently.
 
 ---
 
-## 7. Training data for Gemini
+## 11. Quick reference — Phase 1 10-day cycle (start: 2026-05-25)
 
-`training_summary.py` reads `data/strava.csv` and `data/strong.csv` and produces a compact ~800-token summary of the last 14 days. Gemini receives this as context when generating overrides.
+| Day | Session | Kind | Duration |
+|---|---|---|---|
+| 1 | Strength A1 — Lower, squat-focused | strength | 60 min |
+| 2 | Easy run 6–8 km + optional squash | run | 40 min |
+| 3 | Strength A2 — Upper, push-focused | strength | 60 min |
+| 4 | Easy run 6–8 km | run | 40 min |
+| 5 | Rest / optional mobility | rest | 20 min |
+| 6 | Easy long run 12–14 km | run | 75 min |
+| 7 | Rest | rest | — |
+| 8 | Strength A3 — Full body athletic, lighter | strength | 50 min |
+| 9 | Easy run 6 km + optional squash | run | 35 min |
+| 10 | Strength B1 — Lower, hinge-focused | strength | 60 min |
 
-Luke overwrites these files weekly per the Sunday reminder:
-1. Export full history from Strava → save as `data/strava.csv`
-2. Export from Strong → save as `data/strong.csv`
-3. Commit and push
-
-If the files are absent, `training_summary.py` returns a graceful "no data available" message and Gemini still works — it just has no recent training context.
-
----
-
-## 8. The Gemini prompt
-
-Full prompt is in `gemini_client.py` (`_COACH_CONTEXT` + `_SESSION_SCHEMA`). Key points:
-
-- Coach persona with Luke's full profile, benchmarks, marathon target
-- Hard training principles baked in (80/20 polarised, HR <150 for easy runs, RIR 3, no PBs)
-- Current session JSON + optional prior override + 14-day training summary + Luke's reply
-- `responseMimeType: application/json` forces structured output
-- Response validated against required keys before applying
-- If feedback is unclear or unsafe, Gemini returns the original session unchanged with explanation in `coach_note`
-
-Tone instruction (direct, no motivational fluff) is in the prompt.
+**Pace zones (sub-3:25):**
+- Easy/recovery: 5:35–6:00/km, HR <150
+- Long run: 5:25–5:45/km, HR 150–160
+- Marathon pace: 4:51/km, HR 165–170
+- Threshold: 4:30–4:40/km, HR 172–178
+- VO2/5k: 4:00–4:15/km, HR 180+
 
 ---
 
-## 9. Testing — what was verified
+## 12. Gotchas
 
-End-to-end test completed 2026-05-25:
-
-1. ✅ `daily-email.yml` manual trigger → email arrived at `levans092@gmail.com` with tomorrow's session, Reply-To set to bot Gmail
-2. ✅ Reply sent → `process-replies.yml` manual trigger → Gemini called → `[Updated]` replacement email arrived
-3. ✅ Second reply to `[Updated]` email → override refined again (multiple-reply chaining works)
-4. ✅ `overrides.json` committed back to repo by `fitness-bot`
-5. ✅ Cron live for all three workflows
-
----
-
-## 10. Setup checklist — all complete
-
-- [x] Private GitHub repo at `lukeevans01/Fitness-Tracking`
-- [x] `RESEND_API_KEY` secret added
-- [x] Test workflow verified email delivery to `levans092@gmail.com`
-- [x] Cowork scheduled tasks disabled (no duplicate sends)
-- [x] Dedicated Gmail bot account created with 2FA + App Password
-- [x] Gemini API key created at aistudio.google.com
-- [x] `GMAIL_USER`, `GMAIL_APP_PASSWORD`, `GEMINI_API_KEY` secrets added
-- [x] Section 7 implemented and pushed
-- [x] End-to-end test passed
-- [x] Cron running
+- **Cloudflare + Resend.** Always use curl, never Python HTTP libs.
+- **Empty env vars.** Use `os.environ.get(KEY) or "default"` not `get(KEY, "default")`.
+- **Backslashes in f-strings.** Python 3.11 — extract to variable first.
+- **Taper window.** Starts 28 days before race (25 Oct 2026). Prompt caps are prescriptive, not advisory.
+- **A/B/C reply detection.** `_RE_WEEK_CHOICE` matches exactly one letter, optional punctuation, nothing else. A reply of just "A sounds good" does NOT match — it's treated as natural language feedback.
+- **Week choice expiry.** `plans/pending-choice.json` has an `expires` field (7 days after week_start). Stale picks are ignored.
+- **Race day:** 22 Nov 2026. Phase 3 (marathon build) should start ~4 Aug 2026 (14 weeks out).
 
 ---
 
-## 11. Quick reference — Luke's plan structure
-
-**Phase 1 rolling 10-day cycle** (start: 2026-05-25):
-- Day 1: Strength A1 (Lower, squat-focused, 60 min)
-- Day 2: Easy run 6-8 km + optional squash
-- Day 3: Strength A2 (Upper, push-focused, 60 min)
-- Day 4: Easy run 6-8 km
-- Day 5: Rest / optional mobility
-- Day 6: Easy long run 12-14 km
-- Day 7: Rest
-- Day 8: Strength A3 (Full body athletic, 50 min, lighter)
-- Day 9: Easy run 6 km + optional squash
-- Day 10: Strength B1 (Lower, hinge-focused, 60 min)
-
-**Hard rules (every Phase 1 email):**
-- Easy means easy — HR <150 on easy runs.
-- Sleep is the override: <6h = drop to a walk or skip.
-- No PB attempts.
-- If labour starts, stop.
-
-**Pace targets (sub-3:25 marathon):**
-- Easy/recovery: 5:35-6:00/km, HR <150
-- Long run base: 5:25-5:45/km, HR 150-160
-- Marathon pace: 4:51/km, HR 165-170
-- Threshold: 4:30-4:40/km, HR 172-178
-- 5k/VO2 intervals: 4:00-4:15/km, HR 180+
-
----
-
-## 12. Tone for emails
-
-Luke prefers direct, concise, no motivational fluff. Baked into the Gemini system prompt:
-
-> Output tone: direct and concise. No "you've got this!" / "let's crush it!" /
-> motivational language. Treat Luke as a competent adult who has been training
-> for 8 years. Explain *why* in one sentence. Move on.
-
----
-
-## 13. Code gotchas
-
-- **Cloudflare blocks Python urllib's user-agent.** Use curl for all HTTP. Applies to Resend; Gemini is fine but use curl anyway for consistency.
-- **`os.environ.get(KEY, default)` returns `""` not `default` when var is set to empty string.** GitHub Actions sets `${{ vars.X }}` as `""` when the variable doesn't exist. Always use `os.environ.get(KEY) or "default"`.
-- **Python f-strings <3.12 reject backslashes inside expressions.** GitHub Actions uses Python 3.11. Extract variables before the f-string.
-- **Time gate on `send_daily.py` must allow manual bypass.** `GITHUB_EVENT_NAME == "workflow_dispatch"` skips the gate. Don't remove this.
-- **GitHub Actions cron has 5-15 min drift.** The ±30 min gate on `send_daily.py` accommodates this.
-- **DST handling:** daily-email and sunday-reminder fire at two UTC times; the local-time gate decides which one runs. Don't encode DST in the cron.
-- **Gemini model deprecation.** `gemini-1.5-flash` and `gemini-2.0-flash` are unavailable to new accounts. Current model: `gemini-2.5-flash`. Override via `GEMINI_MODEL` GitHub Actions variable without a code deploy.
-- **process-replies.yml commits back.** The workflow commits `overrides.json`, `feedback_log.jsonl`, and `state.json` after each run. This means the remote can be ahead of local when pushing fixes. Always `git pull --rebase` before pushing.
-
----
-
-End of handover. The repo is ground truth. If this doc conflicts with what's actually in the repo, trust the repo and update this doc.
+End of handover. The repo is ground truth. If this doc conflicts with the code, trust the code and update this doc.

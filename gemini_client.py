@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Thin wrapper around the Gemini 1.5 Flash REST API for session generation."""
+"""Thin wrapper around the Gemini REST API for session generation."""
 
 import json
 import os
@@ -60,21 +60,66 @@ _REQUIRED_KEYS = {"session_type", "session_kind", "duration_min", "short_version
 _VALID_KINDS = {"strength", "run", "rest"}
 
 
+def call_gemini(prompt: str) -> str:
+    """Send a prompt to Gemini and return the response text.
+
+    Raises RuntimeError on HTTP error or missing API key.
+    Raises ValueError on unexpected response structure.
+    """
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY env var not set.")
+
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {"responseMimeType": "application/json", "temperature": 0.4},
+    }
+    url = GEMINI_URL.format(key=api_key)
+    result = subprocess.run(
+        [
+            "curl", "-s", "-w", "\nHTTP_STATUS:%{http_code}\n",
+            "-X", "POST", url,
+            "-H", "Content-Type: application/json",
+            "--data-binary", json.dumps(payload),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    if result.stderr:
+        print("GEMINI STDERR:", result.stderr, file=sys.stderr)
+
+    output = result.stdout
+    if "HTTP_STATUS:200" not in output:
+        status = next((ln for ln in output.splitlines() if ln.startswith("HTTP_STATUS:")), "unknown")
+        raise RuntimeError(f"Gemini API returned {status}.\nResponse body: {output[:500]}")
+
+    body = output.rsplit("\nHTTP_STATUS:", 1)[0].strip()
+
+    try:
+        response = json.loads(body)
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Gemini outer response not valid JSON: {exc}\nBody: {body[:500]}") from exc
+
+    try:
+        return response["candidates"][0]["content"]["parts"][0]["text"]
+    except (KeyError, IndexError) as exc:
+        raise ValueError(
+            f"Unexpected Gemini response structure: {exc}\n"
+            f"Response: {json.dumps(response)[:500]}"
+        ) from exc
+
+
 def generate_session(
     reply_text: str,
     current_session: dict,
     recent_training_summary: str,
     previous_override: dict | None = None,
 ) -> dict:
-    """Call Gemini 1.5 Flash and return a revised session dict.
+    """Call Gemini and return a revised session dict.
 
     Raises ValueError if the response is unparseable or missing required keys.
     Raises RuntimeError on HTTP error or missing API key.
     """
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        raise RuntimeError("GEMINI_API_KEY env var not set.")
-
     prev_section = ""
     if previous_override:
         prev_section = (
@@ -98,45 +143,7 @@ def generate_session(
         ),
     ])
 
-    payload = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"responseMimeType": "application/json", "temperature": 0.4},
-    }
-
-    url = GEMINI_URL.format(key=api_key)
-    result = subprocess.run(
-        [
-            "curl", "-s", "-w", "\nHTTP_STATUS:%{http_code}\n",
-            "-X", "POST", url,
-            "-H", "Content-Type: application/json",
-            "--data-binary", json.dumps(payload),
-        ],
-        capture_output=True,
-        text=True,
-    )
-
-    if result.stderr:
-        print("GEMINI STDERR:", result.stderr, file=sys.stderr)
-
-    output = result.stdout
-    if "HTTP_STATUS:200" not in output:
-        status = next((ln for ln in output.splitlines() if ln.startswith("HTTP_STATUS:")), "unknown")
-        raise RuntimeError(f"Gemini API returned {status}.\nResponse body: {output[:500]}")
-
-    body = output.rsplit("\nHTTP_STATUS:", 1)[0].strip()
-
-    try:
-        response = json.loads(body)
-    except json.JSONDecodeError as exc:
-        raise ValueError(f"Gemini outer response not valid JSON: {exc}\nBody: {body[:500]}") from exc
-
-    try:
-        session_text = response["candidates"][0]["content"]["parts"][0]["text"]
-    except (KeyError, IndexError) as exc:
-        raise ValueError(
-            f"Unexpected Gemini response structure: {exc}\n"
-            f"Response: {json.dumps(response)[:500]}"
-        ) from exc
+    session_text = call_gemini(prompt)
 
     try:
         session = json.loads(session_text)
