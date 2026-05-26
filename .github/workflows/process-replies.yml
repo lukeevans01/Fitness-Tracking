@@ -34,6 +34,7 @@ jobs:
         run: |
           git config user.name "fitness-bot"
           git config user.email "bot@noreply"
-          git add overrides.json feedback_log.jsonl state.json adaptation_state.md plans/pending-choice.json
+          git add overrides.json feedback_log.jsonl state.json adaptation_state.md
+          git add plans/pending-choice.json 2>/dev/null || true
           git diff --cached --quiet || git commit -m "feedback: overrides/state updated ($(date -u +%FT%TZ))"
           git push

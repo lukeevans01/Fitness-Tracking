@@ -5,6 +5,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 
 _GEMINI_MODEL = os.environ.get("GEMINI_MODEL") or "gemini-2.5-flash"
 GEMINI_URL = (
@@ -60,10 +61,11 @@ _REQUIRED_KEYS = {"session_type", "session_kind", "duration_min", "short_version
 _VALID_KINDS = {"strength", "run", "rest"}
 
 
-def call_gemini(prompt: str) -> str:
+def call_gemini(prompt: str, max_retries: int = 3, retry_delay: int = 15) -> str:
     """Send a prompt to Gemini and return the response text.
 
-    Raises RuntimeError on HTTP error or missing API key.
+    Retries up to max_retries times on 503 (high demand) with retry_delay seconds between attempts.
+    Raises RuntimeError on persistent HTTP error or missing API key.
     Raises ValueError on unexpected response structure.
     """
     api_key = os.environ.get("GEMINI_API_KEY")
@@ -75,23 +77,34 @@ def call_gemini(prompt: str) -> str:
         "generationConfig": {"responseMimeType": "application/json", "temperature": 0.4},
     }
     url = GEMINI_URL.format(key=api_key)
-    result = subprocess.run(
-        [
-            "curl", "-s", "-w", "\nHTTP_STATUS:%{http_code}\n",
-            "-X", "POST", url,
-            "-H", "Content-Type: application/json",
-            "--data-binary", json.dumps(payload),
-        ],
-        capture_output=True,
-        text=True,
-    )
-    if result.stderr:
-        print("GEMINI STDERR:", result.stderr, file=sys.stderr)
 
-    output = result.stdout
-    if "HTTP_STATUS:200" not in output:
-        status = next((ln for ln in output.splitlines() if ln.startswith("HTTP_STATUS:")), "unknown")
-        raise RuntimeError(f"Gemini API returned {status}.\nResponse body: {output[:500]}")
+    last_error = ""
+    for attempt in range(1, max_retries + 1):
+        result = subprocess.run(
+            [
+                "curl", "-s", "-w", "\nHTTP_STATUS:%{http_code}\n",
+                "-X", "POST", url,
+                "-H", "Content-Type: application/json",
+                "--data-binary", json.dumps(payload),
+            ],
+            capture_output=True,
+            text=True,
+        )
+        if result.stderr:
+            print("GEMINI STDERR:", result.stderr, file=sys.stderr)
+
+        output = result.stdout
+        status_line = next((ln for ln in output.splitlines() if ln.startswith("HTTP_STATUS:")), "unknown")
+
+        if "HTTP_STATUS:200" in output:
+            break
+
+        last_error = f"Gemini API returned {status_line}.\nResponse body: {output[:500]}"
+        if "HTTP_STATUS:503" in output and attempt < max_retries:
+            print(f"[gemini] 503 on attempt {attempt}/{max_retries} — retrying in {retry_delay}s...")
+            time.sleep(retry_delay)
+        else:
+            raise RuntimeError(last_error)
 
     body = output.rsplit("\nHTTP_STATUS:", 1)[0].strip()
 
