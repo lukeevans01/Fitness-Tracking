@@ -3,5 +3,7 @@
   "mode": "normal",
   "current_phase": "phase1",
   "baby_birth_date": null,
-  "phase3_start_date": null
+  "phase3_start_date": null,
+  "week_choice": "Wed 27 May: Strength A2 \u2014 Upper, push-focused (60 min)\nThu 28 May: Easy run 6-8 km (40 min)\nFri 29 May: Rest / optional mobility (20 min)\nSat 30 May: Easy long run 12-14 km (75 min)\nSun 31 May: Rest (0 min)\nMon 01 Jun: Strength A3 \u2014 Full body athletic (lighter) (50 min)\nTue 02 Jun: Easy run 6 km + optional squash (35 min)",
+  "week_choice_label": "Option A \u2014 Continue as planned"
 }
