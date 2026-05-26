@@ -62,26 +62,51 @@
       }
     },
     "2026-05-27": {
-      "applied_at": "2026-05-26T19:22:25.525090+02:00",
-      "feedback_source": "reply: 'I did this but did the following exercises instead:\\n\\n\\n   1. Barbell back squat\\n   2. Barbell romanian deadlift\\n   3. Barbell overhead press\\n   4. Neutral grip pull up\\n   5. Dumbbell chest fly\\n   6. In'",
+      "applied_at": "2026-05-26T21:32:33.428907+02:00",
+      "feedback_source": "reply: 'Thursday should be a weights/lifting day\\n\\nToday I ate:\\n\\n- protein shake\\n- 2 weetabix, 1/2 cup muesli, 1/4 cup blueberries, 1 cup milk\\n- Albert Heijn salad with feta, chicken, salad and giant couscous\\n'",
       "session": {
-        "session_type": "Easy Run",
-        "session_kind": "run",
+        "session_type": "Strength Training - Lower Body & Upper Pull",
+        "session_kind": "strength",
         "duration_min": 60,
-        "warm_up": "5 min dynamic warm-up",
-        "exercises": [],
-        "run_details": {
-          "pace": "5:35-6:00/km",
-          "hr_target": "<150 bpm",
-          "duration": "60 minutes",
-          "distance": "10-11 km (approx.)",
-          "effort": "Zone 2 / Conversational"
-        },
+        "warm_up": "10 min dynamic warm-up (e.g., leg swings, arm circles, bodyweight squats)",
+        "exercises": [
+          {
+            "name": "Barbell Back Squat",
+            "sets_reps": "3 sets of 5-8 reps",
+            "weight": "Moderate, focus on form",
+            "rest": "90-120s"
+          },
+          {
+            "name": "Bent-Over Row",
+            "sets_reps": "3 sets of 8-12 reps",
+            "weight": "Moderate, controlled movement",
+            "rest": "60-90s"
+          },
+          {
+            "name": "Dumbbell Walking Lunges",
+            "sets_reps": "3 sets of 8-10 reps per leg",
+            "weight": "Moderate, focus on balance and control",
+            "rest": "60-90s"
+          },
+          {
+            "name": "Pull-ups",
+            "sets_reps": "3 sets of 5-8 reps (weighted if possible, or assisted)",
+            "weight": "Bodyweight or added weight",
+            "rest": "90-120s"
+          },
+          {
+            "name": "Plank",
+            "sets_reps": "3 sets of 60 seconds",
+            "weight": "Bodyweight",
+            "rest": "30-45s"
+          }
+        ],
+        "run_details": {},
         "details": "",
         "extras": "",
-        "short_version": "45 min easy run",
-        "purpose": "Build aerobic base and aid recovery after Monday's heavy lifting and Tuesday's squash.",
-        "coach_note": "The strength session was changed to an easy run as requested, prioritizing recovery after Monday's heavy lifting and Tuesday's squash."
+        "short_version": "40 min strength: 2 sets of each exercise, focus on compound movements.",
+        "purpose": "Develop strength, particularly in lower body and pulling muscles, complementing the week's training.",
+        "coach_note": "Session changed from Easy Run to Strength as per your request for Thursday to be a weights/lifting day. This strength session focuses on lower body and upper pull to complement Wednesday's upper push focus."
       }
     }
   }
