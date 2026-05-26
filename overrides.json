@@ -60,6 +60,29 @@
         "purpose": "To incorporate a full-body strength session as requested, maintaining strength stimulus while managing fatigue for potential squash.",
         "coach_note": "Added Dumbbell Bicep Curls and Standing Calf Raises to address your request for a more well-rounded session, which extends the total duration."
       }
+    },
+    "2026-05-27": {
+      "applied_at": "2026-05-26T19:22:25.525090+02:00",
+      "feedback_source": "reply: 'I did this but did the following exercises instead:\\n\\n\\n   1. Barbell back squat\\n   2. Barbell romanian deadlift\\n   3. Barbell overhead press\\n   4. Neutral grip pull up\\n   5. Dumbbell chest fly\\n   6. In'",
+      "session": {
+        "session_type": "Easy Run",
+        "session_kind": "run",
+        "duration_min": 60,
+        "warm_up": "5 min dynamic warm-up",
+        "exercises": [],
+        "run_details": {
+          "pace": "5:35-6:00/km",
+          "hr_target": "<150 bpm",
+          "duration": "60 minutes",
+          "distance": "10-11 km (approx.)",
+          "effort": "Zone 2 / Conversational"
+        },
+        "details": "",
+        "extras": "",
+        "short_version": "45 min easy run",
+        "purpose": "Build aerobic base and aid recovery after Monday's heavy lifting and Tuesday's squash.",
+        "coach_note": "The strength session was changed to an easy run as requested, prioritizing recovery after Monday's heavy lifting and Tuesday's squash."
+      }
     }
   }
 }
