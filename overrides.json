@@ -108,6 +108,66 @@
         "purpose": "Develop strength, particularly in lower body and pulling muscles, complementing the week's training.",
         "coach_note": "Session changed from Easy Run to Strength as per your request for Thursday to be a weights/lifting day. This strength session focuses on lower body and upper pull to complement Wednesday's upper push focus."
       }
+    },
+    "2026-05-28": {
+      "applied_at": "2026-05-27T16:57:59.224508+02:00",
+      "feedback_source": "reply: 'On thursday 28th may I would like to have a full body strength session,\\nfocusing on upper body compound movements but also including legs and core.\\nWorkout length 1 hour to 1hour 10 mins'",
+      "session": {
+        "session_type": "Full Body Strength",
+        "session_kind": "strength",
+        "duration_min": 65,
+        "warm_up": "5-10 min dynamic warm-up (e.g., arm circles, leg swings, bodyweight squats, planks).",
+        "exercises": [
+          {
+            "name": "Barbell Back Squat",
+            "sets_reps": "3 sets x 6-8 reps",
+            "weight": "Challenging, not max effort",
+            "rest": "90s"
+          },
+          {
+            "name": "Bench Press (Barbell or Dumbbell)",
+            "sets_reps": "3 sets x 6-8 reps",
+            "weight": "Challenging, not max effort",
+            "rest": "90s"
+          },
+          {
+            "name": "Pull-ups (or Lat Pulldowns)",
+            "sets_reps": "3 sets x 6-8 reps",
+            "weight": "Bodyweight or added weight",
+            "rest": "90s"
+          },
+          {
+            "name": "Romanian Deadlifts (RDLs)",
+            "sets_reps": "3 sets x 8-10 reps",
+            "weight": "Moderate",
+            "rest": "60s"
+          },
+          {
+            "name": "Overhead Press (Barbell or Dumbbell)",
+            "sets_reps": "3 sets x 8-10 reps",
+            "weight": "Moderate",
+            "rest": "60s"
+          },
+          {
+            "name": "Plank (various forms)",
+            "sets_reps": "3 sets x 30-60s hold",
+            "weight": "Bodyweight",
+            "rest": "45s"
+          },
+          {
+            "name": "Cable Crunches or Hanging Leg Raises",
+            "sets_reps": "3 sets x 10-15 reps",
+            "weight": "Moderate",
+            "rest": "45s"
+          }
+        ],
+        "run_details": {},
+        "details": "",
+        "extras": "",
+        "short_version": "Reduce duration to 30-40 min, focus on 3-4 compound movements with lighter weight, or skip entirely if sleep <6h or feeling excessively fatigued.",
+        "purpose": "Develop overall strength, support running economy, and address Luke's request for a full-body session.",
+        "coach_note": "The easy run is replaced with a full-body strength session as requested. This creates back-to-back strength training days. Manage intensity to prioritize recovery for the upcoming long run and Monday's strength session. Adhere to the 'no PB attempts' rule."
+      }
     }
   }
 }
