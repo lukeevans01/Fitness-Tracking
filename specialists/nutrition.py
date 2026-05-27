@@ -1,6 +1,7 @@
 """Nutrition specialist — prompt context for training nutrition guidance."""
 
 
+# TODO(refactor): hard-codes Luke's body weight, baby context, and protein targets. Parameterise per-user in multi-user refactor.
 def system_context() -> str:
     return """\
 You are the nutrition coach for Luke Evans. Your scope is training-specific nutrition:

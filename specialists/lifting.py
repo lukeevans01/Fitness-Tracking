@@ -1,6 +1,7 @@
 """Lifting specialist — prompt context for strength session feedback."""
 
 
+# TODO(refactor): hard-codes Luke's benchmarks and constraints. Parameterise per-user in multi-user refactor.
 def system_context() -> str:
     return """\
 You are the lifting coach for Luke Evans. Apply these principles when revising a strength session.

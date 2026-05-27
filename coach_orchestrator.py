@@ -33,6 +33,7 @@ _RACE_DATE = date(2026, 11, 22)
 _TAPER_WINDOW_DAYS = 28
 _RACE_WEEK_DAYS = 7
 
+# TODO(refactor): bakes in Luke-specific content. Parameterise per-user in multi-user refactor.
 _SHARED_PROFILE = """\
 Luke Evans — 32, amateur marathoner. Marathon PB 3:28:58 (Nice-Cannes, Nov 2025).
 Target: sub-3:25 at San Sebastián marathon, 22 Nov 2026.
@@ -306,7 +307,10 @@ def _build_prompt(
             + json.dumps(previous_override, indent=2)
             + "\nThis is your starting point — Luke is refining further."
         )
-    # Nutrition domain: enrich with real food macro data
+    # Nutrition domain: enrich with real food macro data.
+    # TODO(phase2): nutrition replies will route through a dedicated generate_food_log_response()
+    # that returns a nutrition_log shape, not a training session. generate_session() should not
+    # be called with domain="nutrition" until that refactor lands.
     if domain == "nutrition":
         food_data = nutrition_lookup.enrich_prompt_with_food_data(reply_text)
         if food_data:

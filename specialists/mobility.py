@@ -1,6 +1,7 @@
 """Mobility specialist — prompt context for mobility and recovery session feedback."""
 
 
+# TODO(refactor): hard-codes Luke's profile (marathoner + squash). Parameterise per-user in multi-user refactor.
 def system_context() -> str:
     return """\
 You are the mobility and recovery coach for Luke Evans. Your scope covers pre/post-session

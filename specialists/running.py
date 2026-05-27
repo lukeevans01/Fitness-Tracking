@@ -1,6 +1,7 @@
 """Running specialist — prompt context for run session feedback."""
 
 
+# TODO(refactor): hard-codes Luke's pace zones, HR caps, and failure mode. Parameterise per-user in multi-user refactor.
 def system_context() -> str:
     return """\
 You are the running coach for Luke Evans. Apply these principles when revising a run session.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Poll Gmail inbox for replies from Luke, process via Gemini, send replacement emails.
+Poll Gmail inbox for replies from Luke, classify intent, dispatch to a handler.
 
 Env vars required:
   GMAIL_USER           Bot Gmail address (e.g. luke.fitness.bot@gmail.com)
@@ -24,6 +24,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import coach_orchestrator
+import intent_classifier
 import training_summary as ts
 from send_daily import (
     CSS_BASE,
@@ -51,6 +52,7 @@ _RE_SURVIVAL_EXIT = re.compile(
 )
 _RE_PAUSE_ALL = re.compile(r"^\s*pause\s*$", re.IGNORECASE)
 _RE_WEEK_CHOICE = re.compile(r"^\s*([ABC])\s*[.!?]?\s*$", re.IGNORECASE)
+_RE_REVERT = re.compile(r"\brevert\b", re.IGNORECASE)
 
 _MODE_NOTICES = {
     "survival": (
@@ -360,65 +362,65 @@ def _build_replacement_email(
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# Core message handler (training feedback only — mode commands handled in main)
+# Intent handlers
 # ──────────────────────────────────────────────────────────────────────────
 
-def _process_message(
-    mail: imaplib.IMAP4_SSL,
-    msg_id: bytes,
-    msg,
+def _handle_revert(
     reply_text: str,
-    message_id: str,
-    from_addr: str,
     plan: dict,
     overrides: dict,
     tomorrow: date,
-    week_context: str = "",
+    message_id: str,
+    from_addr: str,
 ) -> None:
-    print(f"[msg] From: {from_addr}")
-    print(f"[msg] Subject: {_decode_header(msg.get('Subject', ''))}")
-    print(f"[msg] Body (stripped, first 200): {reply_text[:200]!r}")
-
+    """Drop tomorrow's override if any and send the template session as a [Reverted] email."""
     tomorrow_iso = tomorrow.isoformat()
+    if tomorrow_iso in overrides.get("overrides", {}):
+        del overrides["overrides"][tomorrow_iso]
+        original_session, day_num = _get_current_session(tomorrow, plan, overrides)
+        _, _, day_after = _cycle_day(tomorrow, plan)
+        date_str = tomorrow.strftime("%a %d %b")
+        hard_rules = plan["hard_rules_phase1"]
+        html = build_phase1_html(original_session, day_after, day_num, tomorrow, hard_rules)
+        text = build_phase1_text(original_session, day_after, day_num, tomorrow, hard_rules)
+        subj = (
+            f"[Reverted] Fitness plan — {date_str} "
+            f"(Day {day_num}) — {original_session['session_type']}"
+        )
+        print(f"[revert] Removed override for {tomorrow_iso}.")
+    else:
+        subj = f"[Revert] No override active for {tomorrow_iso}"
+        html = (
+            f'<!DOCTYPE html><html><body style="{CSS_BASE}">'
+            f"<p>No override was active for {tomorrow_iso} — "
+            "you're already on the template session.</p></body></html>"
+        )
+        text = f"No override active for {tomorrow_iso}."
+        print(f"[revert] No override to revert for {tomorrow_iso}.")
 
-    # ── Revert ───────────────────────────────────────────────────────────
-    if re.search(r"\brevert\b", reply_text, re.IGNORECASE):
-        if tomorrow_iso in overrides.get("overrides", {}):
-            del overrides["overrides"][tomorrow_iso]
-            original_session, day_num = _get_current_session(tomorrow, plan, overrides)
-            _, _, day_after = _cycle_day(tomorrow, plan)
-            date_str = tomorrow.strftime("%a %d %b")
-            hard_rules = plan["hard_rules_phase1"]
-            html = build_phase1_html(original_session, day_after, day_num, tomorrow, hard_rules)
-            text = build_phase1_text(original_session, day_after, day_num, tomorrow, hard_rules)
-            subj = (
-                f"[Reverted] Fitness plan — {date_str} "
-                f"(Day {day_num}) — {original_session['session_type']}"
-            )
-            print(f"[revert] Removed override for {tomorrow_iso}.")
-        else:
-            subj = f"[Revert] No override active for {tomorrow_iso}"
-            html = (
-                f'<!DOCTYPE html><html><body style="{CSS_BASE}">'
-                f"<p>No override was active for {tomorrow_iso} — "
-                "you're already on the template session.</p></body></html>"
-            )
-            text = f"No override active for {tomorrow_iso}."
-            print(f"[revert] No override to revert for {tomorrow_iso}.")
+    _send_email(subj, html, text)
+    _append_feedback_log({
+        "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+        "message_id": message_id,
+        "from_address": from_addr,
+        "reply_text": reply_text,
+        "intent": "revert",
+        "action": "revert",
+        "override_applied": False,
+    })
 
-        mail.store(msg_id, "+FLAGS", "\\Seen")
-        _send_email(subj, html, text)
-        _append_feedback_log({
-            "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
-            "message_id": message_id,
-            "from_address": from_addr,
-            "reply_text": reply_text,
-            "action": "revert",
-            "override_applied": False,
-        })
-        return
 
-    # ── Normal feedback → Gemini ──────────────────────────────────────────
+def _handle_training_feedback(
+    text: str,
+    plan: dict,
+    overrides: dict,
+    tomorrow: date,
+    message_id: str,
+    from_addr: str,
+    week_context: str,
+) -> None:
+    """Send the training-feedback fragment to the coach orchestrator and apply the override."""
+    tomorrow_iso = tomorrow.isoformat()
     current_session, _ = _get_current_session(tomorrow, plan, overrides)
     prev_override = overrides.get("overrides", {}).get(tomorrow_iso, {}).get("session")
     training_text = ts.build_summary(days=14)
@@ -427,7 +429,7 @@ def _process_message(
     try:
         new_session = coach_orchestrator.generate_session(
             domain=domain,
-            reply_text=reply_text,
+            reply_text=text,
             current_session=current_session,
             training_summary=training_text,
             previous_override=prev_override,
@@ -440,11 +442,11 @@ def _process_message(
             "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
             "message_id": message_id,
             "from_address": from_addr,
-            "reply_text": reply_text,
+            "reply_text": text,
+            "intent": "training_feedback",
             "error": error_msg,
             "override_applied": False,
         })
-        mail.store(msg_id, "+FLAGS", "\\Seen")
         _send_plain_notice(
             "Fitness bot — couldn't process your feedback",
             f"Couldn't process your feedback. Error:\n\n{error_msg}\n\n"
@@ -454,7 +456,7 @@ def _process_message(
 
     overrides.setdefault("overrides", {})[tomorrow_iso] = {
         "applied_at": datetime.now(TZ_AMSTERDAM).isoformat(),
-        "feedback_source": f"reply: {reply_text[:200]!r}",
+        "feedback_source": f"reply: {text[:200]!r}",
         "session": new_session,
     }
 
@@ -462,20 +464,96 @@ def _process_message(
         "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
         "message_id": message_id,
         "from_address": from_addr,
-        "reply_text": reply_text,
+        "reply_text": text,
+        "intent": "training_feedback",
         "coach_note": new_session.get("coach_note", ""),
         "target_date": tomorrow_iso,
         "override_applied": True,
     })
 
     coach_note = new_session.get("coach_note", "")
-    subj, html, text = _build_replacement_email(new_session, coach_note, tomorrow, plan)
-    ok = _send_email(subj, html, text)
-    mail.store(msg_id, "+FLAGS", "\\Seen")
+    subj, html, body_text = _build_replacement_email(new_session, coach_note, tomorrow, plan)
+    ok = _send_email(subj, html, body_text)
     if ok:
         print(f"[ok] Replacement email sent for {tomorrow_iso}.")
     else:
         print(f"[error] Replacement email send failed for {tomorrow_iso}.", file=sys.stderr)
+
+
+def _handle_food_log(text: str, message_id: str, from_addr: str) -> None:
+    """Phase 1 stub: log the intent, send acknowledgement. Real parsing in Phase 2."""
+    _append_feedback_log({
+        "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+        "message_id": message_id,
+        "from_address": from_addr,
+        "reply_text": text,
+        "intent": "food_log",
+        "action": "logged_pending_phase2",
+        "override_applied": False,
+    })
+    _send_plain_notice(
+        "Food log noted",
+        "Got your food log — parsing isn't wired in yet (Phase 2). "
+        "I've recorded the reply for when the nutrition coach goes live.",
+    )
+
+
+def _handle_mobility_log(text: str, message_id: str, from_addr: str) -> None:
+    """Phase 1 stub: log the intent, send acknowledgement. Real parsing in Phase 3."""
+    _append_feedback_log({
+        "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+        "message_id": message_id,
+        "from_address": from_addr,
+        "reply_text": text,
+        "intent": "mobility_log",
+        "action": "logged_pending_phase3",
+        "override_applied": False,
+    })
+    _send_plain_notice(
+        "Mobility log noted",
+        "Got your mobility note — parsing isn't wired in yet (Phase 3). "
+        "I've recorded the reply for the consistency tracker.",
+    )
+
+
+def _handle_question(text: str, message_id: str, from_addr: str) -> None:
+    """Phase 1 stub: log + acknowledge. Real Q&A in Phase 2/3."""
+    _append_feedback_log({
+        "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+        "message_id": message_id,
+        "from_address": from_addr,
+        "reply_text": text,
+        "intent": "question",
+        "action": "logged_pending_qa",
+        "override_applied": False,
+    })
+    _send_plain_notice(
+        "Question noted",
+        "Got your question — I can't answer Q&A in this phase. "
+        "Reply with a specific change request (e.g. 'drop tomorrow's volume') if you want a session adjustment.",
+    )
+
+
+def _handle_clarify(text: str, message_id: str, from_addr: str) -> None:
+    """Classifier flagged the reply as ambiguous. Ask for a clearer reply."""
+    _append_feedback_log({
+        "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+        "message_id": message_id,
+        "from_address": from_addr,
+        "reply_text": text,
+        "intent": "none_clear",
+        "action": "clarify_requested",
+        "override_applied": False,
+    })
+    _send_plain_notice(
+        "Couldn't classify your reply",
+        "Wasn't sure if you meant training feedback, food log, mobility log, or a question. "
+        "Try one of:\n"
+        "  - 'change tomorrow's session to ...'\n"
+        "  - 'food log: ...'\n"
+        "  - 'mobility: 20 min, hips tight'\n"
+        "  - or reply 'revert' to drop any override",
+    )
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -524,7 +602,11 @@ def main():
         message_id = msg.get("Message-ID", "")
         from_addr = _decode_header(msg.get("From", ""))
 
-        # Mode commands work regardless of current mode (enter, exit, pause)
+        print(f"[msg] From: {from_addr}")
+        print(f"[msg] Subject: {_decode_header(msg.get('Subject', ''))}")
+        print(f"[msg] Body (stripped, first 200): {reply_text[:200]!r}")
+
+        # 1. Mode commands work regardless of current mode (enter, exit, pause)
         new_mode = _detect_mode_command(reply_text)
         if new_mode is not None:
             _apply_mode_change(new_mode, state, today_local)
@@ -536,12 +618,13 @@ def main():
                 "message_id": message_id,
                 "from_address": from_addr,
                 "reply_text": reply_text,
+                "intent": f"mode_change:{new_mode}",
                 "action": f"mode_change:{new_mode}",
                 "override_applied": False,
             })
             continue
 
-        # A/B/C week-plan choice from Sunday summary
+        # 2. A/B/C week-plan choice from Sunday summary
         m = _RE_WEEK_CHOICE.match(reply_text)
         if m:
             letter = m.group(1).upper()
@@ -561,22 +644,65 @@ def main():
                 "message_id": message_id,
                 "from_address": from_addr,
                 "reply_text": reply_text,
+                "intent": f"week_choice:{letter}",
                 "action": f"week_choice:{letter}",
                 "override_applied": False,
             })
             continue
 
-        # In survival mode: ignore training feedback
+        # 3. Survival mode: ignore everything below this point (preserves existing behaviour)
         if mode == "survival":
             mail.store(msg_id, "+FLAGS", "\\Seen")
-            print("[skip] Survival mode: ignored training feedback.")
+            print("[skip] Survival mode: ignored reply.")
             continue
 
-        _process_message(
-            mail, msg_id, msg, reply_text, message_id, from_addr,
-            plan, overrides, tomorrow,
-            week_context=state.get("week_choice", ""),
-        )
+        # 4. Revert — explicit, top-level. Bypasses the classifier so a misroute can't swallow it.
+        if _RE_REVERT.search(reply_text):
+            _handle_revert(reply_text, plan, overrides, tomorrow, message_id, from_addr)
+            mail.store(msg_id, "+FLAGS", "\\Seen")
+            continue
+
+        # 5. Intent classifier — splits compound replies into per-intent fragments.
+        try:
+            classification = intent_classifier.classify(reply_text)
+        except (ValueError, RuntimeError) as exc:
+            print(f"[error] Classifier failed: {exc}", file=sys.stderr)
+            _append_feedback_log({
+                "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+                "message_id": message_id,
+                "from_address": from_addr,
+                "reply_text": reply_text,
+                "intent": "classifier_error",
+                "error": str(exc),
+                "override_applied": False,
+            })
+            mail.store(msg_id, "+FLAGS", "\\Seen")
+            _send_plain_notice(
+                "Couldn't classify reply",
+                f"The intent classifier failed: {exc}\n\n"
+                "Reply 'revert' to drop any override, or rephrase your message.",
+            )
+            continue
+
+        # 6. Dispatch per intent. Compound replies produce multiple handler calls.
+        week_context = state.get("week_choice", "")
+        for item in classification["intents"]:
+            intent = item["intent"]
+            text = item["text"]
+            if intent == "training_feedback":
+                _handle_training_feedback(
+                    text, plan, overrides, tomorrow, message_id, from_addr, week_context,
+                )
+            elif intent == "food_log":
+                _handle_food_log(text, message_id, from_addr)
+            elif intent == "mobility_log":
+                _handle_mobility_log(text, message_id, from_addr)
+            elif intent == "question":
+                _handle_question(text, message_id, from_addr)
+            elif intent == "none_clear":
+                _handle_clarify(text, message_id, from_addr)
+
+        mail.store(msg_id, "+FLAGS", "\\Seen")
 
     mail.logout()
 
