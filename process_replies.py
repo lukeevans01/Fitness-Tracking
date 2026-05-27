@@ -25,6 +25,7 @@ from zoneinfo import ZoneInfo
 
 import coach_orchestrator
 import intent_classifier
+import nutrition_logger
 import training_summary as ts
 from send_daily import (
     CSS_BASE,
@@ -481,21 +482,137 @@ def _handle_training_feedback(
 
 
 def _handle_food_log(text: str, message_id: str, from_addr: str) -> None:
-    """Phase 1 stub: log the intent, send acknowledgement. Real parsing in Phase 2."""
+    """Parse the food log fragment, append to nutrition_log/YYYY-MM-DD.md, send ack with totals."""
+    today = datetime.now(TZ_AMSTERDAM).date()
+    try:
+        result = nutrition_logger.log_food(text, today)
+    except (ValueError, RuntimeError) as exc:
+        print(f"[error] Food log failed: {exc}", file=sys.stderr)
+        _append_feedback_log({
+            "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+            "message_id": message_id,
+            "from_address": from_addr,
+            "reply_text": text,
+            "intent": "food_log",
+            "error": str(exc),
+            "override_applied": False,
+        })
+        _send_plain_notice(
+            "Food log — couldn't parse",
+            f"Couldn't parse your food log. Error:\n\n{exc}\n\n"
+            "Try again with more detail (e.g. quantities), or skip and log later.",
+        )
+        return
+
     _append_feedback_log({
         "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
         "message_id": message_id,
         "from_address": from_addr,
         "reply_text": text,
         "intent": "food_log",
-        "action": "logged_pending_phase2",
+        "items_logged": len(result.items),
+        "running_totals": result.running_totals,
         "override_applied": False,
     })
-    _send_plain_notice(
-        "Food log noted",
-        "Got your food log — parsing isn't wired in yet (Phase 2). "
-        "I've recorded the reply for when the nutrition coach goes live.",
+
+    subject = f"Food logged — {today.strftime('%a %d %b')}"
+    html, plain = _build_food_log_ack(result, today)
+    _send_email(subject, html, plain)
+
+
+def _build_food_log_ack(result: nutrition_logger.LogResult, day: date) -> tuple[str, str]:
+    """Render an acknowledgement email for a food-log reply."""
+    date_str = day.strftime("%a %d %b %Y")
+
+    logged_rows_html = "".join(
+        f"<li>{html_lib.escape(i.name)} — "
+        f"{html_lib.escape(i.quantity)}: "
+        f"{i.kcal:.0f} kcal, {i.protein_g:.1f}g P, {i.carbs_g:.1f}g C, {i.fat_g:.1f}g F "
+        f"<span style=\"color:#888;\">({html_lib.escape(i.confidence)} · {html_lib.escape(i.source)})</span></li>"
+        for i in result.items
     )
+    logged_rows_text = "\n".join(
+        f"  - {i.name} — {i.quantity}: "
+        f"{i.kcal:.0f} kcal, {i.protein_g:.1f}g P, {i.carbs_g:.1f}g C, {i.fat_g:.1f}g F "
+        f"({i.confidence} · {i.source})"
+        for i in result.items
+    )
+
+    totals = result.running_totals
+    deltas = result.delta_vs_target
+    targets = nutrition_logger.DAILY_TARGETS
+    sign = lambda d, p=0: (f"+{d:.{p}f}" if d >= 0 else f"{d:.{p}f}")
+
+    totals_html = (
+        '<table style="font-size:13px; border-collapse:collapse; margin-top:8px;">'
+        f'<tr><td style="padding:3px 12px 3px 0; color:#555;">Calories</td>'
+        f'<td style="padding:3px 0;">{totals["kcal"]:.0f} / {targets["kcal"]} ({sign(deltas["kcal"])})</td></tr>'
+        f'<tr><td style="padding:3px 12px 3px 0; color:#555;">Protein</td>'
+        f'<td style="padding:3px 0;">{totals["protein_g"]:.1f}g / {targets["protein_g"]}g ({sign(deltas["protein_g"], 1)}g)</td></tr>'
+        f'<tr><td style="padding:3px 12px 3px 0; color:#555;">Carbs</td>'
+        f'<td style="padding:3px 0;">{totals["carbs_g"]:.1f}g / {targets["carbs_g"]}g ({sign(deltas["carbs_g"], 1)}g)</td></tr>'
+        f'<tr><td style="padding:3px 12px 3px 0; color:#555;">Fat</td>'
+        f'<td style="padding:3px 0;">{totals["fat_g"]:.1f}g / {targets["fat_g"]}g ({sign(deltas["fat_g"], 1)}g)</td></tr>'
+        '</table>'
+    )
+    totals_text = (
+        f"  Calories: {totals['kcal']:.0f} / {targets['kcal']} ({sign(deltas['kcal'])})\n"
+        f"  Protein:  {totals['protein_g']:.1f}g / {targets['protein_g']}g ({sign(deltas['protein_g'], 1)}g)\n"
+        f"  Carbs:    {totals['carbs_g']:.1f}g / {targets['carbs_g']}g ({sign(deltas['carbs_g'], 1)}g)\n"
+        f"  Fat:      {totals['fat_g']:.1f}g / {targets['fat_g']}g ({sign(deltas['fat_g'], 1)}g)"
+    )
+
+    coach_note_html = ""
+    coach_note_text = ""
+    if result.coach_note:
+        coach_note_html = (
+            '<div style="background:#E8F0FE; border-left:3px solid #1F3A5F; '
+            'padding:10px 14px; margin:16px 0; border-radius:2px; font-size:14px;">'
+            f'<strong style="color:#1F3A5F;">Coach note:</strong> '
+            f'{html_lib.escape(result.coach_note)}</div>'
+        )
+        coach_note_text = f"\nCoach note: {result.coach_note}\n"
+
+    low_conf_items = [i for i in result.items if i.confidence == "low"]
+    low_conf_html = ""
+    low_conf_text = ""
+    if low_conf_items:
+        names = ", ".join(html_lib.escape(i.name) for i in low_conf_items)
+        names_plain = ", ".join(i.name for i in low_conf_items)
+        low_conf_html = (
+            '<p style="font-size:13px; color:#8B6914; background:#FFF8E5; '
+            'border-left:3px solid #E8A33D; padding:8px 12px; border-radius:2px; margin-top:14px;">'
+            f'Low-confidence estimates: {names}. '
+            f'Edit <code>nutrition_log/{day.isoformat()}.md</code> if you want to refine.</p>'
+        )
+        low_conf_text = (
+            f"\nLow-confidence estimates: {names_plain}. "
+            f"Edit nutrition_log/{day.isoformat()}.md if you want to refine.\n"
+        )
+
+    html = (
+        f'<!DOCTYPE html><html><body style="{CSS_BASE}">'
+        f'<div style="border-left:4px solid #1F3A5F; padding-left:14px; margin-bottom:18px;">'
+        f'<div style="color:#555; font-size:13px; text-transform:uppercase; letter-spacing:0.5px;">Food logged</div>'
+        f'<div style="font-size:20px; font-weight:600; color:#1F3A5F; margin-top:4px;">{date_str}</div>'
+        f'</div>'
+        f'<div style="font-size:14px; font-weight:600; color:#1F3A5F; margin-bottom:6px;">Logged</div>'
+        f'<ul style="font-size:13px; color:#444; margin:0 0 14px 0; padding-left:20px;">{logged_rows_html}</ul>'
+        f'<div style="font-size:14px; font-weight:600; color:#1F3A5F; margin-top:14px;">Today so far</div>'
+        f'{totals_html}'
+        f'{coach_note_html}'
+        f'{low_conf_html}'
+        f'</body></html>'
+    )
+    plain = (
+        f"FOOD LOGGED — {date_str}\n"
+        f"{'=' * 60}\n\n"
+        f"Logged:\n{logged_rows_text}\n\n"
+        f"Today so far:\n{totals_text}\n"
+        f"{coach_note_text}"
+        f"{low_conf_text}"
+    )
+    return html, plain
 
 
 def _handle_mobility_log(text: str, message_id: str, from_addr: str) -> None:
@@ -516,22 +633,63 @@ def _handle_mobility_log(text: str, message_id: str, from_addr: str) -> None:
     )
 
 
+_RE_NUTRITION_KEYWORDS = re.compile(
+    r"\b(protein|carb|carbs|kcal|calorie|calories|fat|macros?|nutrition|ate|food|meal|fuel)\b",
+    re.IGNORECASE,
+)
+
+
 def _handle_question(text: str, message_id: str, from_addr: str) -> None:
-    """Phase 1 stub: log + acknowledge. Real Q&A in Phase 2/3."""
+    """Answer nutrition questions using today's log + weekly context. Stub training/mobility Q&A."""
+    if not _RE_NUTRITION_KEYWORDS.search(text):
+        _append_feedback_log({
+            "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+            "message_id": message_id,
+            "from_address": from_addr,
+            "reply_text": text,
+            "intent": "question",
+            "action": "out_of_scope",
+            "override_applied": False,
+        })
+        _send_plain_notice(
+            "Question noted",
+            "I can only answer nutrition questions in this phase. "
+            "Training and mobility Q&A come in a later phase.",
+        )
+        return
+
+    today = datetime.now(TZ_AMSTERDAM).date()
+    day_log = nutrition_logger.read_day(today)
+    weekly = nutrition_logger.weekly_summary(days=7)
+
+    try:
+        answer = coach_orchestrator.answer_nutrition_question(
+            text, day_log, nutrition_logger.DAILY_TARGETS, weekly,
+        )
+    except (ValueError, RuntimeError) as exc:
+        print(f"[error] Nutrition Q&A failed: {exc}", file=sys.stderr)
+        _append_feedback_log({
+            "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+            "message_id": message_id,
+            "from_address": from_addr,
+            "reply_text": text,
+            "intent": "question",
+            "error": str(exc),
+            "override_applied": False,
+        })
+        _send_plain_notice("Question — couldn't answer", f"Error: {exc}")
+        return
+
     _append_feedback_log({
         "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
         "message_id": message_id,
         "from_address": from_addr,
         "reply_text": text,
         "intent": "question",
-        "action": "logged_pending_qa",
+        "action": "answered",
         "override_applied": False,
     })
-    _send_plain_notice(
-        "Question noted",
-        "Got your question — I can't answer Q&A in this phase. "
-        "Reply with a specific change request (e.g. 'drop tomorrow's volume') if you want a session adjustment.",
-    )
+    _send_plain_notice(f"Re: {text[:60]}", answer)
 
 
 def _handle_clarify(text: str, message_id: str, from_addr: str) -> None:

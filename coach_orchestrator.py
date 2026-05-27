@@ -233,10 +233,13 @@ and duration. State specifically what changes between options.\
 def generate_weekly_summary(
     training_summary: str,
     standard_week: str,
+    nutrition_summary: str = "",
 ) -> dict:
     """Generate a weekly review with three options for the coming week.
 
     standard_week: compact day-by-day string computed from plan_template.json.
+    nutrition_summary: optional human-readable summary of last week's nutrition logs;
+        passed into the prompt so options can be nutrition-aware.
     Returns a dict with week_review, option_a/b/c, recommendation, recommendation_reason, coach_note.
     Raises ValueError on bad JSON or missing required keys.
     Raises RuntimeError on Gemini HTTP error.
@@ -248,12 +251,14 @@ def generate_weekly_summary(
     parts += [
         "Standard week (use this exactly for Option A):\n" + standard_week,
         "Recent training (last 14 days):\n" + training_summary,
-        (
-            "Output the weekly review as JSON matching this exact schema:\n"
-            + _WEEKLY_SUMMARY_SCHEMA
-            + "\n\nOnly output the JSON. No surrounding text."
-        ),
     ]
+    if nutrition_summary:
+        parts.append("Recent nutrition (last 7 days):\n" + nutrition_summary)
+    parts.append(
+        "Output the weekly review as JSON matching this exact schema:\n"
+        + _WEEKLY_SUMMARY_SCHEMA
+        + "\n\nOnly output the JSON. No surrounding text."
+    )
     prompt = "\n\n".join(parts)
 
     response_text = gemini_client.call_gemini(prompt)
@@ -307,10 +312,8 @@ def _build_prompt(
             + json.dumps(previous_override, indent=2)
             + "\nThis is your starting point — Luke is refining further."
         )
-    # Nutrition domain: enrich with real food macro data.
-    # TODO(phase2): nutrition replies will route through a dedicated generate_food_log_response()
-    # that returns a nutrition_log shape, not a training session. generate_session() should not
-    # be called with domain="nutrition" until that refactor lands.
+    # Nutrition replies should route to generate_food_log_response(), not here — this branch
+    # is retained defensively in case a caller still passes domain="nutrition".
     if domain == "nutrition":
         food_data = nutrition_lookup.enrich_prompt_with_food_data(reply_text)
         if food_data:
@@ -327,3 +330,190 @@ def _build_prompt(
         ),
     ])
     return "\n\n".join(parts)
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# Nutrition — food log parsing and Q&A
+# ──────────────────────────────────────────────────────────────────────────
+
+_FOOD_LOG_SCHEMA = """\
+{
+  "items": [
+    {
+      "name": "string — e.g. 'Banana', 'Chicken breast', 'Chicken curry'",
+      "quantity": "string — human-readable, e.g. '3 large', '1 cup', '200g'",
+      "quantity_g": number — your best estimate of portion weight in grams,
+      "kcal": number,
+      "protein_g": number,
+      "carbs_g": number,
+      "fat_g": number,
+      "confidence": "high | medium | low",
+      "source": "off | needs_lookup | gemini",
+      "meal": "breakfast | lunch | dinner | snack | unspecified"
+    }
+  ],
+  "coach_note": "string — optional one-line note from the nutrition coach; empty string if nothing useful"
+}\
+"""
+
+_FOOD_LOG_REQUIRED = frozenset({"items", "coach_note"})
+_FOOD_ITEM_REQUIRED = frozenset({
+    "name", "quantity", "quantity_g",
+    "kcal", "protein_g", "carbs_g", "fat_g",
+    "confidence", "source", "meal",
+})
+
+
+# TODO(refactor): per-user targets and prompt content. Hardcoded to Luke for Phase 2.
+def generate_food_log_response(
+    reply_text: str,
+    today_so_far: dict,
+    targets: dict,
+    recent_pattern: str = "",
+) -> dict:
+    """Parse a food-log reply into structured items + brief coach note.
+
+    today_so_far: dict with keys protein_g, carbs_g, fat_g, kcal for what's already been logged today.
+    targets: DAILY_TARGETS dict from nutrition_logger.
+    recent_pattern: optional one-line pattern flag from weekly_summary (e.g. "protein <100g for 3 days").
+
+    Returns {"items": [...], "coach_note": "..."}.
+    Raises ValueError on bad JSON or missing required keys.
+    Raises RuntimeError on Gemini HTTP error.
+    """
+    parts = [
+        _SHARED_PROFILE,
+        nutrition.system_context(),
+        (
+            "Today's running totals BEFORE this log entry:\n"
+            f"  Protein: {today_so_far.get('protein_g', 0):.1f}g of {targets['protein_g']}g\n"
+            f"  Carbs:   {today_so_far.get('carbs_g', 0):.1f}g of {targets['carbs_g']}g\n"
+            f"  Fat:     {today_so_far.get('fat_g', 0):.1f}g of {targets['fat_g']}g\n"
+            f"  Calories: {today_so_far.get('kcal', 0):.0f} of {targets['kcal']}"
+        ),
+    ]
+    if recent_pattern:
+        parts.append("Recent pattern context: " + recent_pattern)
+    parts += [
+        "Luke's food log reply:\n" + reply_text,
+        (
+            "Parse this reply into discrete food items with macro estimates.\n\n"
+            "Rules:\n"
+            "- Infer the meal from context (breakfast/lunch/dinner/snack), else 'unspecified'.\n"
+            "- ALWAYS include quantity_g (grams) — your best estimate of portion weight. This is "
+            "used to scale data sources, so be realistic (1 medium banana ≈ 120g, 1 large egg ≈ 50g).\n"
+            "- For each item, choose source:\n"
+            "    * 'needs_lookup' for common whole/branded foods where Open Food Facts would have "
+            "authoritative per-100g data (banana, eggs, oats, chicken, yogurt, bread, rice, pasta, milk). "
+            "Still provide your own kcal/protein/carbs/fat as a fallback in case lookup misses.\n"
+            "    * 'gemini' for composite/cooked meals, restaurant-style items, or anything OFF won't "
+            "reliably know (chicken curry, lasagne, pad thai, smoothie with multiple ingredients).\n"
+            "- Confidence: 'high' for items with explicit quantity; 'medium' if quantity is implied; "
+            "'low' for vague/composite meals where the estimate could easily be ±30%.\n"
+            "- coach_note: optional, single line. Use only when there's something genuinely useful "
+            "to flag (e.g. 'You're under-fueled for tomorrow's long run — eat more carbs tonight.'). "
+            "Empty string otherwise.\n\n"
+            "Output JSON ONLY matching this schema:\n"
+            + _FOOD_LOG_SCHEMA
+            + "\n\nNo surrounding text."
+        ),
+    ]
+    prompt = "\n\n".join(parts)
+    response_text = gemini_client.call_gemini(prompt)
+
+    try:
+        result = json.loads(response_text)
+    except json.JSONDecodeError as exc:
+        raise ValueError(
+            f"Food log response not valid JSON: {exc}\nText: {response_text[:500]}"
+        ) from exc
+
+    missing = _FOOD_LOG_REQUIRED - set(result.keys())
+    if missing:
+        raise ValueError(f"Food log response missing required keys: {missing}")
+    if not isinstance(result["items"], list):
+        raise ValueError("Food log 'items' must be a list")
+    for idx, item in enumerate(result["items"]):
+        if not isinstance(item, dict):
+            raise ValueError(f"Food log item {idx} not a dict: {item}")
+        item_missing = _FOOD_ITEM_REQUIRED - set(item.keys())
+        if item_missing:
+            raise ValueError(f"Food log item {idx} missing keys: {item_missing}")
+    return result
+
+
+# TODO(refactor): per-user prompt and targets. Hardcoded to Luke for Phase 2.
+def answer_nutrition_question(
+    question: str,
+    day_log,
+    targets: dict,
+    weekly_summary: dict | None = None,
+) -> str:
+    """Answer a nutrition question using today's log + targets + optional weekly context.
+
+    day_log: nutrition_logger.DayLog | None — duck-typed to avoid a circular import.
+        Expected to expose .items (list of FoodItem) and .log_date (date) when present.
+    Returns a short prose answer (1-3 sentences typical).
+    Raises ValueError if Gemini's wrapped response is malformed.
+    Raises RuntimeError on Gemini HTTP error.
+    """
+    parts = [_SHARED_PROFILE, nutrition.system_context()]
+
+    if day_log is not None and getattr(day_log, "items", None):
+        totals = {
+            "protein_g": sum(i.protein_g for i in day_log.items),
+            "carbs_g": sum(i.carbs_g for i in day_log.items),
+            "fat_g": sum(i.fat_g for i in day_log.items),
+            "kcal": sum(i.kcal for i in day_log.items),
+        }
+        items_summary = "\n".join(
+            f"  - {i.meal}: {i.name} ({i.quantity}) — "
+            f"{i.kcal:.0f} kcal, {i.protein_g:.1f}g P, {i.carbs_g:.1f}g C, {i.fat_g:.1f}g F"
+            for i in day_log.items
+        )
+        parts.append(
+            f"Today's log ({day_log.log_date.isoformat()}):\n{items_summary}\n\n"
+            f"Today's totals: {totals['kcal']:.0f} kcal, {totals['protein_g']:.1f}g protein, "
+            f"{totals['carbs_g']:.1f}g carbs, {totals['fat_g']:.1f}g fat"
+        )
+    else:
+        parts.append("Today's log: (no food logged yet today)")
+
+    parts.append(
+        f"Daily targets: {targets['kcal']} kcal, {targets['protein_g']}g protein, "
+        f"{targets['carbs_g']}g carbs, {targets['fat_g']}g fat"
+    )
+
+    if weekly_summary and weekly_summary.get("days_logged", 0) > 0:
+        parts.append(
+            f"This week ({weekly_summary['days_logged']}/7 days logged): "
+            f"avg {weekly_summary['avg_protein_g']:.0f}g protein, "
+            f"{weekly_summary['avg_kcal']:.0f} kcal. "
+            f"Protein target hit {weekly_summary['protein_target_hits']}/"
+            f"{weekly_summary['days_logged']} days."
+        )
+
+    parts += [
+        "Luke's question:\n" + question,
+        (
+            "Answer concisely (1-3 sentences max). Use the actual numbers from his log where "
+            "relevant. If suggesting food to close a macro gap, give one specific option with "
+            "a quantity (e.g. 'a 200g Greek yogurt + banana would add ~25g protein, ~35g carbs'). "
+            "No motivational language.\n\n"
+            'Output JSON ONLY: {"answer": "<your answer>"}\n'
+            "No surrounding text."
+        ),
+    ]
+    prompt = "\n\n".join(parts)
+    response_text = gemini_client.call_gemini(prompt)
+
+    try:
+        parsed = json.loads(response_text)
+    except json.JSONDecodeError as exc:
+        raise ValueError(
+            f"Nutrition Q&A response not valid JSON: {exc}\nText: {response_text[:300]}"
+        ) from exc
+    answer = parsed.get("answer", "").strip()
+    if not answer:
+        raise ValueError(f"Nutrition Q&A response missing 'answer': {parsed}")
+    return answer

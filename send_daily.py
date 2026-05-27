@@ -21,6 +21,8 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import nutrition_logger
+
 ROOT = Path(__file__).parent
 TZ_AMSTERDAM = ZoneInfo("Europe/Amsterdam")
 
@@ -104,6 +106,49 @@ def html_callout_yellow(text: str) -> str:
 </div>"""
 
 
+def html_yesterday_nutrition(yesterday_log, targets: dict) -> str:
+    """Yesterday's totals + deltas. Empty string if no log exists for yesterday."""
+    if not yesterday_log or not yesterday_log.items:
+        return ""
+    totals = nutrition_logger.daily_totals(yesterday_log)
+    dk = totals["kcal"] - targets["kcal"]
+    dp = totals["protein_g"] - targets["protein_g"]
+    dc = totals["carbs_g"] - targets["carbs_g"]
+    sign = lambda d, p=0: (f"+{d:.{p}f}" if d >= 0 else f"{d:.{p}f}")
+    return (
+        '<div style="border-top:1px solid #EEE; margin-top:24px; padding-top:18px;">'
+        '<div style="font-size:15px; font-weight:600; color:#1F3A5F; margin-bottom:8px;">'
+        "Yesterday's nutrition</div>"
+        '<table style="font-size:13px; border-collapse:collapse;">'
+        f'<tr><td style="padding:3px 12px 3px 0; color:#555;">Calories</td>'
+        f'<td style="padding:3px 0;">{totals["kcal"]:.0f} / {targets["kcal"]} ({sign(dk)})</td></tr>'
+        f'<tr><td style="padding:3px 12px 3px 0; color:#555;">Protein</td>'
+        f'<td style="padding:3px 0;">{totals["protein_g"]:.1f}g / {targets["protein_g"]}g ({sign(dp, 1)}g)</td></tr>'
+        f'<tr><td style="padding:3px 12px 3px 0; color:#555;">Carbs</td>'
+        f'<td style="padding:3px 0;">{totals["carbs_g"]:.1f}g / {targets["carbs_g"]}g ({sign(dc, 1)}g)</td></tr>'
+        '</table>'
+        '</div>'
+    )
+
+
+def text_yesterday_nutrition(yesterday_log, targets: dict) -> str:
+    """Plain-text mirror of html_yesterday_nutrition. Empty string if no log."""
+    if not yesterday_log or not yesterday_log.items:
+        return ""
+    totals = nutrition_logger.daily_totals(yesterday_log)
+    dk = totals["kcal"] - targets["kcal"]
+    dp = totals["protein_g"] - targets["protein_g"]
+    dc = totals["carbs_g"] - targets["carbs_g"]
+    sign = lambda d, p=0: (f"+{d:.{p}f}" if d >= 0 else f"{d:.{p}f}")
+    return (
+        "\n" + "─" * 70 + "\n"
+        "YESTERDAY'S NUTRITION\n"
+        f"  Calories: {totals['kcal']:.0f} / {targets['kcal']} ({sign(dk)})\n"
+        f"  Protein:  {totals['protein_g']:.1f}g / {targets['protein_g']}g ({sign(dp, 1)}g)\n"
+        f"  Carbs:    {totals['carbs_g']:.1f}g / {targets['carbs_g']}g ({sign(dc, 1)}g)\n"
+    )
+
+
 def html_food_reminder() -> str:
     return """
 <div style="border-top: 1px solid #EEE; margin-top: 28px; padding-top: 20px;">
@@ -129,7 +174,7 @@ def html_callout_green(rules: list) -> str:
 </div>"""
 
 
-def build_phase1_html(day: dict, tomorrow: dict, day_num: int, today: date, hard_rules: list) -> str:
+def build_phase1_html(day: dict, tomorrow: dict, day_num: int, today: date, hard_rules: list, yesterday_log=None) -> str:
     date_str = today.strftime("%a %d %b %Y")
     header = html_header(
         f"Phase 1 · Day {day_num}",
@@ -183,12 +228,13 @@ def build_phase1_html(day: dict, tomorrow: dict, day_num: int, today: date, hard
 
     body += html_callout_green(hard_rules)
     body += '<p style="color: #888; font-size: 13px; margin-top: 24px;">Where you are: Phase 1, pre-baby maintenance. Sub-3:25 marathon target for 22 Nov 2026.</p>'
+    body += html_yesterday_nutrition(yesterday_log, nutrition_logger.DAILY_TARGETS)
     body += html_food_reminder()
 
     return f"<!DOCTYPE html><html><body style=\"{CSS_BASE}\">{header}{body}</body></html>"
 
 
-def build_phase1_text(day: dict, tomorrow: dict, day_num: int, today: date, hard_rules: list) -> str:
+def build_phase1_text(day: dict, tomorrow: dict, day_num: int, today: date, hard_rules: list, yesterday_log=None) -> str:
     date_str = today.strftime("%a %d %b %Y")
     lines = []
     lines.append(f"PHASE 1 · DAY {day_num} — {date_str}")
@@ -227,6 +273,9 @@ def build_phase1_text(day: dict, tomorrow: dict, day_num: int, today: date, hard
         lines.append(f"  - {r}")
     lines.append("")
     lines.append("Where you are: Phase 1, pre-baby maintenance. Sub-3:25 marathon target 22 Nov 2026.")
+    yesterday_block = text_yesterday_nutrition(yesterday_log, nutrition_logger.DAILY_TARGETS)
+    if yesterday_block:
+        lines.append(yesterday_block.rstrip("\n"))
     lines.append("")
     lines.append("─" * 70)
     lines.append("TODAY'S FOOD LOG")
@@ -380,8 +429,9 @@ def main():
 
         date_str = target_date.strftime("%a %d %b")
         subject = f"Fitness plan — {date_str} (Day {day_num}) — {day['session_type']}"
-        html = build_phase1_html(day, day_after, day_num, target_date, plan["hard_rules_phase1"])
-        text = build_phase1_text(day, day_after, day_num, target_date, plan["hard_rules_phase1"])
+        yesterday_log = nutrition_logger.read_day(today_local - timedelta(days=1))
+        html = build_phase1_html(day, day_after, day_num, target_date, plan["hard_rules_phase1"], yesterday_log)
+        text = build_phase1_text(day, day_after, day_num, target_date, plan["hard_rules_phase1"], yesterday_log)
 
     elif phase == "phase2":
         # Send only on Mondays (weekday == 0)

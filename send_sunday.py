@@ -25,6 +25,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import coach_orchestrator
+import nutrition_logger
 import training_summary as ts
 
 ROOT = Path(__file__).parent
@@ -108,7 +109,77 @@ def _option_html(letter: str, opt: dict, is_rec: bool) -> str:
     )
 
 
-def build_html(summary: dict, week_label: str) -> str:
+def html_nutrition_section(weekly: dict, targets: dict) -> str:
+    """Weekly nutrition section for the Sunday email. Empty if no days logged."""
+    if weekly["days_logged"] == 0:
+        return ""
+    rows = [
+        f"<li><strong>Days logged:</strong> {weekly['days_logged']} / 7</li>",
+        f"<li><strong>Avg protein:</strong> {weekly['avg_protein_g']:.0f}g / {targets['protein_g']}g target</li>",
+        f"<li><strong>Avg kcal:</strong> {weekly['avg_kcal']:.0f} / {targets['kcal']} target</li>",
+        f"<li><strong>Protein target hits:</strong> "
+        f"{weekly['protein_target_hits']} / {weekly['days_logged']} days</li>",
+    ]
+    if weekly.get("lowest_protein_day"):
+        day = weekly["lowest_protein_day"]
+        rows.append(
+            f"<li><strong>Lowest protein day:</strong> "
+            f"{html_lib.escape(day['date'])} ({day['g']:.0f}g)</li>"
+        )
+    pattern_html = ""
+    if weekly.get("patterns"):
+        escaped = "; ".join(html_lib.escape(p) for p in weekly["patterns"])
+        pattern_html = (
+            '<div style="background:#FFF8E7; border-left:3px solid #F0A500; '
+            'padding:10px 14px; margin-top:12px; font-size:13px;">'
+            f'<strong>Pattern note:</strong> {escaped}</div>'
+        )
+    return (
+        '<h3 style="color:#1F3A5F; border-bottom:1px solid #eee; padding-bottom:4px;">'
+        "Nutrition this week</h3>"
+        f'<ul style="font-size:14px; color:#444;">{"".join(rows)}</ul>'
+        f"{pattern_html}"
+    )
+
+
+def text_nutrition_section(weekly: dict, targets: dict) -> str:
+    """Plain-text mirror of html_nutrition_section. Empty if no days logged."""
+    if weekly["days_logged"] == 0:
+        return ""
+    lines = [
+        "Nutrition this week:",
+        f"  Days logged:         {weekly['days_logged']} / 7",
+        f"  Avg protein:         {weekly['avg_protein_g']:.0f}g / {targets['protein_g']}g target",
+        f"  Avg kcal:            {weekly['avg_kcal']:.0f} / {targets['kcal']} target",
+        f"  Protein target hits: {weekly['protein_target_hits']} / {weekly['days_logged']} days",
+    ]
+    if weekly.get("lowest_protein_day"):
+        day = weekly["lowest_protein_day"]
+        lines.append(f"  Lowest protein day:  {day['date']} ({day['g']:.0f}g)")
+    if weekly.get("patterns"):
+        lines.append("  Pattern note: " + "; ".join(weekly["patterns"]))
+    return "\n".join(lines)
+
+
+def _nutrition_summary_for_prompt(weekly: dict, targets: dict) -> str:
+    """One-paragraph nutrition summary for injection into generate_weekly_summary's prompt."""
+    if weekly["days_logged"] == 0:
+        return "No nutrition logs this week."
+    parts = [
+        f"{weekly['days_logged']}/7 days logged.",
+        f"Avg protein {weekly['avg_protein_g']:.0f}g (target {targets['protein_g']}g).",
+        f"Avg kcal {weekly['avg_kcal']:.0f} (target {targets['kcal']}).",
+        f"Protein target hit {weekly['protein_target_hits']}/{weekly['days_logged']} days.",
+    ]
+    if weekly.get("lowest_protein_day"):
+        day = weekly["lowest_protein_day"]
+        parts.append(f"Lowest protein day: {day['date']} ({day['g']:.0f}g).")
+    if weekly.get("patterns"):
+        parts.append("Flags: " + "; ".join(weekly["patterns"]) + ".")
+    return " ".join(parts)
+
+
+def build_html(summary: dict, week_label: str, nutrition_html: str = "") -> str:
     rec = summary["recommendation"]
     coach_note_html = ""
     if summary.get("coach_note"):
@@ -136,6 +207,7 @@ def build_html(summary: dict, week_label: str) -> str:
         f'<strong>Last week:</strong> {html_lib.escape(summary["week_review"])}'
         f'</div>'
         f'{coach_note_html}'
+        f'{nutrition_html}'
         f'{options_html}'
         f'<div style="border-top:1px solid #EEE; margin:20px 0 16px;"></div>'
         f'<p style="font-size:14px; margin:0 0 8px;">'
@@ -148,7 +220,7 @@ def build_html(summary: dict, week_label: str) -> str:
     )
 
 
-def build_text(summary: dict, week_label: str) -> str:
+def build_text(summary: dict, week_label: str, nutrition_text: str = "") -> str:
     rec = summary["recommendation"]
     lines = [
         f"Week ahead — {week_label}",
@@ -157,6 +229,8 @@ def build_text(summary: dict, week_label: str) -> str:
     ]
     if summary.get("coach_note"):
         lines += [f"Coach note: {summary['coach_note']}", ""]
+    if nutrition_text:
+        lines += [nutrition_text, ""]
     for letter, key in [("A", "option_a"), ("B", "option_b"), ("C", "option_c")]:
         opt = summary[key]
         marker = " ← Recommended" if rec == letter else ""
@@ -290,6 +364,8 @@ def main():
 
     standard_week = _compute_standard_week(today, plan)
     training_text = ts.build_summary(days=14)
+    weekly_nutrition = nutrition_logger.weekly_summary(days=7, end_date=today)
+    nutrition_prompt_text = _nutrition_summary_for_prompt(weekly_nutrition, nutrition_logger.DAILY_TARGETS)
 
     # Write the coming week's session list to plans/current-week.md
     _write_current_week_plan(standard_week, week_label, week_start)
@@ -299,12 +375,15 @@ def main():
         summary = coach_orchestrator.generate_weekly_summary(
             training_summary=training_text,
             standard_week=standard_week,
+            nutrition_summary=nutrition_prompt_text,
         )
     except Exception as exc:
         sys.exit(f"Weekly summary generation failed: {exc}")
 
-    html = build_html(summary, week_label)
-    text = build_text(summary, week_label)
+    nutrition_html = html_nutrition_section(weekly_nutrition, nutrition_logger.DAILY_TARGETS)
+    nutrition_text = text_nutrition_section(weekly_nutrition, nutrition_logger.DAILY_TARGETS)
+    html = build_html(summary, week_label, nutrition_html)
+    text = build_text(summary, week_label, nutrition_text)
     subject = f"Week ahead — {week_label}"
 
     print(f"[send] {subject}")
