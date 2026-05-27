@@ -110,63 +110,51 @@
       }
     },
     "2026-05-28": {
-      "applied_at": "2026-05-27T16:57:59.224508+02:00",
-      "feedback_source": "reply: 'On thursday 28th may I would like to have a full body strength session,\\nfocusing on upper body compound movements but also including legs and core.\\nWorkout length 1 hour to 1hour 10 mins'",
+      "applied_at": "2026-05-27T19:57:24.931495+02:00",
+      "feedback_source": "reply: 'Give me another full body session for tomorrow, thur 28 May'",
       "session": {
-        "session_type": "Full Body Strength",
+        "session_type": "Full Body Strength (Lighter)",
         "session_kind": "strength",
-        "duration_min": 65,
-        "warm_up": "5-10 min dynamic warm-up (e.g., arm circles, leg swings, bodyweight squats, planks).",
+        "duration_min": 50,
+        "warm_up": "5-10 min dynamic warm-up (e.g., arm circles, light cardio, band pull-aparts, shoulder rotations, leg swings).",
         "exercises": [
           {
-            "name": "Barbell Back Squat",
+            "name": "Pull-ups",
             "sets_reps": "3 sets x 6-8 reps",
-            "weight": "Challenging, not max effort",
+            "weight": "Bodyweight or BW + 2.5kg (RIR 3)",
             "rest": "90s"
           },
           {
-            "name": "Bench Press (Barbell or Dumbbell)",
+            "name": "Barbell Front Squat",
             "sets_reps": "3 sets x 6-8 reps",
-            "weight": "Challenging, not max effort",
+            "weight": "65-75kg (RIR 3)",
             "rest": "90s"
           },
           {
-            "name": "Pull-ups (or Lat Pulldowns)",
+            "name": "Barbell Overhead Press",
             "sets_reps": "3 sets x 6-8 reps",
-            "weight": "Bodyweight or added weight",
+            "weight": "30-35kg (RIR 3)",
             "rest": "90s"
           },
           {
-            "name": "Romanian Deadlifts (RDLs)",
+            "name": "Romanian Deadlift (Barbell)",
             "sets_reps": "3 sets x 8-10 reps",
-            "weight": "Moderate",
+            "weight": "70-80kg (RIR 3)",
             "rest": "60s"
           },
           {
-            "name": "Overhead Press (Barbell or Dumbbell)",
-            "sets_reps": "3 sets x 8-10 reps",
-            "weight": "Moderate",
-            "rest": "60s"
-          },
-          {
-            "name": "Plank (various forms)",
-            "sets_reps": "3 sets x 30-60s hold",
-            "weight": "Bodyweight",
-            "rest": "45s"
-          },
-          {
-            "name": "Cable Crunches or Hanging Leg Raises",
-            "sets_reps": "3 sets x 10-15 reps",
-            "weight": "Moderate",
+            "name": "Pallof Press (Cable or Band)",
+            "sets_reps": "3 sets x 10-12 reps per side",
+            "weight": "Moderate resistance (RIR 3)",
             "rest": "45s"
           }
         ],
         "run_details": {},
         "details": "",
         "extras": "",
-        "short_version": "Reduce duration to 30-40 min, focus on 3-4 compound movements with lighter weight, or skip entirely if sleep <6h or feeling excessively fatigued.",
-        "purpose": "Develop overall strength, support running economy, and address Luke's request for a full-body session.",
-        "coach_note": "The easy run is replaced with a full-body strength session as requested. This creates back-to-back strength training days. Manage intensity to prioritize recovery for the upcoming long run and Monday's strength session. Adhere to the 'no PB attempts' rule."
+        "short_version": "Reduce to 1 set per compound movement (Pull-ups, Front Squat, Overhead Press, Romanian Deadlift). Skip Pallof Press. Focus on RIR 3. If sleep <6h or feeling wrecked, prioritize recovery and consider skipping.",
+        "purpose": "Provide a balanced full-body strength stimulus with lighter loads to support overall strength maintenance and allow adequate recovery for the upcoming long run.",
+        "coach_note": "The session for Thursday, 28 May, has been changed from an Easy Run to a Full Body Strength (Lighter) session as requested. This session prioritizes compound movements with lighter loads and higher reps to align with the 'lighter' full-body principle and manage fatigue during your marathon build. Weights are suggested at 70-80% of estimated 1RM to ensure RIR 3. This structure allows for lower body recovery before your long run on Saturday, while still providing a strength stimulus. Remember to prioritize sleep and adjust to the short_version if needed."
       }
     }
   }
