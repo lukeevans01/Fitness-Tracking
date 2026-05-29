@@ -54,7 +54,15 @@ export default function ChatCoach({ data }) {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ messages: history, context: buildContext(data) }),
       });
-      const body = await res.json();
+      const raw = await res.text();
+      let body;
+      try {
+        body = JSON.parse(raw);
+      } catch {
+        // A non-JSON response usually means the request did not reach the coach
+        // function (for example an edge or deploy blip serving the SPA shell).
+        throw new Error("the coach is temporarily unavailable, please try again in a moment");
+      }
       if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
       setMessages((m) => [...m, { role: "coach", text: body.answer }]);
     } catch (e) {
