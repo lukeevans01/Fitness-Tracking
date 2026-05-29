@@ -1,0 +1,61 @@
+{
+  "generated_at": "2026-05-29",
+  "plan": {
+    "block_name": "base",
+    "weeks_to_race": 26,
+    "race_label": "San Sebasti\u00e1n marathon"
+  },
+  "sections": {
+    "running": {
+      "kpis": [
+        {
+          "value": "16 km",
+          "label": "per week"
+        },
+        {
+          "value": "1%",
+          "label": "easy pace"
+        },
+        {
+          "value": 26,
+          "label": "weeks to race"
+        }
+      ],
+      "narrative": "8 runs and 66 km over the last 4 weeks. Only 1% of your running is genuinely easy, so the priority is slowing easy days out of the moderate grey zone."
+    },
+    "lifting": {
+      "kpis": [
+        {
+          "value": 8,
+          "label": "sessions / 4wk"
+        },
+        {
+          "value": "117 kg",
+          "label": "Squat e1RM"
+        },
+        {
+          "value": "85 kg",
+          "label": "Bench e1RM"
+        }
+      ],
+      "narrative": "8 strength sessions in the last 4 weeks. Your Squat e1RM is about 117 kg against a 130 kg target, the biggest gap right now, so prioritise it."
+    },
+    "nutrition": {
+      "kpis": [
+        {
+          "value": "1",
+          "label": "days logged"
+        },
+        {
+          "value": "2120",
+          "label": "avg kcal"
+        },
+        {
+          "value": "87g",
+          "label": "avg protein"
+        }
+      ],
+      "narrative": "1 day(s) logged so far. Protein is averaging 87g against a 130g target, the main thing to push."
+    }
+  }
+}

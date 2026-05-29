@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-05-29",
+  "empty": false,
+  "targets": {
+    "kcal": 2800,
+    "protein_g": 130,
+    "carbs_g": 432,
+    "fat_g": 72
+  },
+  "days": [
+    {
+      "date": "2026-05-27",
+      "kcal": 2120.0,
+      "protein_g": 86.6,
+      "carbs_g": 293.5,
+      "fat_g": 67.0
+    }
+  ],
+  "averages": {
+    "kcal": 2120.0,
+    "protein_g": 86.6,
+    "carbs_g": 293.5,
+    "fat_g": 67.0
+  },
+  "summary": {
+    "days_logged": 1,
+    "last_day": "2026-05-27"
+  },
+  "recap": [
+    {
+      "heading": "What you have been up to",
+      "text": "You have 1 day(s) logged, most recently 2026-05-27. On the days logged you are averaging 2120 kcal and 87g protein. Log a few more days to build a reliable trend."
+    },
+    {
+      "heading": "Where to push next",
+      "text": "Protein is averaging 87g against a 130g target, about 43g short, so that is the main thing to push. Calories are running under your 2800 target, worth watching given the marathon training load."
+    }
+  ],
+  "headline": {
+    "kpis": [
+      {
+        "value": "1",
+        "label": "days logged"
+      },
+      {
+        "value": "2120",
+        "label": "avg kcal"
+      },
+      {
+        "value": "87g",
+        "label": "avg protein"
+      }
+    ],
+    "narrative": "1 day(s) logged so far. Protein is averaging 87g against a 130g target, the main thing to push."
+  }
+}

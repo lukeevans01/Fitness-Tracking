@@ -1,0 +1,188 @@
+{
+  "generated_at": "2026-05-29",
+  "empty": false,
+  "race": {
+    "date": "2026-11-22",
+    "label": "San Sebasti\u00e1n marathon",
+    "target": "sub-3:25 (4:51/km)",
+    "weeks_to_race": 26
+  },
+  "block": {
+    "name": "base",
+    "label": "Base phase, 26 weeks to race. Long run holding around 12 km while you build aerobic volume before the specific work.",
+    "long_run_km": 12.0,
+    "quality_minutes": 0
+  },
+  "cycle_start_date": "2026-05-25",
+  "days": [
+    {
+      "day_label": "Monday",
+      "session_type": "Full Body Strength - Squat Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Back Squat",
+          "sets_reps": "3x6-8",
+          "weight": "90kg"
+        },
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x8-10",
+          "weight": "81kg"
+        },
+        {
+          "name": "Incline Dumbbell Press",
+          "sets_reps": "3x8-10",
+          "weight": "20kg/hand"
+        },
+        {
+          "name": "Bent-Over Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pallof Press",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Build lower body strength and support running economy with squat and hinge patterns."
+    },
+    {
+      "day_label": "Tuesday",
+      "session_type": "Easy Recovery Run + Evening Squash",
+      "session_kind": "run",
+      "duration_min": 45,
+      "run": {
+        "pace": "5:35-6:00/km",
+        "hr_target": "<150",
+        "distance": "~7.5-8 km",
+        "effort": "Truly easy, conversational."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash."
+    },
+    {
+      "day_label": "Wednesday",
+      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Barbell Bench Press",
+          "sets_reps": "3x6-8",
+          "weight": "62.5kg"
+        },
+        {
+          "name": "Overhead Press (Barbell)",
+          "sets_reps": "3x6-8",
+          "weight": "35kg"
+        },
+        {
+          "name": "Romanian Deadlift (lighter)",
+          "sets_reps": "3x10-12",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pull-ups",
+          "sets_reps": "3x6-8",
+          "weight": "BW+5kg"
+        },
+        {
+          "name": "Side Plank",
+          "sets_reps": "3x30-45s/side",
+          "weight": "BW"
+        }
+      ],
+      "details": "",
+      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism."
+    },
+    {
+      "day_label": "Thursday",
+      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
+      "session_kind": "run",
+      "duration_min": 60,
+      "run": {
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
+        "hr_target": "See pace details.",
+        "distance": "~10-11 km",
+        "effort": "Controlled quality, focus on hitting MP segments precisely."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Introduce marathon pace work to build specific endurance and efficiency."
+    },
+    {
+      "day_label": "Friday",
+      "session_type": "Full Body Strength - Hinge Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x6-8",
+          "weight": "81kg"
+        },
+        {
+          "name": "Front Squat",
+          "sets_reps": "3x8-10",
+          "weight": "70kg"
+        },
+        {
+          "name": "Dumbbell Bench Press",
+          "sets_reps": "3x8-10",
+          "weight": "25kg/hand"
+        },
+        {
+          "name": "Seated Cable Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Woodchoppers (cable)",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention."
+    },
+    {
+      "day_label": "Saturday",
+      "session_type": "Rest Day & Active Recovery",
+      "session_kind": "rest",
+      "duration_min": 40,
+      "run": null,
+      "exercises": [],
+      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
+      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury."
+    },
+    {
+      "day_label": "Sunday",
+      "session_type": "Long Run - Aerobic Base",
+      "session_kind": "run",
+      "duration_min": 90,
+      "run": {
+        "pace": "5:25-5:45/km",
+        "hr_target": "150-160",
+        "distance": "~15-16 km",
+        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance."
+    }
+  ],
+  "hard_rules": [
+    "If labour starts, stop. No 'one last session.'",
+    "Easy means easy \u2014 HR <150 on easy runs.",
+    "Sleep is the override: <6h = drop to a walk or skip.",
+    "No PB attempts."
+  ]
+}

@@ -1,0 +1,4231 @@
+{
+  "generated_at": "2026-05-29",
+  "recent": {
+    "weeks": 4,
+    "window_start": "2026-04-27",
+    "window_end": "2026-05-24",
+    "runs": 8,
+    "km": 65.6,
+    "avg_km_per_week": 16.4,
+    "longest_km": 16.3,
+    "active_weeks": 4,
+    "easy_pct": 1,
+    "moderate_pct": 91,
+    "quality_pct": 8,
+    "trend_pct": 8,
+    "weeks_to_race": 26,
+    "narrative": [
+      {
+        "heading": "What you have been up to",
+        "text": "Over the last 4 weeks you logged 8 runs totalling 66 km, averaging 16 km per week across 4 of 4 weeks. That is up 8% on the previous 4 weeks. Your longest run was 16 km. By pace, your classified running split 1% easy, 91% moderate and 8% quality."
+      },
+      {
+        "heading": "Where to push next",
+        "text": "Most of your volume sits in the moderate zone. Aim to slow your easy runs until at least 70% of weekly km is genuinely easy (6:00/km or slower). Easy running you are currently at 1%, so the grey-zone moderate work is the first thing to trim. With about 26 weeks to the marathon, your long run has room to grow. Extend it gradually, by no more than 1 to 2 km a week."
+      }
+    ]
+  },
+  "efficiency": [
+    {
+      "month": "2022-04",
+      "ef": 1.109,
+      "avg_pace": 5.39,
+      "avg_hr": 168,
+      "runs": 3
+    },
+    {
+      "month": "2024-12",
+      "ef": 1.226,
+      "avg_pace": 5.33,
+      "avg_hr": 153,
+      "runs": 6
+    },
+    {
+      "month": "2025-01",
+      "ef": 1.245,
+      "avg_pace": 5.25,
+      "avg_hr": 153,
+      "runs": 2
+    },
+    {
+      "month": "2025-06",
+      "ef": 1.189,
+      "avg_pace": 5.4,
+      "avg_hr": 156,
+      "runs": 6
+    },
+    {
+      "month": "2025-07",
+      "ef": 1.137,
+      "avg_pace": 5.6,
+      "avg_hr": 158,
+      "runs": 8
+    },
+    {
+      "month": "2025-08",
+      "ef": 1.156,
+      "avg_pace": 5.4,
+      "avg_hr": 160,
+      "runs": 6
+    },
+    {
+      "month": "2025-09",
+      "ef": 1.189,
+      "avg_pace": 5.36,
+      "avg_hr": 157,
+      "runs": 9
+    },
+    {
+      "month": "2025-10",
+      "ef": 1.222,
+      "avg_pace": 5.3,
+      "avg_hr": 155,
+      "runs": 12
+    },
+    {
+      "month": "2025-11",
+      "ef": 1.271,
+      "avg_pace": 5.32,
+      "avg_hr": 148,
+      "runs": 3
+    },
+    {
+      "month": "2025-12",
+      "ef": 1.212,
+      "avg_pace": 5.3,
+      "avg_hr": 157,
+      "runs": 3
+    },
+    {
+      "month": "2026-01",
+      "ef": 1.128,
+      "avg_pace": 5.55,
+      "avg_hr": 160,
+      "runs": 5
+    },
+    {
+      "month": "2026-02",
+      "ef": 1.087,
+      "avg_pace": 6.01,
+      "avg_hr": 153,
+      "runs": 2
+    },
+    {
+      "month": "2026-03",
+      "ef": 1.16,
+      "avg_pace": 5.54,
+      "avg_hr": 156,
+      "runs": 7
+    },
+    {
+      "month": "2026-04",
+      "ef": 1.177,
+      "avg_pace": 5.32,
+      "avg_hr": 160,
+      "runs": 7
+    },
+    {
+      "month": "2026-05",
+      "ef": 1.166,
+      "avg_pace": 5.67,
+      "avg_hr": 152,
+      "runs": 6
+    }
+  ],
+  "weekly": [
+    {
+      "week_start": "2018-04-02",
+      "km": 5.2,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 5.2,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-04-16",
+      "km": 5.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 5.1,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-05-07",
+      "km": 5.8,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 5.8,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-05-14",
+      "km": 5.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-05-21",
+      "km": 5.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-05-28",
+      "km": 5.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-06-04",
+      "km": 5.2,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-06-11",
+      "km": 4.7,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 4.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-06-25",
+      "km": 3.8,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 3.8,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-07-16",
+      "km": 5.5,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.5,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-07-23",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 4.7,
+      "quality_km": 5.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-08-06",
+      "km": 5.2,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 5.2,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-08-13",
+      "km": 10.7,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-08-20",
+      "km": 5.5,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.5,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-08-27",
+      "km": 10.7,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-09-03",
+      "km": 5.4,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-09-10",
+      "km": 10.8,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-09-24",
+      "km": 5.4,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-10-08",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 4.8,
+      "quality_km": 5.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-10-22",
+      "km": 4.6,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 4.6,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-12-03",
+      "km": 15.2,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 10.2,
+      "quality_km": 5.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2018-12-31",
+      "km": 5.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 5.0,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-01-07",
+      "km": 9.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 9.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-01-14",
+      "km": 10.0,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 5.0,
+      "quality_km": 5.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-01-21",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 10.1,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-01-28",
+      "km": 5.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-02-04",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-02-11",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-02-18",
+      "km": 14.3,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 14.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-02-25",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-03-04",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-03-11",
+      "km": 15.5,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 15.5,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-03-18",
+      "km": 4.9,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 4.9,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-03-25",
+      "km": 9.7,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 9.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-04-01",
+      "km": 5.2,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-04-08",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-04-15",
+      "km": 5.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-04-22",
+      "km": 5.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-04-29",
+      "km": 15.1,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 15.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-05-13",
+      "km": 10.3,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-05-20",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-05-27",
+      "km": 15.0,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 15.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-06-03",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-06-10",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-06-24",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-07-01",
+      "km": 5.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-07-08",
+      "km": 15.1,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 15.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-07-15",
+      "km": 5.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-07-22",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 5.0,
+      "quality_km": 5.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-07-29",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-08-05",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-08-12",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-08-19",
+      "km": 10.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-08-26",
+      "km": 4.8,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 4.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-09-16",
+      "km": 8.3,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 8.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-09-30",
+      "km": 4.7,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 4.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-10-07",
+      "km": 5.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-10-14",
+      "km": 5.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-11-11",
+      "km": 5.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-11-18",
+      "km": 5.3,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-11-25",
+      "km": 5.3,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-12-02",
+      "km": 5.4,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-12-09",
+      "km": 11.2,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 11.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2019-12-30",
+      "km": 10.7,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-01-06",
+      "km": 12.3,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 12.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-01-13",
+      "km": 5.9,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.9,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-01-20",
+      "km": 13.5,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 13.5,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-02-03",
+      "km": 25.6,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 25.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-02-10",
+      "km": 12.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 12.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-02-17",
+      "km": 21.7,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 21.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-02-24",
+      "km": 15.5,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 15.5,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-03-02",
+      "km": 11.8,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 11.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-03-09",
+      "km": 13.7,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 13.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-03-16",
+      "km": 34.3,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 34.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-03-23",
+      "km": 14.1,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 14.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-03-30",
+      "km": 36.7,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 36.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-04-06",
+      "km": 8.6,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 8.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-04-13",
+      "km": 14.6,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 14.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-04-20",
+      "km": 32.3,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 32.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-04-27",
+      "km": 22.2,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 22.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-05-04",
+      "km": 16.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 16.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-05-11",
+      "km": 12.8,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 12.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-05-18",
+      "km": 35.3,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 35.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-05-25",
+      "km": 23.1,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 23.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-06-01",
+      "km": 22.1,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 22.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-06-08",
+      "km": 27.4,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 27.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-06-15",
+      "km": 49.4,
+      "runs": 4,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 49.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-06-22",
+      "km": 17.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 17.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-06-29",
+      "km": 32.4,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 32.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-07-06",
+      "km": 24.0,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 24.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-07-13",
+      "km": 23.8,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 23.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-07-20",
+      "km": 10.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-07-27",
+      "km": 19.3,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 19.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-08-03",
+      "km": 11.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 11.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-08-10",
+      "km": 11.4,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 11.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-08-24",
+      "km": 5.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-08-31",
+      "km": 6.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 6.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-09-07",
+      "km": 12.8,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 12.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-09-14",
+      "km": 14.0,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 14.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-09-21",
+      "km": 21.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 21.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-09-28",
+      "km": 16.3,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 16.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-10-05",
+      "km": 17.0,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 17.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-10-12",
+      "km": 19.0,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 19.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-10-19",
+      "km": 17.5,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 17.5,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-10-26",
+      "km": 13.2,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 13.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-11-02",
+      "km": 20.7,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 20.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-11-09",
+      "km": 11.3,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 11.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-11-16",
+      "km": 14.2,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 14.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-11-23",
+      "km": 24.1,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 24.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-11-30",
+      "km": 8.6,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 8.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-12-07",
+      "km": 6.2,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 6.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-12-14",
+      "km": 19.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 19.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-12-21",
+      "km": 13.8,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 13.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2020-12-28",
+      "km": 30.7,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 30.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-01-04",
+      "km": 26.1,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 26.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-01-11",
+      "km": 26.6,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 26.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-01-18",
+      "km": 23.6,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 23.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-01-25",
+      "km": 16.0,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 16.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-02-15",
+      "km": 13.5,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 13.5,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-03-01",
+      "km": 11.0,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 11.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-03-08",
+      "km": 15.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 15.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-03-15",
+      "km": 6.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 6.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-03-22",
+      "km": 16.0,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 16.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-03-29",
+      "km": 5.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-04-05",
+      "km": 11.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 11.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-04-19",
+      "km": 6.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 6.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-05-03",
+      "km": 15.7,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 15.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-05-10",
+      "km": 10.2,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-05-24",
+      "km": 7.9,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 7.9,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-05-31",
+      "km": 12.9,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 12.9,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-06-07",
+      "km": 11.0,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 11.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-06-14",
+      "km": 7.5,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 7.5,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-06-21",
+      "km": 11.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 11.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-07-05",
+      "km": 11.7,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 11.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-07-12",
+      "km": 11.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 11.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-07-19",
+      "km": 33.2,
+      "runs": 4,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 33.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-07-26",
+      "km": 5.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-08-02",
+      "km": 28.3,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 28.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-08-09",
+      "km": 38.3,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 38.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-08-16",
+      "km": 24.0,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 24.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-08-23",
+      "km": 21.6,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 21.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-08-30",
+      "km": 31.0,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 31.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-09-06",
+      "km": 16.9,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 16.9,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-09-13",
+      "km": 7.6,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 7.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-09-20",
+      "km": 46.9,
+      "runs": 4,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 46.9,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-10-04",
+      "km": 27.8,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 27.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-10-11",
+      "km": 5.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-10-18",
+      "km": 7.4,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 7.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-10-25",
+      "km": 12.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 12.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-11-01",
+      "km": 22.6,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 22.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-11-08",
+      "km": 19.0,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 19.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-11-15",
+      "km": 26.3,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 18.9,
+      "quality_km": 7.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-11-22",
+      "km": 18.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 18.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-11-29",
+      "km": 30.8,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 30.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-12-06",
+      "km": 18.5,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 18.5,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-12-13",
+      "km": 22.8,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 22.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-12-20",
+      "km": 21.7,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 21.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2021-12-27",
+      "km": 20.7,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 20.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-01-03",
+      "km": 18.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 18.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-01-10",
+      "km": 9.4,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 9.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-01-17",
+      "km": 27.9,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 27.9,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-01-24",
+      "km": 20.2,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 20.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-01-31",
+      "km": 24.9,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 24.9,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-02-07",
+      "km": 40.2,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 40.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-02-14",
+      "km": 10.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-02-21",
+      "km": 7.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 7.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-02-28",
+      "km": 27.4,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 27.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-03-14",
+      "km": 18.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 18.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-03-21",
+      "km": 15.1,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 15.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-03-28",
+      "km": 10.6,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-04-04",
+      "km": 6.6,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 6.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-04-11",
+      "km": 26.8,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 16.1,
+      "quality_km": 10.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-04-18",
+      "km": 35.1,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 11.1,
+      "quality_km": 24.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-04-25",
+      "km": 27.9,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 27.9,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-05-02",
+      "km": 24.2,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 24.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-05-09",
+      "km": 24.8,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 24.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-05-16",
+      "km": 36.8,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 36.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-05-23",
+      "km": 13.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 13.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-05-30",
+      "km": 21.6,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 21.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-06-06",
+      "km": 10.8,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-06-20",
+      "km": 7.5,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 7.5,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-06-27",
+      "km": 10.8,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-07-04",
+      "km": 13.6,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 13.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-07-18",
+      "km": 10.2,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-07-25",
+      "km": 18.2,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 18.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-08-01",
+      "km": 16.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 16.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-08-08",
+      "km": 18.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 10.3,
+      "quality_km": 8.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-08-15",
+      "km": 5.8,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 5.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-08-29",
+      "km": 5.3,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 5.3,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-09-05",
+      "km": 30.7,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 30.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-09-12",
+      "km": 17.7,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 17.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-09-19",
+      "km": 7.6,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 7.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-09-26",
+      "km": 13.5,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 13.5,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-10-03",
+      "km": 36.1,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 36.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-10-10",
+      "km": 24.3,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 24.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-10-17",
+      "km": 23.0,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 23.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-10-31",
+      "km": 23.2,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 23.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-11-14",
+      "km": 12.3,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 12.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-11-28",
+      "km": 9.5,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 9.5,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2022-12-12",
+      "km": 6.7,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 6.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-01-02",
+      "km": 24.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 24.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-01-09",
+      "km": 15.6,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 15.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-01-16",
+      "km": 21.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 21.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-01-23",
+      "km": 8.9,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 8.9,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-02-06",
+      "km": 8.8,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 8.8,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-02-13",
+      "km": 35.5,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 8.1,
+      "quality_km": 27.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-02-27",
+      "km": 37.7,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 37.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-03-06",
+      "km": 9.2,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 9.2,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-03-13",
+      "km": 9.9,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 9.9,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-03-20",
+      "km": 19.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 19.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-03-27",
+      "km": 10.7,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-04-03",
+      "km": 10.6,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 10.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-04-10",
+      "km": 13.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 13.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-04-17",
+      "km": 9.9,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 9.9,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-04-24",
+      "km": 13.3,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 13.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2023-05-01",
+      "km": 18.1,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 18.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2024-12-02",
+      "km": 26.8,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 26.8,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2024-12-09",
+      "km": 23.5,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 15.5,
+      "quality_km": 8.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2024-12-16",
+      "km": 18.2,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 9.5,
+      "quality_km": 8.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2024-12-23",
+      "km": 17.2,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 17.2,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2024-12-30",
+      "km": 21.8,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 11.1,
+      "quality_km": 10.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-01-06",
+      "km": 19.6,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 10.0,
+      "quality_km": 9.6,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-04-21",
+      "km": 7.6,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 7.6,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-05-19",
+      "km": 7.2,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 7.2,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-06-02",
+      "km": 15.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 8.3,
+      "quality_km": 7.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-06-09",
+      "km": 8.5,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 8.5,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-06-16",
+      "km": 34.0,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 34.0,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-06-23",
+      "km": 6.2,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 6.2,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-06-30",
+      "km": 36.3,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 36.3,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-07-07",
+      "km": 26.3,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 17.2,
+      "quality_km": 9.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-07-14",
+      "km": 17.5,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 8.1,
+      "quality_km": 9.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-07-21",
+      "km": 17.4,
+      "runs": 2,
+      "easy_km": 9.2,
+      "moderate_km": 8.2,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-07-28",
+      "km": 26.8,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 26.8,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-08-04",
+      "km": 20.5,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 20.5,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-08-25",
+      "km": 31.7,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 31.7,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-09-01",
+      "km": 43.2,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 43.2,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-09-08",
+      "km": 34.3,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 24.1,
+      "quality_km": 10.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-09-15",
+      "km": 37.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 26.4,
+      "quality_km": 11.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-09-22",
+      "km": 54.8,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 54.8,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-09-29",
+      "km": 32.9,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 32.9,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-10-06",
+      "km": 56.0,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 56.0,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-10-13",
+      "km": 55.5,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 55.5,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-10-20",
+      "km": 41.3,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 32.2,
+      "quality_km": 9.1,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-10-27",
+      "km": 31.4,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 31.4,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-11-03",
+      "km": 49.6,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 7.2,
+      "quality_km": 42.4,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-11-24",
+      "km": 7.9,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 7.9,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-12-08",
+      "km": 11.0,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 11.0,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-12-15",
+      "km": 5.2,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 5.2,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-12-22",
+      "km": 9.3,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 9.3,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2025-12-29",
+      "km": 6.8,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 6.8,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-01-12",
+      "km": 21.2,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 21.2,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-01-19",
+      "km": 11.5,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 11.5,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-01-26",
+      "km": 7.6,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 7.6,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-02-02",
+      "km": 8.5,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 8.5,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-02-16",
+      "km": 8.7,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 0.0,
+      "quality_km": 8.7,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-02-23",
+      "km": 15.2,
+      "runs": 3,
+      "easy_km": 3.9,
+      "moderate_km": 0.0,
+      "quality_km": 11.3,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-03-02",
+      "km": 23.0,
+      "runs": 4,
+      "easy_km": 0.0,
+      "moderate_km": 18.1,
+      "quality_km": 5.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-03-09",
+      "km": 19.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 19.4,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-03-16",
+      "km": 13.7,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 13.7,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-03-23",
+      "km": 9.4,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 9.4,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-03-30",
+      "km": 8.6,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 8.6,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-04-06",
+      "km": 24.9,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 24.9,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-04-13",
+      "km": 7.6,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 7.6,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-04-20",
+      "km": 19.6,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 19.6,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-04-27",
+      "km": 19.5,
+      "runs": 4,
+      "easy_km": 0.7,
+      "moderate_km": 13.8,
+      "quality_km": 5.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-05-04",
+      "km": 7.5,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 7.5,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-05-11",
+      "km": 22.3,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 22.3,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-05-18",
+      "km": 16.3,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 16.3,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    }
+  ],
+  "zone_trend": [
+    {
+      "week_start": "2018-04-02",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2018-04-16",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2018-05-07",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2018-05-14",
+      "easy_pct": 0,
+      "moderate_pct": 76,
+      "quality_pct": 24
+    },
+    {
+      "week_start": "2018-05-21",
+      "easy_pct": 0,
+      "moderate_pct": 52,
+      "quality_pct": 48
+    },
+    {
+      "week_start": "2018-05-28",
+      "easy_pct": 0,
+      "moderate_pct": 28,
+      "quality_pct": 72
+    },
+    {
+      "week_start": "2018-06-04",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2018-06-11",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2018-06-25",
+      "easy_pct": 0,
+      "moderate_pct": 20,
+      "quality_pct": 80
+    },
+    {
+      "week_start": "2018-07-16",
+      "easy_pct": 0,
+      "moderate_pct": 20,
+      "quality_pct": 80
+    },
+    {
+      "week_start": "2018-07-23",
+      "easy_pct": 0,
+      "moderate_pct": 35,
+      "quality_pct": 65
+    },
+    {
+      "week_start": "2018-08-06",
+      "easy_pct": 0,
+      "moderate_pct": 56,
+      "quality_pct": 44
+    },
+    {
+      "week_start": "2018-08-13",
+      "easy_pct": 0,
+      "moderate_pct": 32,
+      "quality_pct": 68
+    },
+    {
+      "week_start": "2018-08-20",
+      "easy_pct": 0,
+      "moderate_pct": 32,
+      "quality_pct": 68
+    },
+    {
+      "week_start": "2018-08-27",
+      "easy_pct": 0,
+      "moderate_pct": 16,
+      "quality_pct": 84
+    },
+    {
+      "week_start": "2018-09-03",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2018-09-10",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2018-09-24",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2018-10-08",
+      "easy_pct": 0,
+      "moderate_pct": 15,
+      "quality_pct": 85
+    },
+    {
+      "week_start": "2018-10-22",
+      "easy_pct": 0,
+      "moderate_pct": 30,
+      "quality_pct": 70
+    },
+    {
+      "week_start": "2018-12-03",
+      "easy_pct": 0,
+      "moderate_pct": 55,
+      "quality_pct": 45
+    },
+    {
+      "week_start": "2018-12-31",
+      "easy_pct": 0,
+      "moderate_pct": 70,
+      "quality_pct": 30
+    },
+    {
+      "week_start": "2019-01-07",
+      "easy_pct": 0,
+      "moderate_pct": 58,
+      "quality_pct": 42
+    },
+    {
+      "week_start": "2019-01-14",
+      "easy_pct": 0,
+      "moderate_pct": 51,
+      "quality_pct": 49
+    },
+    {
+      "week_start": "2019-01-21",
+      "easy_pct": 0,
+      "moderate_pct": 58,
+      "quality_pct": 42
+    },
+    {
+      "week_start": "2019-01-28",
+      "easy_pct": 0,
+      "moderate_pct": 44,
+      "quality_pct": 56
+    },
+    {
+      "week_start": "2019-02-04",
+      "easy_pct": 0,
+      "moderate_pct": 43,
+      "quality_pct": 57
+    },
+    {
+      "week_start": "2019-02-11",
+      "easy_pct": 0,
+      "moderate_pct": 29,
+      "quality_pct": 71
+    },
+    {
+      "week_start": "2019-02-18",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-02-25",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-03-04",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-03-11",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-03-18",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-03-25",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-04-01",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-04-08",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-04-15",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-04-22",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-04-29",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-05-13",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-05-20",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-05-27",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-06-03",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-06-10",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-06-24",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-07-01",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-07-08",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-07-15",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-07-22",
+      "easy_pct": 0,
+      "moderate_pct": 14,
+      "quality_pct": 86
+    },
+    {
+      "week_start": "2019-07-29",
+      "easy_pct": 0,
+      "moderate_pct": 12,
+      "quality_pct": 88
+    },
+    {
+      "week_start": "2019-08-05",
+      "easy_pct": 0,
+      "moderate_pct": 14,
+      "quality_pct": 86
+    },
+    {
+      "week_start": "2019-08-12",
+      "easy_pct": 0,
+      "moderate_pct": 12,
+      "quality_pct": 88
+    },
+    {
+      "week_start": "2019-08-19",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-08-26",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-09-16",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-09-30",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-10-07",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-10-14",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-11-11",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-11-18",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-11-25",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-12-02",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-12-09",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2019-12-30",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-01-06",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-01-13",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-01-20",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-02-03",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-02-10",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-02-17",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-02-24",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-03-02",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-03-09",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-03-16",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-03-23",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-03-30",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-04-06",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-04-13",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-04-20",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-04-27",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-05-04",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-05-11",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-05-18",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-05-25",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-06-01",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-06-08",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-06-15",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-06-22",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-06-29",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-07-06",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-07-13",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-07-20",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-07-27",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-08-03",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-08-10",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-08-24",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-08-31",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-09-07",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-09-14",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-09-21",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-09-28",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-10-05",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-10-12",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-10-19",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-10-26",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-11-02",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-11-09",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-11-16",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-11-23",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-11-30",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-12-07",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-12-14",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-12-21",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2020-12-28",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-01-04",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-01-11",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-01-18",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-01-25",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-02-15",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-03-01",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-03-08",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-03-15",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-03-22",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-03-29",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-04-05",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-04-19",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-05-03",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-05-10",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-05-24",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-05-31",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-06-07",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-06-14",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-06-21",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-07-05",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-07-12",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-07-19",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-07-26",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-08-02",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-08-09",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-08-16",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-08-23",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-08-30",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-09-06",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-09-13",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-09-20",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-10-04",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-10-11",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-10-18",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-10-25",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-11-01",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-11-08",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-11-15",
+      "easy_pct": 0,
+      "moderate_pct": 24,
+      "quality_pct": 76
+    },
+    {
+      "week_start": "2021-11-22",
+      "easy_pct": 0,
+      "moderate_pct": 22,
+      "quality_pct": 78
+    },
+    {
+      "week_start": "2021-11-29",
+      "easy_pct": 0,
+      "moderate_pct": 20,
+      "quality_pct": 80
+    },
+    {
+      "week_start": "2021-12-06",
+      "easy_pct": 0,
+      "moderate_pct": 20,
+      "quality_pct": 80
+    },
+    {
+      "week_start": "2021-12-13",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-12-20",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2021-12-27",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-01-03",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-01-10",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-01-17",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-01-24",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-01-31",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-02-07",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-02-14",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-02-21",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-02-28",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-03-14",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-03-21",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-03-28",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-04-04",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-04-11",
+      "easy_pct": 0,
+      "moderate_pct": 27,
+      "quality_pct": 73
+    },
+    {
+      "week_start": "2022-04-18",
+      "easy_pct": 0,
+      "moderate_pct": 34,
+      "quality_pct": 66
+    },
+    {
+      "week_start": "2022-04-25",
+      "easy_pct": 0,
+      "moderate_pct": 28,
+      "quality_pct": 72
+    },
+    {
+      "week_start": "2022-05-02",
+      "easy_pct": 0,
+      "moderate_pct": 24,
+      "quality_pct": 76
+    },
+    {
+      "week_start": "2022-05-09",
+      "easy_pct": 0,
+      "moderate_pct": 10,
+      "quality_pct": 90
+    },
+    {
+      "week_start": "2022-05-16",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-05-23",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-05-30",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-06-06",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-06-20",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-06-27",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-07-04",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-07-18",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-07-25",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-08-01",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-08-08",
+      "easy_pct": 0,
+      "moderate_pct": 16,
+      "quality_pct": 84
+    },
+    {
+      "week_start": "2022-08-15",
+      "easy_pct": 0,
+      "moderate_pct": 17,
+      "quality_pct": 83
+    },
+    {
+      "week_start": "2022-08-29",
+      "easy_pct": 0,
+      "moderate_pct": 34,
+      "quality_pct": 66
+    },
+    {
+      "week_start": "2022-09-05",
+      "easy_pct": 0,
+      "moderate_pct": 26,
+      "quality_pct": 74
+    },
+    {
+      "week_start": "2022-09-12",
+      "easy_pct": 0,
+      "moderate_pct": 9,
+      "quality_pct": 91
+    },
+    {
+      "week_start": "2022-09-19",
+      "easy_pct": 0,
+      "moderate_pct": 9,
+      "quality_pct": 91
+    },
+    {
+      "week_start": "2022-09-26",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-10-03",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-10-10",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-10-17",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-10-31",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-11-14",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-11-28",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2022-12-12",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2023-01-02",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2023-01-09",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2023-01-16",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2023-01-23",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2023-02-06",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2023-02-13",
+      "easy_pct": 0,
+      "moderate_pct": 11,
+      "quality_pct": 89
+    },
+    {
+      "week_start": "2023-02-27",
+      "easy_pct": 0,
+      "moderate_pct": 9,
+      "quality_pct": 91
+    },
+    {
+      "week_start": "2023-03-06",
+      "easy_pct": 0,
+      "moderate_pct": 9,
+      "quality_pct": 91
+    },
+    {
+      "week_start": "2023-03-13",
+      "easy_pct": 0,
+      "moderate_pct": 9,
+      "quality_pct": 91
+    },
+    {
+      "week_start": "2023-03-20",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2023-03-27",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2023-04-03",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2023-04-10",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2023-04-17",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2023-04-24",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2023-05-01",
+      "easy_pct": 0,
+      "moderate_pct": 0,
+      "quality_pct": 100
+    },
+    {
+      "week_start": "2024-12-02",
+      "easy_pct": 0,
+      "moderate_pct": 39,
+      "quality_pct": 61
+    },
+    {
+      "week_start": "2024-12-09",
+      "easy_pct": 0,
+      "moderate_pct": 52,
+      "quality_pct": 48
+    },
+    {
+      "week_start": "2024-12-16",
+      "easy_pct": 0,
+      "moderate_pct": 60,
+      "quality_pct": 40
+    },
+    {
+      "week_start": "2024-12-23",
+      "easy_pct": 0,
+      "moderate_pct": 81,
+      "quality_pct": 19
+    },
+    {
+      "week_start": "2024-12-30",
+      "easy_pct": 0,
+      "moderate_pct": 66,
+      "quality_pct": 34
+    },
+    {
+      "week_start": "2025-01-06",
+      "easy_pct": 0,
+      "moderate_pct": 62,
+      "quality_pct": 38
+    },
+    {
+      "week_start": "2025-04-21",
+      "easy_pct": 0,
+      "moderate_pct": 69,
+      "quality_pct": 31
+    },
+    {
+      "week_start": "2025-05-19",
+      "easy_pct": 0,
+      "moderate_pct": 64,
+      "quality_pct": 36
+    },
+    {
+      "week_start": "2025-06-02",
+      "easy_pct": 0,
+      "moderate_pct": 66,
+      "quality_pct": 34
+    },
+    {
+      "week_start": "2025-06-09",
+      "easy_pct": 0,
+      "moderate_pct": 82,
+      "quality_pct": 18
+    },
+    {
+      "week_start": "2025-06-16",
+      "easy_pct": 0,
+      "moderate_pct": 89,
+      "quality_pct": 11
+    },
+    {
+      "week_start": "2025-06-23",
+      "easy_pct": 0,
+      "moderate_pct": 89,
+      "quality_pct": 11
+    },
+    {
+      "week_start": "2025-06-30",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2025-07-07",
+      "easy_pct": 0,
+      "moderate_pct": 91,
+      "quality_pct": 9
+    },
+    {
+      "week_start": "2025-07-14",
+      "easy_pct": 0,
+      "moderate_pct": 79,
+      "quality_pct": 21
+    },
+    {
+      "week_start": "2025-07-21",
+      "easy_pct": 9,
+      "moderate_pct": 72,
+      "quality_pct": 19
+    },
+    {
+      "week_start": "2025-07-28",
+      "easy_pct": 10,
+      "moderate_pct": 69,
+      "quality_pct": 21
+    },
+    {
+      "week_start": "2025-08-04",
+      "easy_pct": 11,
+      "moderate_pct": 77,
+      "quality_pct": 12
+    },
+    {
+      "week_start": "2025-08-25",
+      "easy_pct": 10,
+      "moderate_pct": 90,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2025-09-01",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2025-09-08",
+      "easy_pct": 0,
+      "moderate_pct": 92,
+      "quality_pct": 8
+    },
+    {
+      "week_start": "2025-09-15",
+      "easy_pct": 0,
+      "moderate_pct": 85,
+      "quality_pct": 15
+    },
+    {
+      "week_start": "2025-09-22",
+      "easy_pct": 0,
+      "moderate_pct": 87,
+      "quality_pct": 13
+    },
+    {
+      "week_start": "2025-09-29",
+      "easy_pct": 0,
+      "moderate_pct": 87,
+      "quality_pct": 13
+    },
+    {
+      "week_start": "2025-10-06",
+      "easy_pct": 0,
+      "moderate_pct": 94,
+      "quality_pct": 6
+    },
+    {
+      "week_start": "2025-10-13",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2025-10-20",
+      "easy_pct": 0,
+      "moderate_pct": 95,
+      "quality_pct": 5
+    },
+    {
+      "week_start": "2025-10-27",
+      "easy_pct": 0,
+      "moderate_pct": 95,
+      "quality_pct": 5
+    },
+    {
+      "week_start": "2025-11-03",
+      "easy_pct": 0,
+      "moderate_pct": 71,
+      "quality_pct": 29
+    },
+    {
+      "week_start": "2025-11-24",
+      "easy_pct": 0,
+      "moderate_pct": 60,
+      "quality_pct": 40
+    },
+    {
+      "week_start": "2025-12-08",
+      "easy_pct": 0,
+      "moderate_pct": 58,
+      "quality_pct": 42
+    },
+    {
+      "week_start": "2025-12-15",
+      "easy_pct": 0,
+      "moderate_pct": 42,
+      "quality_pct": 58
+    },
+    {
+      "week_start": "2025-12-22",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2025-12-29",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-01-12",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-01-19",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-01-26",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-02-02",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-02-16",
+      "easy_pct": 0,
+      "moderate_pct": 76,
+      "quality_pct": 24
+    },
+    {
+      "week_start": "2026-02-23",
+      "easy_pct": 10,
+      "moderate_pct": 40,
+      "quality_pct": 50
+    },
+    {
+      "week_start": "2026-03-02",
+      "easy_pct": 7,
+      "moderate_pct": 48,
+      "quality_pct": 45
+    },
+    {
+      "week_start": "2026-03-09",
+      "easy_pct": 6,
+      "moderate_pct": 56,
+      "quality_pct": 38
+    },
+    {
+      "week_start": "2026-03-16",
+      "easy_pct": 5,
+      "moderate_pct": 72,
+      "quality_pct": 23
+    },
+    {
+      "week_start": "2026-03-23",
+      "easy_pct": 0,
+      "moderate_pct": 92,
+      "quality_pct": 8
+    },
+    {
+      "week_start": "2026-03-30",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-04-06",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-04-13",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-04-20",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-04-27",
+      "easy_pct": 1,
+      "moderate_pct": 92,
+      "quality_pct": 7
+    },
+    {
+      "week_start": "2026-05-04",
+      "easy_pct": 1,
+      "moderate_pct": 89,
+      "quality_pct": 10
+    },
+    {
+      "week_start": "2026-05-11",
+      "easy_pct": 1,
+      "moderate_pct": 92,
+      "quality_pct": 7
+    },
+    {
+      "week_start": "2026-05-18",
+      "easy_pct": 1,
+      "moderate_pct": 91,
+      "quality_pct": 8
+    }
+  ],
+  "easy_target_pct": 70,
+  "yearly": [
+    {
+      "year": 2018,
+      "km": 144.3,
+      "runs": 28
+    },
+    {
+      "year": 2019,
+      "km": 371.8,
+      "runs": 74
+    },
+    {
+      "year": 2020,
+      "km": 917.2,
+      "runs": 107
+    },
+    {
+      "year": 2021,
+      "km": 786.5,
+      "runs": 89
+    },
+    {
+      "year": 2022,
+      "km": 773.4,
+      "runs": 83
+    },
+    {
+      "year": 2023,
+      "km": 266.2,
+      "runs": 23
+    },
+    {
+      "year": 2024,
+      "km": 96.4,
+      "runs": 9
+    },
+    {
+      "year": 2025,
+      "km": 756.0,
+      "runs": 60
+    },
+    {
+      "year": 2026,
+      "km": 271.4,
+      "runs": 32
+    }
+  ],
+  "summary": {
+    "total_runs": 505,
+    "total_km": 4383.4,
+    "runs_with_hr": 151,
+    "first_run": "2018-04-08",
+    "last_run": "2026-05-24"
+  },
+  "headline": {
+    "kpis": [
+      {
+        "value": "16 km",
+        "label": "per week"
+      },
+      {
+        "value": "1%",
+        "label": "easy pace"
+      },
+      {
+        "value": 26,
+        "label": "weeks to race"
+      }
+    ],
+    "narrative": "8 runs and 66 km over the last 4 weeks. Only 1% of your running is genuinely easy, so the priority is slowing easy days out of the moderate grey zone."
+  }
+}
