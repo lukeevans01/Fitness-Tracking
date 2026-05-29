@@ -41,20 +41,38 @@ def load_json(path: Path) -> dict:
         return json.load(f)
 
 
-def check_local_time_window():
-    """We may run from multiple UTC cron entries (to cover DST). Only send if
-    Amsterdam local time is within 30 min of 19:00. Manual workflow_dispatch
-    runs bypass the gate so testing is easy."""
-    if os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch":
-        print("[note] Manual workflow_dispatch — bypassing time gate for test send.")
-        return
+# GitHub Actions cron is best-effort and routinely fires 1-2.5h late, which used to
+# push every run past a tight 19:00 +/-30min gate so nothing sent. We now accept any
+# run from 18:30 local onwards and guard against duplicates with a per-day marker in
+# the store, so the first qualifying run each day sends and later/extra runs skip.
+SEND_AFTER_MINUTES = 18 * 60 + 30   # 18:30 local, earliest acceptable send
+SEND_BEFORE_MINUTES = 23 * 60 + 30  # 23:30 local, latest (avoid post-midnight rollover)
+
+
+def should_send_now(profile_id: str, today_local) -> bool:
+    """Decide whether to send today's email.
+
+    Already sent today -> skip (unless FORCE_SEND=1). Manual workflow_dispatch and
+    FORCE_SEND bypass the time window for testing; scheduled runs send only inside
+    the 18:30-23:30 local window, which tolerates GitHub's scheduler delay."""
+    forced = os.environ.get("FORCE_SEND") == "1"
+    manual = os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
+
+    if not forced and store.get_state(profile_id).get("last_email_sent_date") == today_local.isoformat():
+        print(f"[skip] Daily email already sent for {today_local.isoformat()}.")
+        return False
+
+    if forced or manual:
+        if manual:
+            print("[note] Manual workflow_dispatch — bypassing time window for test send.")
+        return True
+
     now = datetime.now(TZ_AMSTERDAM)
-    target_minutes = 19 * 60
     now_minutes = now.hour * 60 + now.minute
-    diff = abs(now_minutes - target_minutes)
-    if diff > 30:
-        print(f"[skip] Amsterdam local time {now.strftime('%H:%M')} is outside 19:00 ±30min window.")
-        sys.exit(0)
+    if now_minutes < SEND_AFTER_MINUTES or now_minutes > SEND_BEFORE_MINUTES:
+        print(f"[skip] Amsterdam local time {now.strftime('%H:%M')} is outside the 18:30-23:30 send window.")
+        return False
+    return True
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -289,14 +307,15 @@ def main():
     if not API_KEY:
         sys.exit("RESEND_API_KEY env var not set.")
 
-    check_local_time_window()
-
     profile = default_profile()
+    today_local = datetime.now(TZ_AMSTERDAM).date()
+
+    if not should_send_now(profile.id, today_local):
+        return
+
     plan = load_json(ROOT / "plan_template.json")
     state = store.get_state(profile.id)
     cycle_state = state.get("cycle_state", "active")
-
-    today_local = datetime.now(TZ_AMSTERDAM).date()
 
     if cycle_state == "active":
         # Email is sent at 19:00 as a preview of tomorrow's session.
@@ -350,6 +369,11 @@ def main():
     ok = send_via_resend(subject, html, text)
     if not ok:
         sys.exit("Resend send failed (non-200 response).")
+
+    # Record the per-day marker so a delayed or duplicate run later today skips.
+    state["last_email_sent_date"] = today_local.isoformat()
+    store.set_state(profile.id, state)
+    print(f"[sent] Daily email sent and marked for {today_local.isoformat()}.")
 
 
 if __name__ == "__main__":

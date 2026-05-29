@@ -1,16 +1,21 @@
 name: Daily fitness email
 
 # Cron is UTC. 19:00 Amsterdam = 17:00 UTC (CEST, summer) or 18:00 UTC (CET, winter).
-# Fire both; the script time-gates on Amsterdam local time so DST is handled for free.
+# GitHub's scheduler routinely fires 1-2.5h late, so we take several shots from
+# ~16:30 UTC onwards. send_daily.py accepts any run from 18:30 local and dedups with a
+# per-day marker in the store, so the first qualifying run sends and the rest skip.
 on:
   schedule:
-    - cron: '0 17,18 * * *'
+    - cron: '30 16,17,18,19 * * *'
+    - cron: '0 17,18,19 * * *'
   workflow_dispatch: {} # allow manual runs from the Actions tab for testing
 
 jobs:
   send-email:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: write # to persist the per-day "sent" marker back to data/app.db
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
     steps:
@@ -29,3 +34,11 @@ jobs:
           TO_EMAIL: ${{ vars.TO_EMAIL || 'levans092@gmail.com' }}
           FROM_EMAIL: ${{ vars.FROM_EMAIL }}
         run: python3 send_daily.py
+
+      - name: Persist sent marker if changed
+        run: |
+          git config user.name "fitness-bot"
+          git config user.email "bot@noreply"
+          git add data/app.db
+          git diff --cached --quiet || git commit -m "state: daily email marker ($(date -u +%FT%TZ))"
+          git push
