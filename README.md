@@ -13,9 +13,9 @@ fitness-emails/
 ├── training_summary.py        # builds compact training summary from CSVs for Gemini
 ├── plan_template.json         # all session data (repeating 7-day training cycle)
 ├── state.json                 # which phase Luke is currently in
-├── overrides.json             # per-date session overrides from feedback replies
 ├── feedback_log.jsonl         # append-only log of all feedback received
 ├── data/
+│   ├── app.db                 # SQLite store: per-date overrides, state, adaptation (via store.py)
 │   ├── strava.csv             # upload weekly via Sunday reminder (Strava export)
 │   └── strong.csv             # upload weekly via Sunday reminder (Strong export)
 ├── .github/workflows/
@@ -25,7 +25,7 @@ fitness-emails/
 └── .gitignore
 ```
 
-The daily email is deterministic — given `plan_template.json` + `state.json` + tomorrow's date, it produces one email. The feedback loop adds a Gemini layer: replies to that email trigger a revised session within ~15 minutes, stored in `overrides.json` and committed back to the repo.
+The daily email is deterministic — given `plan_template.json` + `state.json` + tomorrow's date, it produces one email. The feedback loop adds a Gemini layer: replies to that email trigger a revised session within ~15 minutes, stored in the SQLite store (`data/app.db`) via `store.py` and committed back to the repo.
 
 ## One-time setup (≤ 15 min)
 
@@ -114,8 +114,8 @@ Multiple replies in one evening are fine — each one overwrites the previous ov
 
 **Training data for Gemini:** Put `strava.csv` (Strava full-history export) and `strong.csv` (Strong export) in the `data/` folder and commit them. The Sunday reminder tells you when to refresh these. Without them, Gemini still works but has no recent training context.
 
-**Override files:**
-- `overrides.json` — active per-date overrides. Delete an entry (or reply `revert`) to revert. Auto-cleaned of entries older than 7 days.
+**Overrides and logs:**
+- Per-date overrides live in the SQLite store (`data/app.db`) via `store.py`. Reply `revert` to drop the override for a date. Entries older than 7 days are auto-cleaned.
 - `feedback_log.jsonl` — append-only log of all feedback received. Useful for Sunday review.
 
 **If Gemini fails:** The bot sends you a plain notice with the error text. Reply again once the issue is resolved, or reply `revert` to stay on the template.

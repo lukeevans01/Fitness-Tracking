@@ -153,7 +153,7 @@ class TestSeenOnException(unittest.TestCase):
 
 
 # ---------------------------------------------------------------------------
-# Test 2: _handle_training_feedback writes overrides.json before _send_email
+# Test 2: _handle_training_feedback persists the override (to the store) before _send_email
 # ---------------------------------------------------------------------------
 
 class TestOverridePersistedBeforeSend(unittest.TestCase):

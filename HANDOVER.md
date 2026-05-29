@@ -18,7 +18,7 @@ The system does five things:
 4. Lets Luke **reply to any session email in natural language** to adjust the plan. Gemini revises the session and sends a replacement within ~30 minutes.
 5. Handles **survival mode** — when the baby is born or Luke is otherwise unable to train, one reply pauses all coaching emails. Resume with "I'm back".
 
-Whatever's most recent in `overrides.json` is what Luke does at 06:00 the next morning.
+Whatever's most recent in the SQLite store (`data/app.db`, via `store.py`) is what Luke does at 06:00 the next morning.
 
 ---
 
@@ -48,8 +48,8 @@ fitness-emails/
 ├── training_summary.py        # strava.csv + strong.csv → compact text for Gemini
 ├── plan_template.json         # All session data: repeating 7-day training cycle
 ├── state.json                 # mode, week_choice, week_choice_label
-├── overrides.json             # Per-date session overrides. Auto-cleaned >7 days.
 ├── feedback_log.jsonl         # Append-only log of all feedback received
+├── data/app.db                # SQLite store (store.py): per-date overrides (auto-cleaned >7 days), state, adaptation
 ├── adaptation_state.md        # Human-readable state: mode, phase, weekly counters, taper
 ├── race_calendar.md           # Race schedule: San Sebastián 22 Nov 2026, tune-ups
 ├── muscle_taxonomy.md         # Muscle groups mapped to plan exercises
@@ -80,7 +80,7 @@ fitness-emails/
 
 ### 4.1 Evening email (19:00)
 
-`daily-email.yml` → `send_daily.py` → builds tomorrow's session from `plan_template.json` (checking `overrides.json` first) → sends via Resend with Reply-To pointing to bot Gmail.
+`daily-email.yml` → `send_daily.py` → builds tomorrow's session from `plan_template.json` (checking the store in `data/app.db` for an override first; for non-overridden strength days, selecting a routine via `routine_selector.py`) → sends via Resend with Reply-To pointing to bot Gmail.
 
 ### 4.2 Sunday summary (08:00)
 
@@ -204,7 +204,7 @@ Luke overwrites these weekly per the Sunday prompt: export from Strava (full his
 | Workflow | Files committed |
 |---|---|
 | `sunday-reminder.yml` | `plans/pending-choice.json`, `plans/current-week.md`, `adaptation_state.md` |
-| `process-replies.yml` | `overrides.json`, `feedback_log.jsonl`, `state.json`, `adaptation_state.md`, `plans/pending-choice.json` |
+| `process-replies.yml` | `data/app.db` (overrides, state, adaptation), `feedback_log.jsonl`, `adaptation_state.md`, `plans/pending-choice.json` |
 
 Always `git pull --rebase` before pushing manual fixes — the bot commits frequently.
 
