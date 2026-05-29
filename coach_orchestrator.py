@@ -19,35 +19,20 @@ Usage:
 """
 
 import json
-import re
 from datetime import date, datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import gemini_client
+import routine_library
+import store
+from profile import Profile, default_profile
 from specialists import lifting, mobility, nutrition, nutrition_lookup, running
 
 _ROOT = Path(__file__).parent
 _TZ = ZoneInfo("Europe/Amsterdam")
-_RACE_DATE = date(2026, 11, 22)
 _TAPER_WINDOW_DAYS = 28
 _RACE_WEEK_DAYS = 7
-
-# TODO(refactor): bakes in Luke-specific content. Parameterise per-user in multi-user refactor.
-_SHARED_PROFILE = """\
-Luke Evans — 32, amateur marathoner. Marathon PB 3:28:58 (Nice-Cannes, Nov 2025).
-Target: sub-3:25 at San Sebastián marathon, 22 Nov 2026.
-4+ years consistent strength training. Squash Tuesday evenings (treats as intensity).
-First baby born late May 2026 — sleep deprivation is a real, ongoing factor.
-
-Hard rules that apply to every session, no exceptions:
-- Sleep <6h → drop to short_version or skip entirely.
-- No PB attempts in training.
-- If Luke says he's wrecked, believe him.
-
-Output tone: direct and concise. No motivational language. Treat Luke as a competent
-adult with 8 years of training experience. State the change and the reason. Move on.\
-"""
 
 _SESSION_SCHEMA = """\
 {
@@ -85,28 +70,34 @@ def _today() -> date:
     return datetime.now(_TZ).date()
 
 
-def days_to_race(today: date | None = None) -> int:
+def _race_date(race_date: date | None = None) -> date:
+    """Resolve the race date, defaulting to the active profile's race date."""
+    return race_date if race_date is not None else default_profile().race_date
+
+
+def days_to_race(today: date | None = None, race_date: date | None = None) -> int:
     """Days remaining until race day. Negative after race day."""
-    return (_RACE_DATE - (today or _today())).days
+    return (_race_date(race_date) - (today or _today())).days
 
 
-def is_taper_active(today: date | None = None) -> bool:
+def is_taper_active(today: date | None = None, race_date: date | None = None) -> bool:
     """True when within _TAPER_WINDOW_DAYS of race day (and race hasn't passed)."""
-    d = days_to_race(today)
+    d = days_to_race(today, race_date)
     return 0 <= d <= _TAPER_WINDOW_DAYS
 
 
-def _taper_prompt_block(today: date) -> str:
-    d = days_to_race(today)
+def _taper_prompt_block(today: date, profile: Profile) -> str:
+    race_str = profile.race_date.strftime("%d %b %Y")
+    d = days_to_race(today, profile.race_date)
     race_week = d <= _RACE_WEEK_DAYS
     block = (
-        f"TAPER IS ACTIVE — RACE DAY IS IN {d} DAYS (San Sebastián, 22 Nov 2026).\n"
-        "These rules are PRESCRIPTIVE. They override Luke's preferences and cannot be negotiated:\n"
+        f"TAPER IS ACTIVE — RACE DAY IS IN {d} DAYS ({profile.race_label}, {race_str}).\n"
+        "These rules are PRESCRIPTIVE. They override athlete preferences and cannot be negotiated:\n"
         "- No volume increases. Cap sessions at 70% of standard duration/sets.\n"
         "- Strength: RIR 4 (not 3). 2-3 sets per compound. Skip accessories.\n"
         "- Running: easy runs only (HR <150, 5:35-6:00/km). No new distances.\n"
         "  Exception: one short marathon-pace segment (15-20 min) per week is permitted.\n"
-        "- If Luke asks to train harder: reduce instead. Taper resistance is expected; hold the line.\n"
+        "- If the athlete asks to train harder: reduce instead. Taper resistance is expected; hold the line.\n"
         "- coach_note MUST acknowledge the taper and state the specific reduction applied."
     )
     if race_week:
@@ -117,20 +108,19 @@ def _taper_prompt_block(today: date) -> str:
     return block
 
 
-def sync_taper_state(today: date | None = None) -> None:
-    """Update adaptation_state.md taper fields if status has changed. Call once per run."""
-    path = _ROOT / "adaptation_state.md"
-    if not path.exists():
-        return
+def sync_taper_state(today: date | None = None, profile: Profile | None = None) -> None:
+    """Persist taper flags to the store if status has changed. Call once per run."""
+    profile = profile or default_profile()
     t = today or _today()
-    active = is_taper_active(t)
-    content = path.read_text()
-    new_flag = "true" if active else "false"
-    content = re.sub(r"(?m)^taper_active: \S+", f"taper_active: {new_flag}", content)
-    if active:
-        # Set start date only if still null (preserve the first-detection date)
-        content = re.sub(r"(?m)^taper_start_date: null", f"taper_start_date: {t.isoformat()}", content)
-    path.write_text(content)
+    active = is_taper_active(t, profile.race_date)
+    current = store.get_adaptation(profile.id)
+    fields = {"taper_active": active}
+    if active and not current.get("taper_start_date"):
+        # Set start date only on first detection (preserve the original date)
+        fields["taper_start_date"] = t.isoformat()
+    elif not active:
+        fields["taper_start_date"] = None
+    store.set_adaptation(profile.id, fields)
 
 
 def infer_domain(session_kind: str) -> str:
@@ -146,18 +136,25 @@ def generate_session(
     training_summary: str,
     previous_override: dict | None = None,
     week_context: str = "",
+    profile: Profile | None = None,
+    weekly_load=None,
 ) -> dict:
     """Route feedback to the right specialist, call Gemini, validate, and return a session dict.
 
     domain: "run" | "strength" | "rest" — use infer_domain(session["session_kind"]) if unsure.
+    profile: the athlete profile; defaults to the active profile when omitted.
+    weekly_load: optional weekly_load.WeeklyLoad — a deterministic cross-domain load view.
+        When supplied, its to_prompt_block() is injected so the session can react to
+        recent training and fuelling. Duck-typed to avoid an import cycle.
     Raises ValueError on bad JSON or missing required keys.
     Raises RuntimeError on Gemini HTTP error or missing API key.
     """
+    profile = profile or default_profile()
     today = _today()
     specialist = _DOMAIN_MAP.get(domain, lifting)
     prompt = _build_prompt(
         specialist, domain, reply_text, current_session,
-        training_summary, previous_override, today, week_context,
+        training_summary, previous_override, today, week_context, profile, weekly_load,
     )
     session_text = gemini_client.call_gemini(prompt)
 
@@ -176,6 +173,85 @@ def generate_session(
         )
 
     return session
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# On-demand coaching — advice without changing the plan
+# ──────────────────────────────────────────────────────────────────────────
+
+# Domains the on-demand coach answers. Nutrition has its own richer flow
+# (answer_nutrition_question) so it is intentionally excluded here.
+_ADVICE_DOMAINS = {"strength", "run", "rest"}
+
+
+def answer_training_question(
+    question: str,
+    domain: str = "strength",
+    training_summary: str = "",
+    week_context: str = "",
+    profile: Profile | None = None,
+    weekly_load=None,
+    include_routines: bool = True,
+) -> str:
+    """Answer a free-text training question with advice. Writes no override.
+
+    This is the on-demand coach: Luke asks something ("should I deload bench this
+    week?", "swap a routine for more pulling") and gets prose advice grounded in his
+    profile, the matching specialist context, his recent training, and — for strength —
+    the routine template library. It deliberately does NOT mutate the plan; session
+    changes still go through generate_session / the email override flow.
+
+    domain: "strength" | "run" | "rest" (defaults to strength). Selects the specialist.
+    weekly_load: optional weekly_load.WeeklyLoad; its to_prompt_block() is injected.
+    include_routines: when True and domain is strength, inject the routine library.
+    Returns a short prose answer. Raises ValueError on malformed Gemini output;
+    RuntimeError on HTTP error or missing API key.
+    """
+    profile = profile or default_profile()
+    today = _today()
+    if domain not in _ADVICE_DOMAINS:
+        domain = "strength"
+    specialist = _DOMAIN_MAP.get(domain, lifting)
+
+    parts = [profile.profile_text, specialist.system_context()]
+    if is_taper_active(today, profile.race_date):
+        parts.append(_taper_prompt_block(today, profile))
+    if weekly_load is not None:
+        parts.append(weekly_load.to_prompt_block())
+    if include_routines and domain == "strength":
+        routines_block = routine_library.to_prompt_block()
+        if routines_block:
+            parts.append(routines_block)
+    if week_context:
+        parts.append("Luke's chosen week plan (context):\n" + week_context)
+    if training_summary:
+        parts.append("Recent training (last 14 days):\n" + training_summary)
+    parts += [
+        "Luke's question:\n" + question,
+        (
+            "Answer as his coach: direct, specific, concise (2-5 sentences typical). "
+            "Ground the answer in the benchmarks, principles, and routine library above, "
+            "and in his recent training where relevant. Give concrete numbers (weights, "
+            "sets, reps, paces) rather than vague guidance. No motivational language. "
+            "This is ADVICE ONLY — do not output a full session or claim to have changed "
+            "his plan; if he wants the plan changed, tell him to reply to a daily email.\n\n"
+            'Output JSON ONLY: {"answer": "<your answer>"}\n'
+            "No surrounding text."
+        ),
+    ]
+    prompt = "\n\n".join(parts)
+    response_text = gemini_client.call_gemini(prompt)
+
+    try:
+        parsed = json.loads(response_text)
+    except json.JSONDecodeError as exc:
+        raise ValueError(
+            f"Training Q&A response not valid JSON: {exc}\nText: {response_text[:300]}"
+        ) from exc
+    answer = parsed.get("answer", "").strip()
+    if not answer:
+        raise ValueError(f"Training Q&A response missing 'answer': {parsed}")
+    return answer
 
 
 _WEEKLY_SUMMARY_SCHEMA = """\
@@ -198,13 +274,18 @@ _WEEKLY_SUMMARY_SCHEMA = """\
   },
   "recommendation": "A or B or C",
   "recommendation_reason": "One sentence",
-  "coach_note": "Any additional context, or empty string"
+  "coach_note": "Any additional context, or empty string",
+  "improvements": {
+    "running": "string — one specific, actionable improvement for next week's running",
+    "lifting": "string — one specific, actionable improvement for next week's lifting",
+    "nutrition": "string — one specific, actionable improvement for next week's nutrition"
+  }
 }\
 """
 
 _WEEKLY_SUMMARY_REQUIRED = frozenset({
     "week_review", "option_a", "option_b", "option_c",
-    "recommendation", "recommendation_reason",
+    "recommendation", "recommendation_reason", "improvements",
 })
 _OPTION_REQUIRED = frozenset({"label", "sessions", "rationale"})
 
@@ -234,20 +315,33 @@ def generate_weekly_summary(
     training_summary: str,
     standard_week: str,
     nutrition_summary: str = "",
+    profile: Profile | None = None,
+    weekly_load=None,
+    progression_note: str = "",
 ) -> dict:
     """Generate a weekly review with three options for the coming week.
 
     standard_week: compact day-by-day string computed from plan_template.json.
     nutrition_summary: optional human-readable summary of last week's nutrition logs;
         passed into the prompt so options can be nutrition-aware.
+    profile: the athlete profile; defaults to the active profile when omitted.
+    weekly_load: optional weekly_load.WeeklyLoad; its to_prompt_block() is injected so the
+        options reflect deterministic cross-domain load. Duck-typed to avoid an import cycle.
+    progression_note: optional marathon-block label (base/build/taper + long-run target)
+        so the three options stay coherent with the build toward race day.
     Returns a dict with week_review, option_a/b/c, recommendation, recommendation_reason, coach_note.
     Raises ValueError on bad JSON or missing required keys.
     Raises RuntimeError on Gemini HTTP error.
     """
+    profile = profile or default_profile()
     today = _today()
-    parts = [_SHARED_PROFILE, _WEEKLY_COACH_CONTEXT]
-    if is_taper_active(today):
-        parts.append(_taper_prompt_block(today))
+    parts = [profile.profile_text, _WEEKLY_COACH_CONTEXT]
+    if is_taper_active(today, profile.race_date):
+        parts.append(_taper_prompt_block(today, profile))
+    if progression_note:
+        parts.append("Current marathon block:\n" + progression_note)
+    if weekly_load is not None:
+        parts.append(weekly_load.to_prompt_block())
     parts += [
         "Standard week (use this exactly for Option A):\n" + standard_week,
         "Recent training (last 14 days):\n" + training_summary,
@@ -280,6 +374,13 @@ def generate_weekly_summary(
     if result.get("recommendation") not in ("A", "B", "C"):
         raise ValueError(f"recommendation must be A, B, or C, got: {result.get('recommendation')!r}")
 
+    improvements = result.get("improvements", {})
+    if not isinstance(improvements, dict):
+        raise ValueError(f"'improvements' must be a dict, got: {type(improvements)}")
+    for key in ("running", "lifting", "nutrition"):
+        if key not in improvements:
+            raise ValueError(f"improvements missing key: {key!r}")
+
     return result
 
 
@@ -292,13 +393,17 @@ def _build_prompt(
     previous_override: dict | None,
     today: date,
     week_context: str,
+    profile: Profile,
+    weekly_load=None,
 ) -> str:
     parts = [
-        _SHARED_PROFILE,
+        profile.profile_text,
         specialist.system_context(),
     ]
-    if is_taper_active(today):
-        parts.append(_taper_prompt_block(today))
+    if is_taper_active(today, profile.race_date):
+        parts.append(_taper_prompt_block(today, profile))
+    if weekly_load is not None:
+        parts.append(weekly_load.to_prompt_block())
     if week_context:
         parts.append(
             "Luke's chosen week plan (context for this session):\n" + week_context
@@ -364,25 +469,27 @@ _FOOD_ITEM_REQUIRED = frozenset({
 })
 
 
-# TODO(refactor): per-user targets and prompt content. Hardcoded to Luke for Phase 2.
 def generate_food_log_response(
     reply_text: str,
     today_so_far: dict,
     targets: dict,
     recent_pattern: str = "",
+    profile: Profile | None = None,
 ) -> dict:
     """Parse a food-log reply into structured items + brief coach note.
 
     today_so_far: dict with keys protein_g, carbs_g, fat_g, kcal for what's already been logged today.
-    targets: DAILY_TARGETS dict from nutrition_logger.
+    targets: daily macro target dict (typically profile.daily_targets).
     recent_pattern: optional one-line pattern flag from weekly_summary (e.g. "protein <100g for 3 days").
+    profile: the athlete profile; defaults to the active profile when omitted.
 
     Returns {"items": [...], "coach_note": "..."}.
     Raises ValueError on bad JSON or missing required keys.
     Raises RuntimeError on Gemini HTTP error.
     """
+    profile = profile or default_profile()
     parts = [
-        _SHARED_PROFILE,
+        profile.profile_text,
         nutrition.system_context(),
         (
             "Today's running totals BEFORE this log entry:\n"
@@ -442,22 +549,24 @@ def generate_food_log_response(
     return result
 
 
-# TODO(refactor): per-user prompt and targets. Hardcoded to Luke for Phase 2.
 def answer_nutrition_question(
     question: str,
     day_log,
     targets: dict,
     weekly_summary: dict | None = None,
+    profile: Profile | None = None,
 ) -> str:
     """Answer a nutrition question using today's log + targets + optional weekly context.
 
     day_log: nutrition_logger.DayLog | None — duck-typed to avoid a circular import.
         Expected to expose .items (list of FoodItem) and .log_date (date) when present.
+    profile: the athlete profile; defaults to the active profile when omitted.
     Returns a short prose answer (1-3 sentences typical).
     Raises ValueError if Gemini's wrapped response is malformed.
     Raises RuntimeError on Gemini HTTP error.
     """
-    parts = [_SHARED_PROFILE, nutrition.system_context()]
+    profile = profile or default_profile()
+    parts = [profile.profile_text, nutrition.system_context()]
 
     if day_log is not None and getattr(day_log, "items", None):
         totals = {

@@ -7,6 +7,7 @@ Run from the fitness-emails dir:  python -m unittest tests.test_intent_classifie
 import json
 import sys
 import unittest
+from datetime import date, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
@@ -85,6 +86,75 @@ class ClassifyTests(unittest.TestCase):
         with _gemini_returns(response):
             with self.assertRaisesRegex(ValueError, "not a dict"):
                 intent_classifier.classify("x")
+
+    # ── target_date resolution (Pack 11) ─────────────────────────────
+
+    def test_resolves_weekday_to_next_occurrence(self):
+        # today is a Monday (2026-06-01); "Thursday" -> the same week's Thursday.
+        today = date(2026, 6, 1)
+        response = json.dumps({"intents": [
+            {"intent": "training_feedback", "text": "make Thursday a lift",
+             "target_date": "Thursday"}
+        ]})
+        with _gemini_returns(response):
+            result = intent_classifier.classify("make Thursday a lift", today=today)
+        self.assertEqual(result["intents"][0]["target_date"], "2026-06-04")
+
+    def test_weekday_today_resolves_to_today_not_last_week(self):
+        # Asking for "Monday" on a Monday resolves to today (on or after), never the past.
+        today = date(2026, 6, 1)  # Monday
+        response = json.dumps({"intents": [
+            {"intent": "training_feedback", "text": "Monday easy run", "target_date": "Monday"}
+        ]})
+        with _gemini_returns(response):
+            result = intent_classifier.classify("Monday easy run", today=today)
+        self.assertEqual(result["intents"][0]["target_date"], "2026-06-01")
+
+    def test_tomorrow_phrase_resolves(self):
+        today = date(2026, 6, 1)
+        response = json.dumps({"intents": [
+            {"intent": "training_feedback", "text": "swap tomorrow", "target_date": "tomorrow"}
+        ]})
+        with _gemini_returns(response):
+            result = intent_classifier.classify("swap tomorrow", today=today)
+        self.assertEqual(result["intents"][0]["target_date"], "2026-06-02")
+
+    def test_explicit_iso_within_horizon(self):
+        today = date(2026, 6, 1)
+        response = json.dumps({"intents": [
+            {"intent": "training_feedback", "text": "change 2026-08-14",
+             "target_date": "2026-08-14"}
+        ]})
+        with _gemini_returns(response):
+            result = intent_classifier.classify("change 2026-08-14", today=today)
+        self.assertEqual(result["intents"][0]["target_date"], "2026-08-14")
+
+    def test_null_target_date_when_none_mentioned(self):
+        response = json.dumps({"intents": [
+            {"intent": "training_feedback", "text": "I'm wrecked, drop volume",
+             "target_date": None}
+        ]})
+        with _gemini_returns(response):
+            result = intent_classifier.classify("I'm wrecked, drop volume", today=date(2026, 6, 1))
+        self.assertIsNone(result["intents"][0]["target_date"])
+
+    def test_out_of_horizon_resolves_to_null(self):
+        today = date(2026, 6, 1)
+        far = (today + timedelta(days=500)).isoformat()
+        response = json.dumps({"intents": [
+            {"intent": "training_feedback", "text": "way out", "target_date": far}
+        ]})
+        with _gemini_returns(response):
+            result = intent_classifier.classify("way out", today=today)
+        self.assertIsNone(result["intents"][0]["target_date"])
+
+    def test_non_training_intent_gets_null_target_date(self):
+        response = json.dumps({"intents": [
+            {"intent": "food_log", "text": "ate eggs"}
+        ]})
+        with _gemini_returns(response):
+            result = intent_classifier.classify("ate eggs", today=date(2026, 6, 1))
+        self.assertIsNone(result["intents"][0]["target_date"])
 
     def test_propagates_gemini_runtime_error(self):
         with patch.object(

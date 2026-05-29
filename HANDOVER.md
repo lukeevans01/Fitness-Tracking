@@ -46,7 +46,7 @@ fitness-emails/
 ├── gemini_client.py           # Gemini 2.5 Flash REST wrapper (curl via subprocess)
 ├── coach_orchestrator.py      # Routes sessions to specialists; taper detection
 ├── training_summary.py        # strava.csv + strong.csv → compact text for Gemini
-├── plan_template.json         # All session data: 10-day Phase 1 cycle
+├── plan_template.json         # All session data: repeating 7-day training cycle
 ├── state.json                 # mode, week_choice, week_choice_label
 ├── overrides.json             # Per-date session overrides. Auto-cleaned >7 days.
 ├── feedback_log.jsonl         # Append-only log of all feedback received
@@ -148,13 +148,13 @@ Each specialist provides a `system_context()` string injected into the prompt. N
 
 ## 6. Survival mode
 
-Replaces the old Phase 2/Phase 3 distinction. Much simpler.
+A single pause switch that replaces the old multi-stage training model. Much simpler.
 
 **Enter:** Reply with `baby born`, `survival mode`, `baby arrived`, or `pause training`. Or edit `state.json` directly.
 
-**Effect:** `state["mode"]` → `"survival"`, `current_phase` → `"paused"`. Daily emails stop. Weekly Sunday summary continues (so Luke stays aware of the plan). Survival mode log entry written to `adaptation_state.md`.
+**Effect:** `state["mode"]` → `"survival"`, `cycle_state` → `"paused"`. Daily emails stop. Weekly Sunday summary continues (so Luke stays aware of the plan). Survival mode log entry written to `adaptation_state.md`.
 
-**Exit:** Reply with `I'm back` or `resume training`. Training picks up immediately from the Phase 1 10-day cycle. Goal and race date are unchanged.
+**Exit:** Reply with `I'm back` or `resume training`. Training picks up immediately from the 7-day cycle. Goal and race date are unchanged.
 
 **Pause everything:** Reply with exactly `pause`. Both daily and Sunday emails stop.
 
@@ -175,7 +175,7 @@ Luke overwrites these weekly per the Sunday prompt: export from Strava (full his
 | Field | Purpose |
 |---|---|
 | `mode` | `normal` / `survival` / `paused` |
-| `current_phase` | `phase1` / `paused` — kept in sync for `send_daily.py` |
+| `cycle_state` | `active` / `paused` — kept in sync for `send_daily.py` |
 | `baby_birth_date` | Set when survival mode entered |
 | `week_choice` | Sessions text from Luke's A/B/C pick (passed to Gemini as week context) |
 | `week_choice_label` | Human label e.g. "Option B — Recovery focus" |
@@ -210,7 +210,7 @@ Always `git pull --rebase` before pushing manual fixes — the bot commits frequ
 
 ---
 
-## 11. Quick reference — Phase 1 10-day cycle (start: 2026-05-25)
+## 11. Quick reference — 7-day training cycle (start: 2026-05-25)
 
 | Day | Session | Kind | Duration |
 |---|---|---|---|
@@ -242,7 +242,7 @@ Always `git pull --rebase` before pushing manual fixes — the bot commits frequ
 - **Taper window.** Starts 28 days before race (25 Oct 2026). Prompt caps are prescriptive, not advisory.
 - **A/B/C reply detection.** `_RE_WEEK_CHOICE` matches exactly one letter, optional punctuation, nothing else. A reply of just "A sounds good" does NOT match — it's treated as natural language feedback.
 - **Week choice expiry.** `plans/pending-choice.json` has an `expires` field (7 days after week_start). Stale picks are ignored.
-- **Race day:** 22 Nov 2026. Phase 3 (marathon build) should start ~4 Aug 2026 (14 weeks out).
+- **Race day:** 22 Nov 2026. The marathon build should ramp up ~4 Aug 2026 (14 weeks out), driven by the progression engine (planned in a later pack).
 
 ---
 

@@ -24,8 +24,12 @@ Tune-ups serve two purposes: (1) calibrate marathon-pace feel against recent fit
 
 ## Key dates
 
+The training block is now derived automatically from the race date by `progression.py`
+(base / build / taper); there is no manual build step to trigger. The dates below are
+the resulting transitions, not actions to perform.
+
 | Date | Milestone |
 |---|---|
-| ~2026-08-04 | Target Phase 3 marathon build start (14+ weeks out) |
-| ~2026-10-11 | Begin taper (~6 weeks before race) |
+| ~2026-08-16 | Build phase begins automatically (14 weeks out): marathon-pace work starts, long run escalates |
+| ~2026-10-25 | Taper begins automatically (4 weeks out): progression hands off to the taper rules |
 | 2026-11-22 | Race day |

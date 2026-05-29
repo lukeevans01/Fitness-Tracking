@@ -7,7 +7,7 @@ Env vars required:
   GMAIL_APP_PASSWORD   16-char App Password (no spaces)
   GEMINI_API_KEY       Gemini API key
   RESEND_API_KEY       Resend API key
-  TO_EMAIL             Luke's email (default: levans092@gmail.com)
+  TO_EMAIL             Recipient override (default: the active profile's email)
   FROM_EMAIL           Sender (default: Luke's Fitness Bot <onboarding@resend.dev>)
 """
 
@@ -26,11 +26,14 @@ from zoneinfo import ZoneInfo
 import coach_orchestrator
 import intent_classifier
 import nutrition_logger
+import store
 import training_summary as ts
+import weekly_load
+from profile import default_profile
 from send_daily import (
     CSS_BASE,
-    build_phase1_html,
-    build_phase1_text,
+    build_cycle_html,
+    build_cycle_text,
 )
 
 ROOT = Path(__file__).parent
@@ -39,7 +42,7 @@ TZ_AMSTERDAM = ZoneInfo("Europe/Amsterdam")
 GMAIL_USER = os.environ.get("GMAIL_USER") or ""
 GMAIL_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD") or ""
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY") or ""
-TO_EMAIL = os.environ.get("TO_EMAIL") or "levans092@gmail.com"
+TO_EMAIL = os.environ.get("TO_EMAIL") or default_profile().email
 FROM_EMAIL = os.environ.get("FROM_EMAIL") or "Luke's Fitness Bot <onboarding@resend.dev>"
 RESEND_URL = "https://api.resend.com/emails"
 
@@ -54,6 +57,11 @@ _RE_SURVIVAL_EXIT = re.compile(
 _RE_PAUSE_ALL = re.compile(r"^\s*pause\s*$", re.IGNORECASE)
 _RE_WEEK_CHOICE = re.compile(r"^\s*([ABC])\s*[.!?]?\s*$", re.IGNORECASE)
 _RE_REVERT = re.compile(r"\brevert\b", re.IGNORECASE)
+
+def _imap_search_query(profile) -> str:
+    """Build the IMAP search expression for unread replies from the profile's address."""
+    return f'UNSEEN FROM "{profile.email}"'
+
 
 _MODE_NOTICES = {
     "survival": (
@@ -71,10 +79,20 @@ _MODE_NOTICES = {
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# File I/O
+# Storage (all persisted state goes through store.py, profile-keyed)
 # ──────────────────────────────────────────────────────────────────────────
 
+# The active profile for this run. Set once at the top of main(); the storage
+# helpers fall back to the default profile so they remain callable in tests.
+_ACTIVE_PROFILE_ID: str | None = None
+
+
+def _active_profile_id() -> str:
+    return _ACTIVE_PROFILE_ID or default_profile().id
+
+
 def _load_json(path: Path) -> dict:
+    """Read a plain JSON file (still used for the static plan_template.json)."""
     if not path.exists():
         return {}
     with open(path) as f:
@@ -82,42 +100,40 @@ def _load_json(path: Path) -> dict:
 
 
 def _load_overrides() -> dict:
-    path = ROOT / "overrides.json"
-    if not path.exists():
-        return {"overrides": {}}
-    data = _load_json(path)
-    data.setdefault("overrides", {})
-    return data
+    """Load overrides from the store into the in-memory {"overrides": {...}} shape."""
+    return {"overrides": store.get_overrides(_active_profile_id())}
 
 
-def _save_overrides(overrides: dict) -> None:
-    overrides["_comment"] = (
-        "Per-date session overrides from feedback replies. "
-        "Auto-cleaned of entries older than 7 days on each run."
-    )
-    with open(ROOT / "overrides.json", "w") as f:
-        json.dump(overrides, f, indent=2)
-        f.write("\n")
+def _persist_override(iso_date: str, record: dict, overrides: dict) -> None:
+    """Write one override to the store and mirror it into the in-memory cache."""
+    store.set_override(_active_profile_id(), iso_date, record)
+    overrides.setdefault("overrides", {})[iso_date] = record
+
+
+def _drop_override(iso_date: str, overrides: dict) -> None:
+    """Delete one override from the store and the in-memory cache."""
+    store.delete_override(_active_profile_id(), iso_date)
+    overrides.get("overrides", {}).pop(iso_date, None)
 
 
 def _save_state(state: dict) -> None:
-    with open(ROOT / "state.json", "w") as f:
-        json.dump(state, f, indent=2)
-        f.write("\n")
+    store.set_state(_active_profile_id(), state)
 
 
 def _append_feedback_log(entry: dict) -> None:
-    with open(ROOT / "feedback_log.jsonl", "a") as f:
-        f.write(json.dumps(entry) + "\n")
+    store.append_feedback(_active_profile_id(), entry)
 
 
-def _clean_old_overrides(overrides: dict) -> None:
-    cutoff = (date.today() - timedelta(days=7)).isoformat()
-    stale = [k for k in overrides.get("overrides", {}) if k < cutoff]
+def _clean_old_overrides(overrides: dict, today: date) -> None:
+    # Prune only past dates. A deliberate edit to a future day (possibly weeks out) must
+    # survive until its date passes, so the cutoff is today, not "applied 7+ days ago".
+    cutoff = today.isoformat()
+    removed = store.clean_old_overrides(_active_profile_id(), cutoff)
+    stale = [k for k in list(overrides.get("overrides", {})) if k < cutoff]
     for k in stale:
         del overrides["overrides"][k]
-    if stale:
-        print(f"[cleanup] Removed {len(stale)} stale override(s): {stale}")
+    if removed:
+        print(f"[cleanup] Removed {removed} stale override(s).")
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -177,14 +193,14 @@ def _decode_header(value: str) -> str:
 # ──────────────────────────────────────────────────────────────────────────
 
 def _cycle_day(target_date: date, plan: dict) -> tuple[int, dict, dict]:
-    """Return (day_num, session, day_after_session) for target_date from the phase1 cycle."""
-    start = date.fromisoformat(plan["phase1_start_date"])
-    cycle = plan["phase1_cycle_length_days"]
+    """Return (day_num, session, day_after_session) for target_date from the training cycle."""
+    start = date.fromisoformat(plan["cycle_start_date"])
+    cycle = plan["cycle_length_days"]
     days_in = (target_date - start).days
     day_num = (days_in % cycle) + 1
     day_after_num = ((days_in + 1) % cycle) + 1
-    session = next(d for d in plan["phase1_days"] if d["day_num"] == day_num)
-    day_after = next(d for d in plan["phase1_days"] if d["day_num"] == day_after_num)
+    session = next(d for d in plan["cycle_days"] if d["day_num"] == day_num)
+    day_after = next(d for d in plan["cycle_days"] if d["day_num"] == day_after_num)
     return day_num, session, day_after
 
 
@@ -215,36 +231,26 @@ def _detect_mode_command(text: str) -> str | None:
 def _apply_mode_change(new_mode: str, state: dict, today_local: date) -> None:
     prev_mode = state.get("mode", "normal")
     state["mode"] = new_mode
-    # Keep current_phase in sync so send_daily.py pauses/resumes correctly
+    # Keep cycle_state in sync so send_daily.py pauses/resumes correctly
     if new_mode in ("survival", "paused"):
-        state["current_phase"] = "paused"
+        state["cycle_state"] = "paused"
     elif new_mode == "normal":
-        state["current_phase"] = "phase1"
+        state["cycle_state"] = "active"
     _save_state(state)
     _update_adaptation_state_mode(new_mode, prev_mode, today_local)
     print(f"[mode] {prev_mode} → {new_mode}")
 
 
 def _update_adaptation_state_mode(new_mode: str, prev_mode: str, today_local: date) -> None:
-    path = ROOT / "adaptation_state.md"
-    if not path.exists():
-        return
+    """Record the mode transition in the store's adaptation record."""
     today_iso = today_local.isoformat()
-    content = path.read_text()
-    content = re.sub(r"(?m)^mode: \S+", f"mode: {new_mode}", content)
-    content = re.sub(r"(?m)^last_updated: \S+", f"last_updated: {today_iso}", content)
+    fields = {"mode": new_mode, "last_updated": today_iso}
     if new_mode == "survival" and prev_mode != "survival":
-        # Replace placeholder row with real entry
-        content = content.replace("| — | — | — |", f"| {today_iso} | — | — |", 1)
+        fields["survival_started_at"] = today_iso
+        fields["survival_ended_at"] = None
     elif new_mode == "normal" and prev_mode == "survival":
-        # Close the most recent open survival entry
-        content = re.sub(
-            r"(\| \d{4}-\d{2}-\d{2}) \| — \| — \|",
-            rf"\1 | {today_iso} | — |",
-            content,
-            count=1,
-        )
-    path.write_text(content)
+        fields["survival_ended_at"] = today_iso
+    store.set_adaptation(_active_profile_id(), fields)
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -253,13 +259,8 @@ def _update_adaptation_state_mode(new_mode: str, prev_mode: str, today_local: da
 
 def _apply_week_choice(letter: str, state: dict, today_local: date) -> str | None:
     """Record Luke's A/B/C pick. Returns confirmation text, or None if no valid pending choice."""
-    path = ROOT / "plans" / "pending-choice.json"
-    if not path.exists():
-        return None
-    try:
-        with open(path) as f:
-            pending = json.load(f)
-    except (json.JSONDecodeError, OSError):
+    pending = store.get_pending_choice(_active_profile_id())
+    if not pending:
         return None
     expires = date.fromisoformat(pending.get("expires", "2000-01-01"))
     if today_local > expires:
@@ -272,9 +273,7 @@ def _apply_week_choice(letter: str, state: dict, today_local: date) -> str | Non
     state["week_choice_label"] = f"Option {letter_upper} — {opt['label']}"
     _save_state(state)
     pending["chosen"] = letter_upper
-    with open(path, "w") as f:
-        json.dump(pending, f, indent=2)
-        f.write("\n")
+    store.set_pending_choice(_active_profile_id(), pending)
     return (
         f"Week plan confirmed: Option {letter_upper} — {opt['label']}\n\n"
         f"{opt['sessions']}\n\n"
@@ -330,7 +329,7 @@ def _build_replacement_email(
     """Return (subject, html, text) for a replacement email with coach_note prepended."""
     day_num, _, day_after = _cycle_day(target_date, plan)
     date_str = target_date.strftime("%a %d %b")
-    hard_rules = plan["hard_rules_phase1"]
+    hard_rules = plan["hard_rules"]
 
     note_html = (
         '<div style="background:#E8F0FE; border-left:3px solid #1F3A5F; '
@@ -341,8 +340,8 @@ def _build_replacement_email(
     note_text = f"[Updated] Coach note: {coach_note}\n\n"
 
     try:
-        base_html = build_phase1_html(session, day_after, day_num, target_date, hard_rules)
-        base_text = build_phase1_text(session, day_after, day_num, target_date, hard_rules)
+        base_html = build_cycle_html(session, day_after, day_num, target_date, hard_rules)
+        base_text = build_cycle_text(session, day_after, day_num, target_date, hard_rules)
     except Exception:
         fallback_body = f"Coach note: {coach_note}\n\nSession: {json.dumps(session, indent=2)}"
         return (
@@ -357,7 +356,7 @@ def _build_replacement_email(
 
     subject = (
         f"[Updated] Fitness plan — {date_str} "
-        f"(Day {day_num}) — {session['session_type']}"
+        f"(Day {day_num}) — {session.get('session_type', 'session')}"
     )
     return subject, full_html, full_text
 
@@ -377,13 +376,13 @@ def _handle_revert(
     """Drop tomorrow's override if any and send the template session as a [Reverted] email."""
     tomorrow_iso = tomorrow.isoformat()
     if tomorrow_iso in overrides.get("overrides", {}):
-        del overrides["overrides"][tomorrow_iso]
+        _drop_override(tomorrow_iso, overrides)
         original_session, day_num = _get_current_session(tomorrow, plan, overrides)
         _, _, day_after = _cycle_day(tomorrow, plan)
         date_str = tomorrow.strftime("%a %d %b")
-        hard_rules = plan["hard_rules_phase1"]
-        html = build_phase1_html(original_session, day_after, day_num, tomorrow, hard_rules)
-        text = build_phase1_text(original_session, day_after, day_num, tomorrow, hard_rules)
+        hard_rules = plan["hard_rules"]
+        html = build_cycle_html(original_session, day_after, day_num, tomorrow, hard_rules)
+        text = build_cycle_text(original_session, day_after, day_num, tomorrow, hard_rules)
         subj = (
             f"[Reverted] Fitness plan — {date_str} "
             f"(Day {day_num}) — {original_session['session_type']}"
@@ -415,16 +414,27 @@ def _handle_training_feedback(
     text: str,
     plan: dict,
     overrides: dict,
-    tomorrow: date,
+    target_date: date,
     message_id: str,
     from_addr: str,
     week_context: str,
+    profile,
 ) -> None:
-    """Send the training-feedback fragment to the coach orchestrator and apply the override."""
-    tomorrow_iso = tomorrow.isoformat()
-    current_session, _ = _get_current_session(tomorrow, plan, overrides)
-    prev_override = overrides.get("overrides", {}).get(tomorrow_iso, {}).get("session")
-    training_text = ts.build_summary(days=14)
+    """Send the training-feedback fragment to the coach orchestrator and apply the override.
+
+    target_date is the day being adjusted (defaults to tomorrow at the call site when no
+    day is referenced in the reply). The override is keyed and the email built for it.
+    """
+    target_iso = target_date.isoformat()
+    current_session, _ = _get_current_session(target_date, plan, overrides)
+    prev_override = overrides.get("overrides", {}).get(target_iso, {}).get("session")
+    today = datetime.now(TZ_AMSTERDAM).date()
+    training_text = ts.build_summary(days=14, today=today)
+    try:
+        load = weekly_load.build_weekly_load(days=7, today=today, profile_id=profile.id)
+    except Exception as exc:
+        print(f"[warning] could not build weekly load: {exc}", file=sys.stderr)
+        load = None
 
     domain = coach_orchestrator.infer_domain(current_session.get("session_kind", "strength"))
     try:
@@ -435,6 +445,8 @@ def _handle_training_feedback(
             training_summary=training_text,
             previous_override=prev_override,
             week_context=week_context,
+            profile=profile,
+            weekly_load=load,
         )
     except (ValueError, RuntimeError) as exc:
         error_msg = str(exc)
@@ -455,11 +467,11 @@ def _handle_training_feedback(
         )
         return
 
-    overrides.setdefault("overrides", {})[tomorrow_iso] = {
+    _persist_override(target_iso, {
         "applied_at": datetime.now(TZ_AMSTERDAM).isoformat(),
         "feedback_source": f"reply: {text[:200]!r}",
         "session": new_session,
-    }
+    }, overrides)
 
     _append_feedback_log({
         "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
@@ -468,24 +480,47 @@ def _handle_training_feedback(
         "reply_text": text,
         "intent": "training_feedback",
         "coach_note": new_session.get("coach_note", ""),
-        "target_date": tomorrow_iso,
+        "target_date": target_iso,
         "override_applied": True,
     })
 
     coach_note = new_session.get("coach_note", "")
-    subj, html, body_text = _build_replacement_email(new_session, coach_note, tomorrow, plan)
+    subj, html, body_text = _build_replacement_email(new_session, coach_note, target_date, plan)
     ok = _send_email(subj, html, body_text)
     if ok:
-        print(f"[ok] Replacement email sent for {tomorrow_iso}.")
+        print(f"[ok] Replacement email sent for {target_iso}.")
     else:
-        print(f"[error] Replacement email send failed for {tomorrow_iso}.", file=sys.stderr)
+        print(f"[error] Replacement email send failed for {target_iso}.", file=sys.stderr)
 
 
-def _handle_food_log(text: str, message_id: str, from_addr: str) -> None:
-    """Parse the food log fragment, append to nutrition_log/YYYY-MM-DD.md, send ack with totals."""
+def _is_nutrition_actionable(result) -> bool:
+    """Return True when the food-log result warrants an acknowledgement email.
+
+    Criteria (any one sufficient):
+      - coach generated a note (guidance to act on)
+      - protein is short by more than 30 g against today's target
+      - total kcal is off by more than 500 (over or under)
+    Routine, on-target logs are silently written but produce no email.
+    """
+    if result.coach_note:
+        return True
+    d = result.delta_vs_target
+    if d.get("protein_g", 0) < -30:
+        return True
+    if abs(d.get("kcal", 0)) > 500:
+        return True
+    return False
+
+
+def _handle_food_log(text: str, message_id: str, from_addr: str, profile) -> None:
+    """Parse the food log fragment, append to nutrition_log/YYYY-MM-DD.md.
+
+    An acknowledgement email is sent only when _is_nutrition_actionable returns True.
+    The feedback log entry always records whether an email was sent.
+    """
     today = datetime.now(TZ_AMSTERDAM).date()
     try:
-        result = nutrition_logger.log_food(text, today)
+        result = nutrition_logger.log_food(text, today, profile=profile)
     except (ValueError, RuntimeError) as exc:
         print(f"[error] Food log failed: {exc}", file=sys.stderr)
         _append_feedback_log({
@@ -504,6 +539,7 @@ def _handle_food_log(text: str, message_id: str, from_addr: str) -> None:
         )
         return
 
+    actionable = _is_nutrition_actionable(result)
     _append_feedback_log({
         "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
         "message_id": message_id,
@@ -513,14 +549,22 @@ def _handle_food_log(text: str, message_id: str, from_addr: str) -> None:
         "items_logged": len(result.items),
         "running_totals": result.running_totals,
         "override_applied": False,
+        "emailed": actionable,
     })
 
-    subject = f"Food logged — {today.strftime('%a %d %b')}"
-    html, plain = _build_food_log_ack(result, today)
-    _send_email(subject, html, plain)
+    if actionable:
+        subject = f"Food logged — {today.strftime('%a %d %b')}"
+        html, plain = _build_food_log_ack(result, today, profile.daily_targets)
+        _send_email(subject, html, plain)
+    else:
+        print(f"[food_log] Log written silently — on target, no email sent.")
 
 
-def _build_food_log_ack(result: nutrition_logger.LogResult, day: date) -> tuple[str, str]:
+def _build_food_log_ack(
+    result: nutrition_logger.LogResult,
+    day: date,
+    targets: dict,
+) -> tuple[str, str]:
     """Render an acknowledgement email for a food-log reply."""
     date_str = day.strftime("%a %d %b %Y")
 
@@ -540,7 +584,6 @@ def _build_food_log_ack(result: nutrition_logger.LogResult, day: date) -> tuple[
 
     totals = result.running_totals
     deltas = result.delta_vs_target
-    targets = nutrition_logger.DAILY_TARGETS
     sign = lambda d, p=0: (f"+{d:.{p}f}" if d >= 0 else f"{d:.{p}f}")
 
     totals_html = (
@@ -583,11 +626,11 @@ def _build_food_log_ack(result: nutrition_logger.LogResult, day: date) -> tuple[
             '<p style="font-size:13px; color:#8B6914; background:#FFF8E5; '
             'border-left:3px solid #E8A33D; padding:8px 12px; border-radius:2px; margin-top:14px;">'
             f'Low-confidence estimates: {names}. '
-            f'Edit <code>nutrition_log/{day.isoformat()}.md</code> if you want to refine.</p>'
+            'Reply with quantities if you want to refine them.</p>'
         )
         low_conf_text = (
             f"\nLow-confidence estimates: {names_plain}. "
-            f"Edit nutrition_log/{day.isoformat()}.md if you want to refine.\n"
+            "Reply with quantities if you want to refine them.\n"
         )
 
     html = (
@@ -616,21 +659,17 @@ def _build_food_log_ack(result: nutrition_logger.LogResult, day: date) -> tuple[
 
 
 def _handle_mobility_log(text: str, message_id: str, from_addr: str) -> None:
-    """Phase 1 stub: log the intent, send acknowledgement. Real parsing in Phase 3."""
+    """Phase 1 stub: record the intent silently. No email sent until Phase 3 parsing lands."""
     _append_feedback_log({
         "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
         "message_id": message_id,
         "from_address": from_addr,
         "reply_text": text,
         "intent": "mobility_log",
-        "action": "logged_pending_phase3",
+        "action": "logged_pending_parsing",
         "override_applied": False,
     })
-    _send_plain_notice(
-        "Mobility log noted",
-        "Got your mobility note — parsing isn't wired in yet (Phase 3). "
-        "I've recorded the reply for the consistency tracker.",
-    )
+    print("[mobility_log] Logged silently — no email sent until Phase 3.")
 
 
 _RE_NUTRITION_KEYWORDS = re.compile(
@@ -639,32 +678,69 @@ _RE_NUTRITION_KEYWORDS = re.compile(
 )
 
 
-def _handle_question(text: str, message_id: str, from_addr: str) -> None:
-    """Answer nutrition questions using today's log + weekly context. Stub training/mobility Q&A."""
+_RE_RUNNING_KEYWORDS = re.compile(
+    r"\b(run|runs|running|ran|pace|paces|tempo|interval|intervals|easy run|long run|"
+    r"marathon|threshold|km|kms|mileage|zone\s?2|hr|heart rate)\b",
+    re.IGNORECASE,
+)
+
+
+def _handle_question(text: str, message_id: str, from_addr: str, profile) -> None:
+    """Answer questions. Nutrition uses the food-log context; training/running questions
+    route to the on-demand coach (advice only — writes no override)."""
     if not _RE_NUTRITION_KEYWORDS.search(text):
+        domain = "run" if _RE_RUNNING_KEYWORDS.search(text) else "strength"
+        today = datetime.now(TZ_AMSTERDAM).date()
+        try:
+            summary = ts.build_summary(days=14, today=today)
+        except Exception as exc:  # noqa: BLE001 — best-effort context
+            print(f"[warn] training summary unavailable: {exc}", file=sys.stderr)
+            summary = ""
+        try:
+            load = weekly_load.build_weekly_load(days=7, today=today, profile_id=profile.id)
+        except Exception as exc:  # noqa: BLE001 — best-effort context
+            print(f"[warn] weekly load unavailable: {exc}", file=sys.stderr)
+            load = None
+
+        try:
+            answer = coach_orchestrator.answer_training_question(
+                text, domain=domain, training_summary=summary,
+                profile=profile, weekly_load=load,
+            )
+        except (ValueError, RuntimeError) as exc:
+            print(f"[error] Training Q&A failed: {exc}", file=sys.stderr)
+            _append_feedback_log({
+                "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+                "message_id": message_id,
+                "from_address": from_addr,
+                "reply_text": text,
+                "intent": "question",
+                "error": str(exc),
+                "override_applied": False,
+            })
+            _send_plain_notice("Question — couldn't answer", f"Error: {exc}")
+            return
+
         _append_feedback_log({
             "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
             "message_id": message_id,
             "from_address": from_addr,
             "reply_text": text,
             "intent": "question",
-            "action": "out_of_scope",
+            "action": "answered",
+            "domain": domain,
             "override_applied": False,
         })
-        _send_plain_notice(
-            "Question noted",
-            "I can only answer nutrition questions in this phase. "
-            "Training and mobility Q&A come in a later phase.",
-        )
+        _send_plain_notice(f"Re: {text[:60]}", answer)
         return
 
     today = datetime.now(TZ_AMSTERDAM).date()
     day_log = nutrition_logger.read_day(today)
-    weekly = nutrition_logger.weekly_summary(days=7)
+    weekly = nutrition_logger.weekly_summary(days=7, targets=profile.daily_targets)
 
     try:
         answer = coach_orchestrator.answer_nutrition_question(
-            text, day_log, nutrition_logger.DAILY_TARGETS, weekly,
+            text, day_log, profile.daily_targets, weekly, profile=profile,
         )
     except (ValueError, RuntimeError) as exc:
         print(f"[error] Nutrition Q&A failed: {exc}", file=sys.stderr)
@@ -727,7 +803,10 @@ def main():
         if not val:
             sys.exit(f"{name} env var not set.")
 
-    state = _load_json(ROOT / "state.json")
+    global _ACTIVE_PROFILE_ID
+    profile = default_profile()
+    _ACTIVE_PROFILE_ID = profile.id
+    state = store.get_state(profile.id)
     mode = state.get("mode", "normal")
 
     if mode == "paused":
@@ -749,123 +828,145 @@ def main():
         sys.exit(f"IMAP login failed: {exc}")
 
     mail.select("INBOX")
-    _, data = mail.search(None, 'UNSEEN FROM "levans092@gmail.com"')
+    _, data = mail.search(None, _imap_search_query(profile))
     msg_ids = data[0].split() if data[0] else []
-    print(f"[poll] {len(msg_ids)} unread message(s) from levans092@gmail.com")
+    print(f"[poll] {len(msg_ids)} unread message(s) from {profile.email}")
 
     for msg_id in msg_ids:
-        _, raw_data = mail.fetch(msg_id, "(RFC822)")
-        msg = email_lib.message_from_bytes(raw_data[0][1])
-        reply_text = _strip_quoted_history(_get_plain_body(msg))
-        message_id = msg.get("Message-ID", "")
-        from_addr = _decode_header(msg.get("From", ""))
-
-        print(f"[msg] From: {from_addr}")
-        print(f"[msg] Subject: {_decode_header(msg.get('Subject', ''))}")
-        print(f"[msg] Body (stripped, first 200): {reply_text[:200]!r}")
-
-        # 1. Mode commands work regardless of current mode (enter, exit, pause)
-        new_mode = _detect_mode_command(reply_text)
-        if new_mode is not None:
-            _apply_mode_change(new_mode, state, today_local)
-            mode = new_mode
-            mail.store(msg_id, "+FLAGS", "\\Seen")
-            _send_plain_notice(f"Mode update: {new_mode}", _MODE_NOTICES[new_mode])
-            _append_feedback_log({
-                "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
-                "message_id": message_id,
-                "from_address": from_addr,
-                "reply_text": reply_text,
-                "intent": f"mode_change:{new_mode}",
-                "action": f"mode_change:{new_mode}",
-                "override_applied": False,
-            })
-            continue
-
-        # 2. A/B/C week-plan choice from Sunday summary
-        m = _RE_WEEK_CHOICE.match(reply_text)
-        if m:
-            letter = m.group(1).upper()
-            confirmation = _apply_week_choice(letter, state, today_local)
-            mail.store(msg_id, "+FLAGS", "\\Seen")
-            if confirmation:
-                _send_plain_notice(f"Week plan: Option {letter}", confirmation)
-                print(f"[choice] Week option {letter} saved.")
-            else:
-                _send_plain_notice(
-                    "Week plan — no pending choice",
-                    "No pending week plan found (or it has expired). "
-                    "Wait for Sunday's summary to choose a plan.",
-                )
-            _append_feedback_log({
-                "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
-                "message_id": message_id,
-                "from_address": from_addr,
-                "reply_text": reply_text,
-                "intent": f"week_choice:{letter}",
-                "action": f"week_choice:{letter}",
-                "override_applied": False,
-            })
-            continue
-
-        # 3. Survival mode: ignore everything below this point (preserves existing behaviour)
-        if mode == "survival":
-            mail.store(msg_id, "+FLAGS", "\\Seen")
-            print("[skip] Survival mode: ignored reply.")
-            continue
-
-        # 4. Revert — explicit, top-level. Bypasses the classifier so a misroute can't swallow it.
-        if _RE_REVERT.search(reply_text):
-            _handle_revert(reply_text, plan, overrides, tomorrow, message_id, from_addr)
-            mail.store(msg_id, "+FLAGS", "\\Seen")
-            continue
-
-        # 5. Intent classifier — splits compound replies into per-intent fragments.
+        message_id = ""
         try:
-            classification = intent_classifier.classify(reply_text)
-        except (ValueError, RuntimeError) as exc:
-            print(f"[error] Classifier failed: {exc}", file=sys.stderr)
+            _, raw_data = mail.fetch(msg_id, "(RFC822)")
+            msg = email_lib.message_from_bytes(raw_data[0][1])
+            reply_text = _strip_quoted_history(_get_plain_body(msg))
+            message_id = msg.get("Message-ID", "")
+            from_addr = _decode_header(msg.get("From", ""))
+
+            print(f"[msg] From: {from_addr}")
+            print(f"[msg] Subject: {_decode_header(msg.get('Subject', ''))}")
+            print(f"[msg] Body (stripped, first 200): {reply_text[:200]!r}")
+
+            # 1. Mode commands work regardless of current mode (enter, exit, pause)
+            new_mode = _detect_mode_command(reply_text)
+            if new_mode is not None:
+                _apply_mode_change(new_mode, state, today_local)
+                mode = new_mode
+                _send_plain_notice(f"Mode update: {new_mode}", _MODE_NOTICES[new_mode])
+                _append_feedback_log({
+                    "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+                    "message_id": message_id,
+                    "from_address": from_addr,
+                    "reply_text": reply_text,
+                    "intent": f"mode_change:{new_mode}",
+                    "action": f"mode_change:{new_mode}",
+                    "override_applied": False,
+                })
+                continue
+
+            # 2. A/B/C week-plan choice from Sunday summary
+            m = _RE_WEEK_CHOICE.match(reply_text)
+            if m:
+                letter = m.group(1).upper()
+                confirmation = _apply_week_choice(letter, state, today_local)
+                if confirmation:
+                    _send_plain_notice(f"Week plan: Option {letter}", confirmation)
+                    print(f"[choice] Week option {letter} saved.")
+                else:
+                    _send_plain_notice(
+                        "Week plan — no pending choice",
+                        "No pending week plan found (or it has expired). "
+                        "Wait for Sunday's summary to choose a plan.",
+                    )
+                _append_feedback_log({
+                    "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+                    "message_id": message_id,
+                    "from_address": from_addr,
+                    "reply_text": reply_text,
+                    "intent": f"week_choice:{letter}",
+                    "action": f"week_choice:{letter}",
+                    "override_applied": False,
+                })
+                continue
+
+            # 3. Survival mode: ignore everything below this point
+            if mode == "survival":
+                print("[skip] Survival mode: ignored reply.")
+                continue
+
+            # 4. Revert — explicit, top-level. Bypasses the classifier so a misroute can't swallow it.
+            if _RE_REVERT.search(reply_text):
+                _handle_revert(reply_text, plan, overrides, tomorrow, message_id, from_addr)
+                continue
+
+            # 5. Intent classifier — splits compound replies into per-intent fragments.
+            try:
+                classification = intent_classifier.classify(reply_text, today=today_local)
+            except (ValueError, RuntimeError) as exc:
+                print(f"[error] Classifier failed: {exc}", file=sys.stderr)
+                _append_feedback_log({
+                    "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
+                    "message_id": message_id,
+                    "from_address": from_addr,
+                    "reply_text": reply_text,
+                    "intent": "classifier_error",
+                    "error": str(exc),
+                    "override_applied": False,
+                })
+                _send_plain_notice(
+                    "Couldn't classify reply",
+                    f"The intent classifier failed: {exc}\n\n"
+                    "Reply 'revert' to drop any override, or rephrase your message.",
+                )
+                continue
+
+            # 6. Dispatch per intent. Compound replies produce multiple handler calls.
+            week_context = state.get("week_choice", "")
+            for item in classification["intents"]:
+                intent = item["intent"]
+                text = item["text"]
+                if intent == "training_feedback":
+                    # The classifier resolves any day reference to an absolute ISO date
+                    # in Amsterdam time; default to tomorrow when none was mentioned.
+                    raw_target = item.get("target_date")
+                    try:
+                        target_day = date.fromisoformat(raw_target) if raw_target else tomorrow
+                    except (TypeError, ValueError):
+                        target_day = tomorrow
+                    _handle_training_feedback(
+                        text, plan, overrides, target_day, message_id, from_addr,
+                        week_context, profile,
+                    )
+                elif intent == "food_log":
+                    _handle_food_log(text, message_id, from_addr, profile)
+                elif intent == "mobility_log":
+                    _handle_mobility_log(text, message_id, from_addr)
+                elif intent == "question":
+                    _handle_question(text, message_id, from_addr, profile)
+                elif intent == "none_clear":
+                    _handle_clarify(text, message_id, from_addr)
+
+        except Exception as exc:
+            print(f"[error] Unhandled while processing message: {exc}", file=sys.stderr)
             _append_feedback_log({
                 "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(),
                 "message_id": message_id,
-                "from_address": from_addr,
-                "reply_text": reply_text,
-                "intent": "classifier_error",
+                "intent": "processing_error",
                 "error": str(exc),
                 "override_applied": False,
             })
-            mail.store(msg_id, "+FLAGS", "\\Seen")
-            _send_plain_notice(
-                "Couldn't classify reply",
-                f"The intent classifier failed: {exc}\n\n"
-                "Reply 'revert' to drop any override, or rephrase your message.",
-            )
-            continue
-
-        # 6. Dispatch per intent. Compound replies produce multiple handler calls.
-        week_context = state.get("week_choice", "")
-        for item in classification["intents"]:
-            intent = item["intent"]
-            text = item["text"]
-            if intent == "training_feedback":
-                _handle_training_feedback(
-                    text, plan, overrides, tomorrow, message_id, from_addr, week_context,
+            try:
+                _send_plain_notice(
+                    "Fitness bot — something went wrong",
+                    f"Couldn't fully process your last reply: {exc}\n\n"
+                    "Reply 'revert' to drop any override, or rephrase and try again.",
                 )
-            elif intent == "food_log":
-                _handle_food_log(text, message_id, from_addr)
-            elif intent == "mobility_log":
-                _handle_mobility_log(text, message_id, from_addr)
-            elif intent == "question":
-                _handle_question(text, message_id, from_addr)
-            elif intent == "none_clear":
-                _handle_clarify(text, message_id, from_addr)
-
-        mail.store(msg_id, "+FLAGS", "\\Seen")
+            except Exception:
+                pass
+        finally:
+            mail.store(msg_id, "+FLAGS", "\\Seen")
 
     mail.logout()
 
-    _clean_old_overrides(overrides)
-    _save_overrides(overrides)
+    _clean_old_overrides(overrides, today_local)
 
 
 if __name__ == "__main__":

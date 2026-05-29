@@ -9,9 +9,9 @@ fitness-emails/
 ├── send_daily.py              # builds and sends tomorrow's session preview email
 ├── send_sunday.py             # Sunday 6 PM data-refresh reminder
 ├── process_replies.py         # polls Gmail, calls Gemini, sends replacement emails
-├── gemini_client.py           # thin Gemini 1.5 Flash REST API wrapper
+├── gemini_client.py           # thin Gemini 2.5 Flash REST API wrapper (overridable via GEMINI_MODEL)
 ├── training_summary.py        # builds compact training summary from CSVs for Gemini
-├── plan_template.json         # all session data (Phase 1 rolling 10-day + Phase 2 menu + Phase 3 placeholder)
+├── plan_template.json         # all session data (repeating 7-day training cycle)
 ├── state.json                 # which phase Luke is currently in
 ├── overrides.json             # per-date session overrides from feedback replies
 ├── feedback_log.jsonl         # append-only log of all feedback received
@@ -128,16 +128,16 @@ Multiple replies in one evening are fine — each one overwrites the previous ov
 
 To resume: reply `I'm back` or `resume training`. Training picks up toward the same goal (sub-3:25, San Sebastián).
 
-## When ready for Phase 3 (marathon build)
+## Marathon build
 
-Open Claude Code, say "build Phase 3" — I'll write the 17-week block into `plan_template.json` under `phase3.weeks`. Then update `adaptation_state.md` to set `phase: marathon_build` and `cycle_start_date` to the start date. Commit and push. Daily emails continue with the Phase 3 week plan.
+The shift from maintenance to a structured marathon build is handled by the progression engine (planned in a later pack), which adjusts the training cycle as race day approaches. There is no separate stage to switch into manually.
 
 ## Weekly plan adjustments
 
 The plan is just JSON. To change next week:
 
 1. Open `plan_template.json` (or have Cowork edit it for you after a weekly review)
-2. Edit the relevant `phase1_days` entry (or `phase3.weeks` entry once Phase 3 is live)
+2. Edit the relevant `cycle_days` entry
 3. Commit and push
 4. Next morning's email reflects the new plan
 
@@ -171,4 +171,4 @@ Total: $0/month, indefinitely.
 
 ## Decommissioning
 
-If you want to stop the emails: disable both workflows in GitHub Actions (Actions tab → workflow → ⋯ → Disable workflow), or set `current_phase` to `"paused"` in `state.json` and push.
+If you want to stop the emails: disable both workflows in GitHub Actions (Actions tab → workflow → ⋯ → Disable workflow), or set `cycle_state` to `"paused"` in `state.json` and push.

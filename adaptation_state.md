@@ -23,15 +23,15 @@ Valid values: `normal` | `survival` | `paused`
 |---|---|---|
 | — | — | — |
 
-## Current training phase
+## Current training cycle
 
 ```
-phase: maintenance
+focus: maintenance
 cycle_start_date: 2026-05-25
-cycle_length_days: 10
+cycle_length_days: 7
 ```
 
-Phase becomes `marathon_build` when Phase 3 starts (~2026-08-04).
+Training focus shifts to the marathon build when the progression engine activates it (planned in a later pack).
 
 ## Weekly load counters (current week)
 
@@ -42,7 +42,6 @@ week_start: 2026-05-27
 strength_sessions: 0
 run_sessions: 0
 run_km_total: 0.0
-squash_sessions: 0
 ```
 
 ## Taper

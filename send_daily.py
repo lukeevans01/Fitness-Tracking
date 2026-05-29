@@ -7,7 +7,7 @@ Reads plan_template.json + state.json, builds today's email, POSTs to Resend.
 
 Env vars required:
   RESEND_API_KEY    Resend API key (set as a GitHub repo secret)
-  TO_EMAIL          Recipient (default: levans092@gmail.com)
+  TO_EMAIL          Recipient override (default: the active profile's email)
   FROM_EMAIL        Sender (default: Luke's Fitness Bot <onboarding@resend.dev>)
 
 Cloudflare blocks Python urllib's user-agent; we shell out to curl for the POST.
@@ -21,13 +21,15 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-import nutrition_logger
+import progression
+import store
+from profile import default_profile
 
 ROOT = Path(__file__).parent
 TZ_AMSTERDAM = ZoneInfo("Europe/Amsterdam")
 
 API_KEY = os.environ.get("RESEND_API_KEY")
-TO_EMAIL = os.environ.get("TO_EMAIL") or "levans092@gmail.com"
+TO_EMAIL = os.environ.get("TO_EMAIL") or default_profile().email
 FROM_EMAIL = os.environ.get("FROM_EMAIL") or "Luke's Fitness Bot <onboarding@resend.dev>"
 GMAIL_USER = os.environ.get("GMAIL_USER") or ""
 RESEND_URL = "https://api.resend.com/emails"
@@ -106,59 +108,17 @@ def html_callout_yellow(text: str) -> str:
 </div>"""
 
 
-def html_yesterday_nutrition(yesterday_log, targets: dict) -> str:
-    """Yesterday's totals + deltas. Empty string if no log exists for yesterday."""
-    if not yesterday_log or not yesterday_log.items:
-        return ""
-    totals = nutrition_logger.daily_totals(yesterday_log)
-    dk = totals["kcal"] - targets["kcal"]
-    dp = totals["protein_g"] - targets["protein_g"]
-    dc = totals["carbs_g"] - targets["carbs_g"]
-    sign = lambda d, p=0: (f"+{d:.{p}f}" if d >= 0 else f"{d:.{p}f}")
-    return (
-        '<div style="border-top:1px solid #EEE; margin-top:24px; padding-top:18px;">'
-        '<div style="font-size:15px; font-weight:600; color:#1F3A5F; margin-bottom:8px;">'
-        "Yesterday's nutrition</div>"
-        '<table style="font-size:13px; border-collapse:collapse;">'
-        f'<tr><td style="padding:3px 12px 3px 0; color:#555;">Calories</td>'
-        f'<td style="padding:3px 0;">{totals["kcal"]:.0f} / {targets["kcal"]} ({sign(dk)})</td></tr>'
-        f'<tr><td style="padding:3px 12px 3px 0; color:#555;">Protein</td>'
-        f'<td style="padding:3px 0;">{totals["protein_g"]:.1f}g / {targets["protein_g"]}g ({sign(dp, 1)}g)</td></tr>'
-        f'<tr><td style="padding:3px 12px 3px 0; color:#555;">Carbs</td>'
-        f'<td style="padding:3px 0;">{totals["carbs_g"]:.1f}g / {targets["carbs_g"]}g ({sign(dc, 1)}g)</td></tr>'
-        '</table>'
-        '</div>'
-    )
-
-
-def text_yesterday_nutrition(yesterday_log, targets: dict) -> str:
-    """Plain-text mirror of html_yesterday_nutrition. Empty string if no log."""
-    if not yesterday_log or not yesterday_log.items:
-        return ""
-    totals = nutrition_logger.daily_totals(yesterday_log)
-    dk = totals["kcal"] - targets["kcal"]
-    dp = totals["protein_g"] - targets["protein_g"]
-    dc = totals["carbs_g"] - targets["carbs_g"]
-    sign = lambda d, p=0: (f"+{d:.{p}f}" if d >= 0 else f"{d:.{p}f}")
-    return (
-        "\n" + "─" * 70 + "\n"
-        "YESTERDAY'S NUTRITION\n"
-        f"  Calories: {totals['kcal']:.0f} / {targets['kcal']} ({sign(dk)})\n"
-        f"  Protein:  {totals['protein_g']:.1f}g / {targets['protein_g']}g ({sign(dp, 1)}g)\n"
-        f"  Carbs:    {totals['carbs_g']:.1f}g / {targets['carbs_g']}g ({sign(dc, 1)}g)\n"
-    )
-
-
 def html_food_reminder() -> str:
     return """
 <div style="border-top: 1px solid #EEE; margin-top: 28px; padding-top: 20px;">
-  <div style="font-size: 15px; font-weight: 600; color: #1F3A5F; margin-bottom: 8px;">Today's food log</div>
-  <p style="font-size: 13px; color: #555; margin: 0 0 12px 0;">Reply with what you ate today — your nutrition coach will flag anything worth adjusting around training.</p>
+  <div style="font-size: 15px; font-weight: 600; color: #1F3A5F; margin-bottom: 8px;">Reply to this email</div>
+  <p style="font-size: 13px; color: #555; margin: 0 0 12px 0;">Reply with what you ate today and any feedback on tomorrow's session — both can go in one reply.</p>
   <table style="font-size: 13px; color: #444; border-collapse: collapse; width: 100%;">
     <tr><td style="padding: 5px 14px 5px 0; color: #888; white-space: nowrap;">Breakfast</td><td style="padding: 5px 0; border-bottom: 1px solid #EEE; width: 100%;"></td></tr>
     <tr><td style="padding: 5px 14px 5px 0; color: #888; white-space: nowrap;">Lunch</td><td style="padding: 5px 0; border-bottom: 1px solid #EEE;"></td></tr>
     <tr><td style="padding: 5px 14px 5px 0; color: #888; white-space: nowrap;">Dinner</td><td style="padding: 5px 0; border-bottom: 1px solid #EEE;"></td></tr>
-    <tr><td style="padding: 5px 14px 5px 0; color: #888; white-space: nowrap;">Snacks</td><td style="padding: 5px 0;"></td></tr>
+    <tr><td style="padding: 5px 14px 5px 0; color: #888; white-space: nowrap;">Snacks</td><td style="padding: 5px 0; border-bottom: 1px solid #EEE;"></td></tr>
+    <tr><td style="padding: 5px 14px 5px 0; color: #888; white-space: nowrap;">Session feedback</td><td style="padding: 5px 0; font-size: 12px; color: #AAA;">(optional — e.g. "swap the run for strength")</td></tr>
   </table>
 </div>"""
 
@@ -174,10 +134,11 @@ def html_callout_green(rules: list) -> str:
 </div>"""
 
 
-def build_phase1_html(day: dict, tomorrow: dict, day_num: int, today: date, hard_rules: list, yesterday_log=None) -> str:
+def build_cycle_html(day: dict, tomorrow: dict, day_num: int, today: date, hard_rules: list,
+                     progression_note: str = "") -> str:
     date_str = today.strftime("%a %d %b %Y")
     header = html_header(
-        f"Phase 1 · Day {day_num}",
+        f"Day {day_num}",
         date_str,
         f"{day['session_type']} · ~{day.get('duration_min', '')} min"
     )
@@ -227,17 +188,20 @@ def build_phase1_html(day: dict, tomorrow: dict, day_num: int, today: date, hard
 """
 
     body += html_callout_green(hard_rules)
-    body += '<p style="color: #888; font-size: 13px; margin-top: 24px;">Where you are: Phase 1, pre-baby maintenance. Sub-3:25 marathon target for 22 Nov 2026.</p>'
-    body += html_yesterday_nutrition(yesterday_log, nutrition_logger.DAILY_TARGETS)
+    footer = "Training cycle, sub-3:25 marathon target for 22 Nov 2026."
+    if progression_note:
+        footer += " " + progression_note
+    body += f'<p style="color: #888; font-size: 13px; margin-top: 24px;">{footer}</p>'
     body += html_food_reminder()
 
     return f"<!DOCTYPE html><html><body style=\"{CSS_BASE}\">{header}{body}</body></html>"
 
 
-def build_phase1_text(day: dict, tomorrow: dict, day_num: int, today: date, hard_rules: list, yesterday_log=None) -> str:
+def build_cycle_text(day: dict, tomorrow: dict, day_num: int, today: date, hard_rules: list,
+                     progression_note: str = "") -> str:
     date_str = today.strftime("%a %d %b %Y")
     lines = []
-    lines.append(f"PHASE 1 · DAY {day_num} — {date_str}")
+    lines.append(f"DAY {day_num} — {date_str}")
     lines.append(f"{day['session_type']} (~{day.get('duration_min', '')} min)")
     lines.append("=" * 70)
     lines.append("")
@@ -272,95 +236,21 @@ def build_phase1_text(day: dict, tomorrow: dict, day_num: int, today: date, hard
     for r in hard_rules:
         lines.append(f"  - {r}")
     lines.append("")
-    lines.append("Where you are: Phase 1, pre-baby maintenance. Sub-3:25 marathon target 22 Nov 2026.")
-    yesterday_block = text_yesterday_nutrition(yesterday_log, nutrition_logger.DAILY_TARGETS)
-    if yesterday_block:
-        lines.append(yesterday_block.rstrip("\n"))
+    footer = "Training cycle, sub-3:25 marathon target for 22 Nov 2026."
+    if progression_note:
+        footer += " " + progression_note
+    lines.append(footer)
     lines.append("")
     lines.append("─" * 70)
-    lines.append("TODAY'S FOOD LOG")
-    lines.append("Reply with what you ate — your nutrition coach will flag anything worth adjusting.")
+    lines.append("REPLY TO THIS EMAIL")
+    lines.append("Include what you ate today and any feedback on tomorrow's session — both can go in one reply.")
     lines.append("")
     lines.append("  Breakfast:")
     lines.append("  Lunch:")
     lines.append("  Dinner:")
     lines.append("  Snacks:")
+    lines.append("  Session feedback (optional):")
 
-    return "\n".join(lines)
-
-
-def build_phase2_html(menu: dict, today: date, baby_birth_date_str: str | None) -> str:
-    week_str = today.strftime("%d %b %Y")
-    if baby_birth_date_str:
-        bbd = date.fromisoformat(baby_birth_date_str)
-        days_post = (today - bbd).days
-        weeks_post = days_post // 7
-        header_sub = f"Week {weeks_post + 1} postpartum"
-    else:
-        header_sub = "Postpartum recovery"
-
-    header = html_header("Phase 2 · Weekly digest", f"Week of {week_str}", header_sub)
-
-    grid_rows = []
-    for row in menu["grid"]:
-        grid_rows.append(f"""
-    <tr>
-      <td style="padding: 8px 10px; border-bottom: 1px solid #eee; font-weight: 600; background: #F8F9FB;">{row['time']}</td>
-      <td style="padding: 8px 10px; border-bottom: 1px solid #eee;">{row['wrecked']}</td>
-      <td style="padding: 8px 10px; border-bottom: 1px solid #eee;">{row['tired']}</td>
-      <td style="padding: 8px 10px; border-bottom: 1px solid #eee;">{row['decent']}</td>
-    </tr>""")
-
-    grid_html = f"""
-<table style="border-collapse: collapse; width: 100%; font-size: 13px;">
-  <thead>
-    <tr style="background: #1F3A5F; color: white;">
-      <th style="padding: 8px 10px; text-align: left;">Time</th>
-      <th style="padding: 8px 10px; text-align: left;">Wrecked (sleep &lt;4h)</th>
-      <th style="padding: 8px 10px; text-align: left;">Tired (4-6h)</th>
-      <th style="padding: 8px 10px; text-align: left;">Decent (6h+)</th>
-    </tr>
-  </thead>
-  <tbody>{''.join(grid_rows)}
-  </tbody>
-</table>"""
-
-    checklist = "\n".join(f"    <li>{m}</li>" for m in menu["readiness_for_phase3"])
-    body = f"""
-<p>{menu['preamble']}</p>
-<h3 style="color: #1F3A5F; border-bottom: 1px solid #eee; padding-bottom: 4px;">The menu</h3>
-{grid_html}
-<h3 style="color: #1F3A5F; border-bottom: 1px solid #eee; padding-bottom: 4px;">Ready for Phase 3?</h3>
-<ul style="color: #444;">
-{checklist}
-</ul>
-<p style="color: #888; font-size: 13px; margin-top: 24px;">When all four are true, reply to this email or ping Cowork with "I'm ready" and I'll write the marathon build.</p>
-"""
-    return f"<!DOCTYPE html><html><body style=\"{CSS_BASE}\">{header}{body}</body></html>"
-
-
-def build_phase2_text(menu: dict, today: date, baby_birth_date_str: str | None) -> str:
-    week_str = today.strftime("%d %b %Y")
-    lines = [f"PHASE 2 · WEEKLY DIGEST — Week of {week_str}", "=" * 70, ""]
-    if baby_birth_date_str:
-        bbd = date.fromisoformat(baby_birth_date_str)
-        days_post = (today - bbd).days
-        lines.append(f"Week {days_post // 7 + 1} postpartum.")
-        lines.append("")
-    lines.append(menu["preamble"])
-    lines.append("")
-    lines.append("THE MENU:")
-    for row in menu["grid"]:
-        lines.append(f"  {row['time']}")
-        lines.append(f"    Wrecked: {row['wrecked']}")
-        lines.append(f"    Tired:   {row['tired']}")
-        lines.append(f"    Decent:  {row['decent']}")
-        lines.append("")
-    lines.append("READY FOR PHASE 3?")
-    for m in menu["readiness_for_phase3"]:
-        lines.append(f"  - {m}")
-    lines.append("")
-    lines.append("When all four are true, reply or ping Cowork with 'I'm ready' to trigger Phase 3.")
     return "\n".join(lines)
 
 
@@ -400,90 +290,49 @@ def main():
 
     check_local_time_window()
 
+    profile = default_profile()
     plan = load_json(ROOT / "plan_template.json")
-    state = load_json(ROOT / "state.json")
-    phase = state["current_phase"]
+    state = store.get_state(profile.id)
+    cycle_state = state.get("cycle_state", "active")
 
     today_local = datetime.now(TZ_AMSTERDAM).date()
-    date_str = today_local.strftime("%a %d %b")  # used by phase2/3
 
-    if phase == "phase1":
+    if cycle_state == "active":
         # Email is sent at 19:00 as a preview of tomorrow's session.
         target_date = today_local + timedelta(days=1)
-        start = date.fromisoformat(plan["phase1_start_date"])
+        start = date.fromisoformat(plan["cycle_start_date"])
         days_in = (target_date - start).days
         if days_in < 0:
-            sys.exit(f"Target date {target_date} is before phase1 start {start}; nothing to send.")
-        cycle = plan["phase1_cycle_length_days"]
+            sys.exit(f"Target date {target_date} is before cycle start {start}; nothing to send.")
+        cycle = plan["cycle_length_days"]
         day_num = (days_in % cycle) + 1
         day_after_num = ((days_in + 1) % cycle) + 1
-        day = next(d for d in plan["phase1_days"] if d["day_num"] == day_num)
-        day_after = next(d for d in plan["phase1_days"] if d["day_num"] == day_after_num)
+        day = next(d for d in plan["cycle_days"] if d["day_num"] == day_num)
+        day_after = next(d for d in plan["cycle_days"] if d["day_num"] == day_after_num)
 
         # Check for a feedback override for target_date
-        overrides_data = load_json(ROOT / "overrides.json")
-        override = overrides_data.get("overrides", {}).get(target_date.isoformat())
+        override = store.get_overrides(profile.id).get(target_date.isoformat())
+        progression_note = ""
         if override:
             day = override["session"]
             print(f"[override] Using feedback override for {target_date.isoformat()}")
+        else:
+            # Scale the template long-run / quality-run days toward race day. Overrides win,
+            # so progression only applies to the unmodified template session.
+            day, progression_note = progression.apply_to_session(
+                day, target_date, profile.race_date
+            )
 
         date_str = target_date.strftime("%a %d %b")
         subject = f"Fitness plan — {date_str} (Day {day_num}) — {day['session_type']}"
-        yesterday_log = nutrition_logger.read_day(today_local - timedelta(days=1))
-        html = build_phase1_html(day, day_after, day_num, target_date, plan["hard_rules_phase1"], yesterday_log)
-        text = build_phase1_text(day, day_after, day_num, target_date, plan["hard_rules_phase1"], yesterday_log)
+        html = build_cycle_html(day, day_after, day_num, target_date, plan["hard_rules"], progression_note)
+        text = build_cycle_text(day, day_after, day_num, target_date, plan["hard_rules"], progression_note)
 
-    elif phase == "phase2":
-        # Send only on Mondays (weekday == 0)
-        if today_local.weekday() != 0:
-            print(f"[skip] Phase 2: today is {today_local.strftime('%A')}, only sending Mondays.")
-            return
-        subject = f"Fitness plan — week of {date_str} — Phase 2 menu"
-        html = build_phase2_html(plan["phase2_menu"], today_local, state.get("baby_birth_date"))
-        text = build_phase2_text(plan["phase2_menu"], today_local, state.get("baby_birth_date"))
-
-    elif phase == "phase3":
-        weeks = plan.get("phase3", {}).get("weeks", [])
-        if not weeks:
-            subject = f"Fitness plan — {date_str} — Phase 3 not yet built"
-            html = f"""<!DOCTYPE html><html><body style="{CSS_BASE}">
-{html_header("Phase 3", date_str, "Plan not yet built")}
-<p>Phase 3 marathon build hasn't been written yet. Open Cowork and ask Claude to build it.</p>
-<p>Today: easy 30-min run if you want, otherwise rest.</p>
-</body></html>"""
-            text = f"Phase 3 plan not yet built. Open Cowork and ask Claude to build it. Today: easy 30-min run or rest."
-        else:
-            # Look up today's session by date in phase3.weeks
-            # Each week entry expected to have: {week_num, start_date, sessions: [{date, ...}]}
-            today_iso = today_local.isoformat()
-            found = None
-            for week in weeks:
-                for session in week.get("sessions", []):
-                    if session.get("date") == today_iso:
-                        found = (week, session)
-                        break
-                if found:
-                    break
-            if not found:
-                subject = f"Fitness plan — {date_str} — Phase 3 (no session today)"
-                html = f"<!DOCTYPE html><html><body style=\"{CSS_BASE}\">{html_header('Phase 3', date_str, 'No session scheduled')}<p>Rest day or unscheduled. Check the plan in your folder.</p></body></html>"
-                text = f"No Phase 3 session scheduled for {date_str}. Rest day or check plan."
-            else:
-                # Phase 3 session rendering — placeholder, will be expanded when Phase 3 is written
-                week, session = found
-                week_num = week.get("week_num")
-                session_type = session.get("session_type", "")
-                session_json = json.dumps(session, indent=2)
-                subject = f"Fitness plan — {date_str} — Phase 3 Week {week_num}: {session_type}"
-                header = html_header(f"Phase 3 · Week {week_num}", date_str, session_type)
-                html = f"<!DOCTYPE html><html><body style=\"{CSS_BASE}\">{header}<pre>{session_json}</pre></body></html>"
-                text = f"Phase 3 session for {date_str}:\n\n{session_json}"
-
-    elif phase == "paused":
-        print(f"[skip] current_phase is 'paused'; no email sent.")
+    elif cycle_state == "paused":
+        print("[skip] cycle_state is 'paused'; no email sent.")
         return
     else:
-        sys.exit(f"Unknown phase: {phase}")
+        sys.exit(f"Unknown cycle_state: {cycle_state}")
 
     ok = send_via_resend(subject, html, text)
     if not ok:

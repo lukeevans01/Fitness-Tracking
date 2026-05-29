@@ -1,0 +1,15 @@
+{
+  "id": "luke",
+  "email": "levans092@gmail.com",
+  "display_name": "Luke Evans",
+  "race_date": "2026-11-22",
+  "race_label": "San Sebastián marathon",
+  "race_target": "sub-3:25 (4:51/km)",
+  "daily_targets": {
+    "protein_g": 130,
+    "carbs_g": 432,
+    "fat_g": 72,
+    "kcal": 2800
+  },
+  "profile_text": "Luke Evans — 32, amateur marathoner. Marathon PB 3:28:58 (Nice-Cannes, Nov 2025).\nTarget: sub-3:25 at San Sebastián marathon, 22 Nov 2026.\n4+ years consistent strength training. Squash Tuesday evenings (treats as intensity).\nFirst baby born late May 2026 — sleep deprivation is a real, ongoing factor.\n\nHard rules that apply to every session, no exceptions:\n- Sleep <6h → drop to short_version or skip entirely.\n- No PB attempts in training.\n- If Luke says he's wrecked, believe him.\n\nOutput tone: direct and concise. No motivational language. Treat Luke as a competent\nadult with 8 years of training experience. State the change and the reason. Move on."
+}

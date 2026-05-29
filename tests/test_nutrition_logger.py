@@ -1,11 +1,13 @@
 """Unit tests for nutrition_logger.
 
 Mocks coach_orchestrator.generate_food_log_response and nutrition_lookup.lookup_food
-so no Gemini or OFF network calls are made. Patches LOG_DIR to a tmp path per test.
+so no Gemini or OFF network calls are made. Storage goes through store.py against a
+temp SQLite database (FITNESS_DB_PATH) created per test.
 
-Run from the fitness-emails dir:  python -m unittest tests.test_nutrition_logger
+Run from the fitness-emails dir:  python3 -m unittest tests.test_nutrition_logger
 """
 
+import os
 import sys
 import tempfile
 import unittest
@@ -16,7 +18,7 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import nutrition_logger  # noqa: E402
-from nutrition_logger import DAILY_TARGETS, DayLog, FoodItem  # noqa: E402
+from nutrition_logger import DayLog, FoodItem  # noqa: E402
 
 
 def _gemini_returns(items, coach_note=""):
@@ -59,33 +61,32 @@ class NutritionLoggerTests(unittest.TestCase):
 
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
-        self._dir = Path(self._tmp.name) / "nutrition_log"
-        self._log_dir_patch = patch.object(nutrition_logger, "LOG_DIR", self._dir)
-        self._log_dir_patch.start()
+        self._db = Path(self._tmp.name) / "app.db"
+        self._prev_db = os.environ.get("FITNESS_DB_PATH")
+        os.environ["FITNESS_DB_PATH"] = str(self._db)
 
     def tearDown(self):
-        self._log_dir_patch.stop()
+        if self._prev_db is None:
+            os.environ.pop("FITNESS_DB_PATH", None)
+        else:
+            os.environ["FITNESS_DB_PATH"] = self._prev_db
         self._tmp.cleanup()
 
-    # ── log_food writes a well-formed file ──────────────────────────────
+    # ── log_food persists items readable through the store ─────────────
 
-    def test_log_food_writes_well_formed_file(self):
+    def test_log_food_persists_items(self):
         items = [_gemini_item(source="gemini")]  # skip OFF lookup
         target = date(2026, 5, 27)
         with _gemini_returns(items):
             result = nutrition_logger.log_food("3 eggs", target)
 
-        path = self._dir / "2026-05-27.md"
-        self.assertTrue(path.exists())
-        content = path.read_text()
-        self.assertIn("schema_version: 1", content)
-        self.assertIn("log_date: 2026-05-27", content)
-        self.assertIn("first_logged_at:", content)
-        self.assertIn("last_updated_at:", content)
-        self.assertIn("| breakfast | Eggs | 3 large |", content)
-        self.assertIn("## Daily totals", content)
         self.assertEqual(len(result.items), 1)
         self.assertEqual(result.items[0].name, "Eggs")
+        day = nutrition_logger.read_day(target)
+        self.assertIsNotNone(day)
+        self.assertEqual(len(day.items), 1)
+        self.assertEqual(day.items[0].meal, "breakfast")
+        self.assertEqual(day.items[0].quantity, "3 large")
 
     # ── append: second call adds rows, doesn't overwrite ──────────────
 
@@ -96,17 +97,15 @@ class NutritionLoggerTests(unittest.TestCase):
         with _gemini_returns([_gemini_item(name="Toast", source="gemini", meal="breakfast")]):
             result = nutrition_logger.log_food("toast", target)
 
-        content = (self._dir / "2026-05-27.md").read_text()
-        self.assertIn("| breakfast | Eggs |", content)
-        self.assertIn("| breakfast | Toast |", content)
-        # first_logged_at preserved, last_updated_at advances
-        self.assertEqual(content.count("schema_version: 1"), 1)
+        day = nutrition_logger.read_day(target)
+        names = [i.name for i in day.items]
+        self.assertEqual(names, ["Eggs", "Toast"])
         # running_totals after second call reflect both items
         self.assertEqual(result.running_totals["protein_g"], 36.0)
 
     # ── read_day round-trip ───────────────────────────────────────────
 
-    def test_read_day_round_trips_a_written_file(self):
+    def test_read_day_round_trips(self):
         items = [
             _gemini_item(name="Eggs", source="gemini", protein_g=18.0, carbs_g=1.5,
                          fat_g=15.0, kcal=210),
@@ -126,37 +125,51 @@ class NutritionLoggerTests(unittest.TestCase):
         self.assertEqual(day.items[0].name, "Eggs")
         self.assertAlmostEqual(day.items[1].carbs_g, 30.0)
 
-    # ── read_day on missing file returns None, not raises ─────────────
+    # ── read_day on a day with nothing logged returns None ────────────
 
-    def test_read_day_missing_file_returns_none(self):
+    def test_read_day_missing_returns_none(self):
         self.assertIsNone(nutrition_logger.read_day(date(2026, 1, 1)))
 
-    # ── read_day tolerates a malformed row ────────────────────────────
+    # ── full precision is preserved in the store (no truncation) ──────
 
-    def test_read_day_skips_malformed_row_keeps_valid(self):
-        self._dir.mkdir(parents=True, exist_ok=True)
-        path = self._dir / "2026-05-27.md"
-        path.write_text(
-            "---\n"
-            "schema_version: 1\n"
-            "log_date: 2026-05-27\n"
-            "first_logged_at: 2026-05-27T08:00:00+02:00\n"
-            "last_updated_at: 2026-05-27T08:00:00+02:00\n"
-            "---\n\n"
-            "# Nutrition log\n\n"
-            "## Items\n\n"
-            "| Meal | Item | Quantity | kcal | P (g) | C (g) | F (g) | Confidence | Source |\n"
-            "|---|---|---|---|---|---|---|---|---|\n"
-            "| breakfast | Eggs | 3 large | 210 | 18.0 | 1.5 | 15.0 | high | off |\n"
-            "| breakfast | Broken Row | three | not-a-number | nope | nope | nope | low | gemini |\n"
-            "| lunch | Banana | 1 medium | 105 | 1.3 | 27.0 | 0.4 | high | off |\n\n"
-            "## Daily totals\n\n"
-            "- **Calories:** 315 / 2800 (-2485)\n"
+    def test_stored_macros_keep_full_precision(self):
+        item = _gemini_item(
+            name="Precise meal", source="gemini",
+            kcal=123.456, protein_g=12.34, carbs_g=5.678, fat_g=9.012,
         )
-        day = nutrition_logger.read_day(date(2026, 5, 27))
-        self.assertIsNotNone(day)
-        names = [i.name for i in day.items]
-        self.assertEqual(names, ["Eggs", "Banana"])
+        target = date(2026, 5, 27)
+        with _gemini_returns([item]):
+            nutrition_logger.log_food("precise meal", target)
+
+        day = nutrition_logger.read_day(target)
+        stored = day.items[0]
+        # Values come back at full float precision — not rounded to the 1-dp
+        # display format used in the markdown/email view.
+        self.assertEqual(stored.kcal, 123.456)
+        self.assertEqual(stored.protein_g, 12.34)
+        self.assertEqual(stored.carbs_g, 5.678)
+        self.assertEqual(stored.fat_g, 9.012)
+
+    # ── render_day_markdown is a display-only view ────────────────────
+
+    def test_render_day_markdown_is_display_only(self):
+        items = [
+            _gemini_item(name="Eggs", source="gemini", protein_g=18.36, carbs_g=1.5,
+                         fat_g=15.0, kcal=210),
+        ]
+        target = date(2026, 5, 27)
+        with _gemini_returns(items):
+            nutrition_logger.log_food("eggs", target)
+
+        day = nutrition_logger.read_day(target)
+        md = nutrition_logger.render_day_markdown(day)
+        self.assertIn("schema_version: 1", md)
+        self.assertIn("log_date: 2026-05-27", md)
+        self.assertIn("| breakfast | Eggs | 3 large |", md)
+        self.assertIn("## Daily totals", md)
+        # Stored value keeps full precision even though the view rounds to 1 dp.
+        self.assertEqual(day.items[0].protein_g, 18.36)
+        self.assertIn("18.4", md)  # presentation rounding only
 
     # ── daily_totals sums correctly ───────────────────────────────────
 
@@ -179,16 +192,15 @@ class NutritionLoggerTests(unittest.TestCase):
     # ── weekly_summary handles missing days ───────────────────────────
 
     def test_weekly_summary_counts_only_logged_days(self):
-        # Log on days 1 and 3 of a 5-day window
+        # Log on two days of a 5-day window
         end = date(2026, 5, 27)
-        for offset in (4, 2):  # days_ago = 4 and 2 in a 5-day window
+        for offset in (4, 2):
             d = end - timedelta(days=offset)
             with _gemini_returns([_gemini_item(name="Eggs", source="gemini")]):
                 nutrition_logger.log_food("3 eggs", d)
         weekly = nutrition_logger.weekly_summary(days=5, end_date=end)
         self.assertEqual(weekly["days_logged"], 2)
         self.assertEqual(weekly["avg_protein_g"], 18.0)
-        # Three days have no log -> pattern should fire about gaps
         gap_patterns = [p for p in weekly["patterns"] if p.startswith("no log for")]
         self.assertEqual(len(gap_patterns), 1)
 
@@ -229,13 +241,11 @@ class NutritionLoggerTests(unittest.TestCase):
     # ── OFF override: needs_lookup with OFF hit scales by quantity_g ──
 
     def test_off_lookup_overrides_gemini_macros(self):
-        # OFF data for "Banana": 89 kcal, 23g carbs, 1.1g protein, 0.3g fat per 100g
-        # Gemini says it's 120g -> expect 89*1.2=106.8 kcal, etc.
         item = _gemini_item(
             name="Banana",
             quantity="1 medium",
             quantity_g=120,
-            kcal=999,  # Gemini's fallback — should be overridden
+            kcal=999,
             protein_g=999,
             carbs_g=999,
             fat_g=999,
@@ -260,7 +270,7 @@ class NutritionLoggerTests(unittest.TestCase):
             source="needs_lookup",
             kcal=500, protein_g=30, carbs_g=60, fat_g=15,
         )
-        with _gemini_returns([item]), _off_returns(""):  # OFF returns nothing
+        with _gemini_returns([item]), _off_returns(""):
             result = nutrition_logger.log_food("mystery meal", date(2026, 5, 27))
 
         logged = result.items[0]

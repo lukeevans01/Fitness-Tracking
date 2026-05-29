@@ -81,14 +81,19 @@ def _fetch_off(query: str) -> str:
 
 
 def lookup_food(name: str) -> str:
-    """Return a macro summary for name, cached. Returns '' if not found."""
+    """Return a macro summary for name, cached. Returns '' if not found.
+
+    Empty results (transient timeout or no match) are not written to the cache,
+    so a temporary Open Food Facts outage does not permanently poison future lookups.
+    """
     cache = _load_cache()
     key = name.lower().strip()
     if key in cache:
         return cache[key]
     result = _fetch_off(key)
-    cache[key] = result
-    _save_cache()
+    if result:
+        cache[key] = result
+        _save_cache()
     return result
 
 

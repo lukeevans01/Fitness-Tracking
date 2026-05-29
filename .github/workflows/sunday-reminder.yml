@@ -32,10 +32,11 @@ jobs:
           FROM_EMAIL: ${{ vars.FROM_EMAIL }}
         run: python3 send_sunday.py
 
-      - name: Commit plan files
+      - name: Commit store + plan view
         run: |
           git config user.name "fitness-bot"
           git config user.email "bot@noreply"
-          git add plans/pending-choice.json plans/current-week.md adaptation_state.md
+          git add data/app.db
+          git add plans/current-week.md 2>/dev/null || true
           git diff --cached --quiet || git commit -m "plan: weekly summary + options updated ($(date -u +%FT%TZ))"
           git push
