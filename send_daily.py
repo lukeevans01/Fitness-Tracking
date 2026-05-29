@@ -42,11 +42,12 @@ def load_json(path: Path) -> dict:
 
 
 # GitHub Actions cron is best-effort and routinely fires 1-2.5h late, which used to
-# push every run past a tight 19:00 +/-30min gate so nothing sent. We now accept any
-# run from 18:30 local onwards and guard against duplicates with a per-day marker in
-# the store, so the first qualifying run each day sends and later/extra runs skip.
-SEND_AFTER_MINUTES = 18 * 60 + 30   # 18:30 local, earliest acceptable send
-SEND_BEFORE_MINUTES = 23 * 60 + 30  # 23:30 local, latest (avoid post-midnight rollover)
+# push every run past a tight gate so nothing sent. We now accept any run inside a wide
+# afternoon-to-evening window and guard against duplicates with a per-day marker in the
+# store, so the first qualifying run each day sends and later/extra runs skip. The 20:00
+# upper bound is deliberate: Luke may not action an email that lands later than that.
+SEND_AFTER_MINUTES = 15 * 60        # 15:00 local, earliest acceptable send
+SEND_BEFORE_MINUTES = 20 * 60       # 20:00 local, latest (later and it may go unactioned)
 
 
 def should_send_now(profile_id: str, today_local) -> bool:
@@ -70,7 +71,7 @@ def should_send_now(profile_id: str, today_local) -> bool:
     now = datetime.now(TZ_AMSTERDAM)
     now_minutes = now.hour * 60 + now.minute
     if now_minutes < SEND_AFTER_MINUTES or now_minutes > SEND_BEFORE_MINUTES:
-        print(f"[skip] Amsterdam local time {now.strftime('%H:%M')} is outside the 18:30-23:30 send window.")
+        print(f"[skip] Amsterdam local time {now.strftime('%H:%M')} is outside the 15:00-20:00 send window.")
         return False
     return True
 

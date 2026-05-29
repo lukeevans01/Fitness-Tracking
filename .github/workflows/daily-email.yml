@@ -1,13 +1,13 @@
 name: Daily fitness email
 
-# Cron is UTC. 19:00 Amsterdam = 17:00 UTC (CEST, summer) or 18:00 UTC (CET, winter).
-# GitHub's scheduler routinely fires 1-2.5h late, so we take several shots from
-# ~16:30 UTC onwards. send_daily.py accepts any run from 18:30 local and dedups with a
-# per-day marker in the store, so the first qualifying run sends and the rest skip.
+# Cron is UTC; send_daily.py gates on Amsterdam local time (15:00-20:00 window) so DST is
+# handled for free. GitHub's scheduler routinely fires 1-2.5h late, so we take several
+# shots from 13:00 UTC (15:00 local in summer) onwards. The script dedups with a per-day
+# marker, so the first qualifying run sends and the rest skip. Starting early means even a
+# heavily delayed run still lands before the 20:00 local cut-off.
 on:
   schedule:
-    - cron: '30 16,17,18,19 * * *'
-    - cron: '0 17,18,19 * * *'
+    - cron: '0 13,14,15,16,17 * * *'
   workflow_dispatch: {} # allow manual runs from the Actions tab for testing
 
 jobs:
