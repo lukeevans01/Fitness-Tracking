@@ -1,0 +1,652 @@
+{
+  "generated_at": "2026-05-29",
+  "empty": false,
+  "e1rm": [
+    {
+      "month": "2021-12",
+      "Squat": 106.7,
+      "Bench": null,
+      "RDL": null,
+      "OHP": null
+    },
+    {
+      "month": "2022-01",
+      "Squat": 111.0,
+      "Bench": 87.5,
+      "RDL": null,
+      "OHP": 63.3
+    },
+    {
+      "month": "2022-02",
+      "Squat": 117.2,
+      "Bench": 87.5,
+      "RDL": null,
+      "OHP": 53.3
+    },
+    {
+      "month": "2022-03",
+      "Squat": 114.0,
+      "Bench": 80.0,
+      "RDL": null,
+      "OHP": 50.7
+    },
+    {
+      "month": "2022-04",
+      "Squat": 120.0,
+      "Bench": 86.3,
+      "RDL": null,
+      "OHP": 52.0
+    },
+    {
+      "month": "2022-05",
+      "Squat": 120.0,
+      "Bench": null,
+      "RDL": null,
+      "OHP": 50.7
+    },
+    {
+      "month": "2022-06",
+      "Squat": null,
+      "Bench": 76.0,
+      "RDL": null,
+      "OHP": 48.0
+    },
+    {
+      "month": "2022-07",
+      "Squat": 114.0,
+      "Bench": 72.0,
+      "RDL": null,
+      "OHP": 50.7
+    },
+    {
+      "month": "2022-08",
+      "Squat": 120.0,
+      "Bench": 86.3,
+      "RDL": null,
+      "OHP": 50.7
+    },
+    {
+      "month": "2022-09",
+      "Squat": 114.0,
+      "Bench": 88.7,
+      "RDL": null,
+      "OHP": 57.0
+    },
+    {
+      "month": "2022-10",
+      "Squat": 120.0,
+      "Bench": 90.0,
+      "RDL": null,
+      "OHP": 52.5
+    },
+    {
+      "month": "2022-11",
+      "Squat": null,
+      "Bench": null,
+      "RDL": null,
+      "OHP": 42.7
+    },
+    {
+      "month": "2022-12",
+      "Squat": 114.0,
+      "Bench": null,
+      "RDL": null,
+      "OHP": null
+    },
+    {
+      "month": "2023-01",
+      "Squat": 116.7,
+      "Bench": 78.0,
+      "RDL": null,
+      "OHP": 42.7
+    },
+    {
+      "month": "2023-02",
+      "Squat": 122.5,
+      "Bench": 80.0,
+      "RDL": null,
+      "OHP": 48.0
+    },
+    {
+      "month": "2023-03",
+      "Squat": 126.0,
+      "Bench": 84.0,
+      "RDL": null,
+      "OHP": 46.7
+    },
+    {
+      "month": "2023-04",
+      "Squat": 126.0,
+      "Bench": 88.7,
+      "RDL": null,
+      "OHP": 50.7
+    },
+    {
+      "month": "2023-05",
+      "Squat": 120.0,
+      "Bench": 90.0,
+      "RDL": null,
+      "OHP": 50.7
+    },
+    {
+      "month": "2023-06",
+      "Squat": null,
+      "Bench": 88.0,
+      "RDL": null,
+      "OHP": 48.0
+    },
+    {
+      "month": "2023-07",
+      "Squat": 108.0,
+      "Bench": 90.7,
+      "RDL": null,
+      "OHP": 50.7
+    },
+    {
+      "month": "2023-08",
+      "Squat": 114.0,
+      "Bench": 46.2,
+      "RDL": null,
+      "OHP": 53.3
+    },
+    {
+      "month": "2023-09",
+      "Squat": null,
+      "Bench": 96.0,
+      "RDL": 58.7,
+      "OHP": 52.5
+    },
+    {
+      "month": "2023-10",
+      "Squat": 108.0,
+      "Bench": 96.0,
+      "RDL": null,
+      "OHP": 50.7
+    },
+    {
+      "month": "2023-11",
+      "Squat": 116.7,
+      "Bench": 88.0,
+      "RDL": null,
+      "OHP": 48.0
+    },
+    {
+      "month": "2024-01",
+      "Squat": 80.0,
+      "Bench": null,
+      "RDL": null,
+      "OHP": 48.0
+    },
+    {
+      "month": "2024-02",
+      "Squat": 80.0,
+      "Bench": null,
+      "RDL": null,
+      "OHP": 48.0
+    },
+    {
+      "month": "2024-03",
+      "Squat": null,
+      "Bench": null,
+      "RDL": null,
+      "OHP": 49.3
+    },
+    {
+      "month": "2024-04",
+      "Squat": null,
+      "Bench": null,
+      "RDL": 58.7,
+      "OHP": 44.3
+    },
+    {
+      "month": "2024-05",
+      "Squat": 80.0,
+      "Bench": null,
+      "RDL": 76.0,
+      "OHP": 51.0
+    },
+    {
+      "month": "2024-06",
+      "Squat": 108.0,
+      "Bench": 82.5,
+      "RDL": 90.7,
+      "OHP": 48.0
+    },
+    {
+      "month": "2024-07",
+      "Squat": 114.0,
+      "Bench": 81.7,
+      "RDL": 88.7,
+      "OHP": 50.7
+    },
+    {
+      "month": "2024-08",
+      "Squat": 124.7,
+      "Bench": 85.0,
+      "RDL": 98.7,
+      "OHP": 48.0
+    },
+    {
+      "month": "2024-09",
+      "Squat": 124.7,
+      "Bench": 84.0,
+      "RDL": 96.0,
+      "OHP": 54.3
+    },
+    {
+      "month": "2024-10",
+      "Squat": 120.0,
+      "Bench": 86.3,
+      "RDL": 96.0,
+      "OHP": 55.7
+    },
+    {
+      "month": "2024-11",
+      "Squat": 116.7,
+      "Bench": 82.5,
+      "RDL": 98.7,
+      "OHP": 58.7
+    },
+    {
+      "month": "2024-12",
+      "Squat": 108.0,
+      "Bench": 85.0,
+      "RDL": 88.7,
+      "OHP": 54.3
+    },
+    {
+      "month": "2025-01",
+      "Squat": null,
+      "Bench": 85.0,
+      "RDL": 70.9,
+      "OHP": 55.7
+    },
+    {
+      "month": "2025-02",
+      "Squat": null,
+      "Bench": 84.0,
+      "RDL": 48.0,
+      "OHP": 48.0
+    },
+    {
+      "month": "2025-03",
+      "Squat": 113.3,
+      "Bench": 84.0,
+      "RDL": 93.3,
+      "OHP": 55.7
+    },
+    {
+      "month": "2025-04",
+      "Squat": 108.0,
+      "Bench": null,
+      "RDL": 96.0,
+      "OHP": 55.7
+    },
+    {
+      "month": "2025-05",
+      "Squat": 96.0,
+      "Bench": 84.0,
+      "RDL": 76.0,
+      "OHP": 57.2
+    },
+    {
+      "month": "2025-06",
+      "Squat": 101.3,
+      "Bench": 86.3,
+      "RDL": 55.7,
+      "OHP": 59.2
+    },
+    {
+      "month": "2025-07",
+      "Squat": 101.3,
+      "Bench": 79.3,
+      "RDL": 76.0,
+      "OHP": 55.7
+    },
+    {
+      "month": "2025-08",
+      "Squat": null,
+      "Bench": 81.7,
+      "RDL": 60.8,
+      "OHP": 59.2
+    },
+    {
+      "month": "2025-09",
+      "Squat": null,
+      "Bench": 76.0,
+      "RDL": null,
+      "OHP": 48.0
+    },
+    {
+      "month": "2025-10",
+      "Squat": null,
+      "Bench": null,
+      "RDL": null,
+      "OHP": 52.8
+    },
+    {
+      "month": "2025-11",
+      "Squat": 80.0,
+      "Bench": 78.0,
+      "RDL": 60.8,
+      "OHP": 50.7
+    },
+    {
+      "month": "2025-12",
+      "Squat": 96.0,
+      "Bench": null,
+      "RDL": 84.0,
+      "OHP": 45.6
+    },
+    {
+      "month": "2026-01",
+      "Squat": 120.0,
+      "Bench": 76.0,
+      "RDL": 96.0,
+      "OHP": 52.8
+    },
+    {
+      "month": "2026-02",
+      "Squat": 108.0,
+      "Bench": 81.7,
+      "RDL": 96.0,
+      "OHP": 56.7
+    },
+    {
+      "month": "2026-03",
+      "Squat": 116.7,
+      "Bench": 85.0,
+      "RDL": 105.0,
+      "OHP": 55.7
+    },
+    {
+      "month": "2026-04",
+      "Squat": 108.0,
+      "Bench": 84.0,
+      "RDL": 102.0,
+      "OHP": 49.3
+    },
+    {
+      "month": "2026-05",
+      "Squat": 113.3,
+      "Bench": null,
+      "RDL": 108.0,
+      "OHP": null
+    }
+  ],
+  "tonnage": [
+    {
+      "month": "2021-12",
+      "tonnes": 17.1
+    },
+    {
+      "month": "2022-01",
+      "tonnes": 173.9
+    },
+    {
+      "month": "2022-02",
+      "tonnes": 119.5
+    },
+    {
+      "month": "2022-03",
+      "tonnes": 93.7
+    },
+    {
+      "month": "2022-04",
+      "tonnes": 91.9
+    },
+    {
+      "month": "2022-05",
+      "tonnes": 105.1
+    },
+    {
+      "month": "2022-06",
+      "tonnes": 32.3
+    },
+    {
+      "month": "2022-07",
+      "tonnes": 94.2
+    },
+    {
+      "month": "2022-08",
+      "tonnes": 140.8
+    },
+    {
+      "month": "2022-09",
+      "tonnes": 73.4
+    },
+    {
+      "month": "2022-10",
+      "tonnes": 142.7
+    },
+    {
+      "month": "2022-11",
+      "tonnes": 48.0
+    },
+    {
+      "month": "2022-12",
+      "tonnes": 42.5
+    },
+    {
+      "month": "2023-01",
+      "tonnes": 104.8
+    },
+    {
+      "month": "2023-02",
+      "tonnes": 109.9
+    },
+    {
+      "month": "2023-03",
+      "tonnes": 117.4
+    },
+    {
+      "month": "2023-04",
+      "tonnes": 79.5
+    },
+    {
+      "month": "2023-05",
+      "tonnes": 102.2
+    },
+    {
+      "month": "2023-06",
+      "tonnes": 63.0
+    },
+    {
+      "month": "2023-07",
+      "tonnes": 138.1
+    },
+    {
+      "month": "2023-08",
+      "tonnes": 89.9
+    },
+    {
+      "month": "2023-09",
+      "tonnes": 56.0
+    },
+    {
+      "month": "2023-10",
+      "tonnes": 84.8
+    },
+    {
+      "month": "2023-11",
+      "tonnes": 102.5
+    },
+    {
+      "month": "2023-12",
+      "tonnes": 17.1
+    },
+    {
+      "month": "2024-01",
+      "tonnes": 65.5
+    },
+    {
+      "month": "2024-02",
+      "tonnes": 91.8
+    },
+    {
+      "month": "2024-03",
+      "tonnes": 44.9
+    },
+    {
+      "month": "2024-04",
+      "tonnes": 23.3
+    },
+    {
+      "month": "2024-05",
+      "tonnes": 51.0
+    },
+    {
+      "month": "2024-06",
+      "tonnes": 70.0
+    },
+    {
+      "month": "2024-07",
+      "tonnes": 74.6
+    },
+    {
+      "month": "2024-08",
+      "tonnes": 112.9
+    },
+    {
+      "month": "2024-09",
+      "tonnes": 99.8
+    },
+    {
+      "month": "2024-10",
+      "tonnes": 98.4
+    },
+    {
+      "month": "2024-11",
+      "tonnes": 77.2
+    },
+    {
+      "month": "2024-12",
+      "tonnes": 70.8
+    },
+    {
+      "month": "2025-01",
+      "tonnes": 67.8
+    },
+    {
+      "month": "2025-02",
+      "tonnes": 45.7
+    },
+    {
+      "month": "2025-03",
+      "tonnes": 72.4
+    },
+    {
+      "month": "2025-04",
+      "tonnes": 57.2
+    },
+    {
+      "month": "2025-05",
+      "tonnes": 77.8
+    },
+    {
+      "month": "2025-06",
+      "tonnes": 79.9
+    },
+    {
+      "month": "2025-07",
+      "tonnes": 49.5
+    },
+    {
+      "month": "2025-08",
+      "tonnes": 47.6
+    },
+    {
+      "month": "2025-09",
+      "tonnes": 47.8
+    },
+    {
+      "month": "2025-10",
+      "tonnes": 60.7
+    },
+    {
+      "month": "2025-11",
+      "tonnes": 44.1
+    },
+    {
+      "month": "2025-12",
+      "tonnes": 40.9
+    },
+    {
+      "month": "2026-01",
+      "tonnes": 92.0
+    },
+    {
+      "month": "2026-02",
+      "tonnes": 39.3
+    },
+    {
+      "month": "2026-03",
+      "tonnes": 91.4
+    },
+    {
+      "month": "2026-04",
+      "tonnes": 75.3
+    },
+    {
+      "month": "2026-05",
+      "tonnes": 78.4
+    }
+  ],
+  "benchmarks": {
+    "Squat": {
+      "current": 120,
+      "target": 130
+    },
+    "Bench": {
+      "current": 85,
+      "target": 96
+    },
+    "RDL": {
+      "current": 108,
+      "target": 120
+    },
+    "OHP": {
+      "current": 49,
+      "target": 55
+    }
+  },
+  "current_e1rm": {
+    "Squat": 116.7,
+    "RDL": 108.0,
+    "OHP": 55.7,
+    "Bench": 85.0
+  },
+  "summary": {
+    "total_sessions": 493,
+    "first_session": "2021-12-31",
+    "last_session": "2026-05-23",
+    "sessions_4w": 8
+  },
+  "recap": [
+    {
+      "heading": "What you have been up to",
+      "text": "You have logged 8 strength sessions in the last 4 weeks, and 493 sessions all-time. Your current best estimated one-rep maxes are Squat 117 kg, Bench 85 kg, RDL 108 kg, OHP 56 kg. Training volume held steady at about 78.4 tonnes lifted last month."
+    },
+    {
+      "heading": "Where to push next",
+      "text": "Your Squat is the biggest gap to target, about 117 kg against 130 kg, so give it priority in the next block. Your OHP is already at or above its target, so hold it there."
+    }
+  ],
+  "headline": {
+    "kpis": [
+      {
+        "value": 8,
+        "label": "sessions / 4wk"
+      },
+      {
+        "value": "117 kg",
+        "label": "Squat e1RM"
+      },
+      {
+        "value": "85 kg",
+        "label": "Bench e1RM"
+      }
+    ],
+    "narrative": "8 strength sessions in the last 4 weeks. Your Squat e1RM is about 117 kg against a 130 kg target, the biggest gap right now, so prioritise it."
+  }
+}
