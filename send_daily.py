@@ -41,13 +41,14 @@ def load_json(path: Path) -> dict:
         return json.load(f)
 
 
-# GitHub Actions cron is best-effort and routinely fires 1-2.5h late, which used to
-# push every run past a tight gate so nothing sent. We now accept any run inside a wide
-# afternoon-to-evening window and guard against duplicates with a per-day marker in the
-# store, so the first qualifying run each day sends and later/extra runs skip. The 20:00
-# upper bound is deliberate: Luke may not action an email that lands later than that.
-SEND_AFTER_MINUTES = 15 * 60        # 15:00 local, earliest acceptable send
-SEND_BEFORE_MINUTES = 20 * 60       # 20:00 local, latest (later and it may go unactioned)
+# GitHub Actions cron is best-effort and routinely fires 1-2.5h late. We guard against
+# duplicates with a per-day marker in the store, so the first qualifying run each day
+# sends and later/extra runs skip. A late email beats none, so there is no upper cut-off:
+# any run from 15:00 local until midnight will send. 20:00 is only a preference (we start
+# the cron early so the send normally lands before it); the 15:00 floor stops a run that
+# slips past midnight from firing the next day's preview in the small hours.
+SEND_AFTER_MINUTES = 15 * 60        # 15:00 local, earliest acceptable send (hard floor)
+PREFERRED_BEFORE_MINUTES = 20 * 60  # 20:00 local, preferred-by latest (soft; we still send)
 
 
 def should_send_now(profile_id: str, today_local) -> bool:
@@ -70,9 +71,11 @@ def should_send_now(profile_id: str, today_local) -> bool:
 
     now = datetime.now(TZ_AMSTERDAM)
     now_minutes = now.hour * 60 + now.minute
-    if now_minutes < SEND_AFTER_MINUTES or now_minutes > SEND_BEFORE_MINUTES:
-        print(f"[skip] Amsterdam local time {now.strftime('%H:%M')} is outside the 15:00-20:00 send window.")
+    if now_minutes < SEND_AFTER_MINUTES:
+        print(f"[skip] Amsterdam local time {now.strftime('%H:%M')} is before the 15:00 earliest-send time.")
         return False
+    if now_minutes > PREFERRED_BEFORE_MINUTES:
+        print(f"[note] Amsterdam local time {now.strftime('%H:%M')} is past the preferred 20:00; sending late rather than skipping.")
     return True
 
 
