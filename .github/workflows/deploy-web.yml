@@ -1,0 +1,53 @@
+name: Deploy web dashboard
+
+# Rebuilds the precomputed JSON from the committed training data, builds the
+# Vite app, and deploys to Cloudflare Pages. Runs on pushes to main that touch
+# the site or its source data, once a week to pick up fresh data, and on demand.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - 'data/**'
+      - 'nutrition_log/**'
+      - 'plan_template.json'
+      - 'profiles/**'
+      - '.github/workflows/deploy-web.yml'
+  schedule:
+    - cron: '30 6 * * 1' # Mondays 06:30 UTC, after the weekly data refresh
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Rebuild dashboard data
+        run: python3 web/scripts/build_data.py
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install and build
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: web
+          command: pages deploy dist --project-name=${{ vars.CF_PAGES_PROJECT || 'evansgale' }} --branch=main
