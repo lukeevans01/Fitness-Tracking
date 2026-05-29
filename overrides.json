@@ -108,6 +108,54 @@
         "purpose": "Develop strength, particularly in lower body and pulling muscles, complementing the week's training.",
         "coach_note": "Session changed from Easy Run to Strength as per your request for Thursday to be a weights/lifting day. This strength session focuses on lower body and upper pull to complement Wednesday's upper push focus."
       }
+    },
+    "2026-05-28": {
+      "applied_at": "2026-05-27T19:57:24.931495+02:00",
+      "feedback_source": "reply: 'Give me another full body session for tomorrow, thur 28 May'",
+      "session": {
+        "session_type": "Full Body Strength (Lighter)",
+        "session_kind": "strength",
+        "duration_min": 50,
+        "warm_up": "5-10 min dynamic warm-up (e.g., arm circles, light cardio, band pull-aparts, shoulder rotations, leg swings).",
+        "exercises": [
+          {
+            "name": "Pull-ups",
+            "sets_reps": "3 sets x 6-8 reps",
+            "weight": "Bodyweight or BW + 2.5kg (RIR 3)",
+            "rest": "90s"
+          },
+          {
+            "name": "Barbell Front Squat",
+            "sets_reps": "3 sets x 6-8 reps",
+            "weight": "65-75kg (RIR 3)",
+            "rest": "90s"
+          },
+          {
+            "name": "Barbell Overhead Press",
+            "sets_reps": "3 sets x 6-8 reps",
+            "weight": "30-35kg (RIR 3)",
+            "rest": "90s"
+          },
+          {
+            "name": "Romanian Deadlift (Barbell)",
+            "sets_reps": "3 sets x 8-10 reps",
+            "weight": "70-80kg (RIR 3)",
+            "rest": "60s"
+          },
+          {
+            "name": "Pallof Press (Cable or Band)",
+            "sets_reps": "3 sets x 10-12 reps per side",
+            "weight": "Moderate resistance (RIR 3)",
+            "rest": "45s"
+          }
+        ],
+        "run_details": {},
+        "details": "",
+        "extras": "",
+        "short_version": "Reduce to 1 set per compound movement (Pull-ups, Front Squat, Overhead Press, Romanian Deadlift). Skip Pallof Press. Focus on RIR 3. If sleep <6h or feeling wrecked, prioritize recovery and consider skipping.",
+        "purpose": "Provide a balanced full-body strength stimulus with lighter loads to support overall strength maintenance and allow adequate recovery for the upcoming long run.",
+        "coach_note": "The session for Thursday, 28 May, has been changed from an Easy Run to a Full Body Strength (Lighter) session as requested. This session prioritizes compound movements with lighter loads and higher reps to align with the 'lighter' full-body principle and manage fatigue during your marathon build. Weights are suggested at 70-80% of estimated 1RM to ensure RIR 3. This structure allows for lower body recovery before your long run on Saturday, while still providing a strength stimulus. Remember to prioritize sleep and adjust to the short_version if needed."
+      }
     }
   }
 }
