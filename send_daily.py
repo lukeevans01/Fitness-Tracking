@@ -22,6 +22,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import progression
+import routine_selector
 import store
 from profile import default_profile
 
@@ -316,6 +317,18 @@ def main():
         if override:
             day = override["session"]
             print(f"[override] Using feedback override for {target_date.isoformat()}")
+        elif day["session_kind"] == "strength":
+            # Pick a routine from the library that avoids the muscle groups trained in the
+            # last few days. Deterministic (no Gemini). Falls back to the static template
+            # day on any failure so the email always sends.
+            try:
+                selected = routine_selector.select_session(target_date)
+            except Exception as exc:  # noqa: BLE001 — never block the send on selection
+                print(f"[warn] routine selection failed, using template: {exc}", file=sys.stderr)
+                selected = None
+            if selected:
+                day = selected
+                print(f"[routine] Selected '{day['session_type']}' for {target_date.isoformat()}")
         else:
             # Scale the template long-run / quality-run days toward race day. Overrides win,
             # so progression only applies to the unmodified template session.
