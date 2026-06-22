@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import useJson from "../useJson.js";
 import { useProfile } from "../ProfileContext.jsx";
+import PlanSection from "../components/PlanSection.jsx";
+import TrainingCalendar from "../components/TrainingCalendar.jsx";
 
 const SECTIONS = [
   { key: "running", title: "Running", to: "/running",
@@ -40,12 +42,13 @@ function SectionCard({ title, to, blurb, headline }) {
 export default function Home() {
   const { active } = useProfile();
   const { data, error } = useJson("/data/home.json");
+  const { data: plan } = useJson("/data/plan.json");
 
   if (error) return <div className="error">Failed to load summary: {error}</div>;
   if (!data) return <div className="loading">Loading…</div>;
 
   const sections = data.sections || {};
-  const plan = data.plan;
+  const planHeadline = data.plan;
   return (
     <>
       <header>
@@ -53,12 +56,12 @@ export default function Home() {
         <p>Training overview · generated {data.generated_at}</p>
       </header>
 
-      {plan && plan.block_name && (
+      {planHeadline && planHeadline.block_name && (
         <Link to="/plan" className="home-plan">
           <div>
-            <span className="home-plan-block">{plan.block_name} phase</span>
+            <span className="home-plan-block">{planHeadline.block_name} phase</span>
             <span className="home-plan-text">
-              {plan.weeks_to_race} weeks to the {plan.race_label}
+              {planHeadline.weeks_to_race} weeks to the {planHeadline.race_label}
             </span>
           </div>
           <span className="home-card-cta">View plan →</span>
@@ -70,6 +73,17 @@ export default function Home() {
           <SectionCard key={key} {...rest} headline={sections[key]} />
         ))}
       </div>
+
+      {plan && !plan.empty && (
+        <section className="home-section">
+          <div className="home-section-head">
+            <h2>Training plan</h2>
+            <Link to="/plan" className="home-card-cta">Open plan tab →</Link>
+          </div>
+          <TrainingCalendar />
+          <PlanSection plan={plan} embedded />
+        </section>
+      )}
     </>
   );
 }

@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-05-29",
+  "generated_at": "2026-06-21",
   "empty": false,
   "race": {
     "date": "2026-11-22",
     "label": "San Sebasti\u00e1n marathon",
     "target": "sub-3:25 (4:51/km)",
-    "weeks_to_race": 26
+    "weeks_to_race": 22
   },
   "block": {
     "name": "base",
-    "label": "Base phase, 26 weeks to race. Long run holding around 12 km while you build aerobic volume before the specific work.",
+    "label": "Base phase, 22 weeks to race. Long run holding around 12 km while you build aerobic volume before the specific work.",
     "long_run_km": 12.0,
     "quality_minutes": 0
   },
