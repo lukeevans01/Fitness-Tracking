@@ -1,0 +1,63 @@
+name: Apply plan edit
+
+# Fired by the dashboard via /api/plan-edit -> GitHub repository_dispatch. Writes the
+# per-date overrides into data/app.db (the same store the email coach reads), commits
+# the change, then rebuilds and deploys the site inline. We deploy inline rather than
+# relying on deploy-web.yml because a push made with the default GITHUB_TOKEN does not
+# trigger other workflows.
+on:
+  repository_dispatch:
+    types: [plan-edit]
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write # to persist the override into data/app.db
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Apply the edit to the override store
+        env:
+          # The dispatch payload is untrusted; apply_plan_edit.py validates it again.
+          PLAN_EDIT_PAYLOAD: ${{ toJSON(github.event.client_payload) }}
+        run: python3 apply_plan_edit.py
+
+      - name: Commit override change if any
+        run: |
+          git config user.name "fitness-bot"
+          git config user.email "bot@noreply"
+          git add data/app.db
+          git diff --cached --quiet || git commit -m "plan: web edit ($(date -u +%FT%TZ))"
+          git push
+
+      - name: Rebuild dashboard data
+        run: python3 web/scripts/build_data.py
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install and build
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: web
+          command: pages deploy dist --project-name=${{ vars.CF_PAGES_PROJECT || 'evansgale' }} --branch=main
