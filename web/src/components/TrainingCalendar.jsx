@@ -158,6 +158,11 @@ export default function TrainingCalendar() {
   const [editing, setEditing] = useState(false);
   const [edits, setEdits] = useState({}); // { iso: { session } | { clear: true } }
   const [save, setSave] = useState({ state: "idle", message: "" });
+  // Shared edit token, sent as X-Edit-Token so saving never relies on an
+  // interactive auth redirect. Kept only in this browser, never in the bundle.
+  const [token, setToken] = useState(() => {
+    try { return localStorage.getItem("planEditToken") || ""; } catch { return ""; }
+  });
 
   const byDate = useMemo(
     () => Object.fromEntries(((data && data.days) || []).map((d) => [d.date, d])),
@@ -193,6 +198,10 @@ export default function TrainingCalendar() {
   function applyEdit(session) { setEdits((p) => ({ ...p, [selected]: { session } })); setEditing(false); setSave({ state: "idle", message: "" }); }
   function clearDay() { setEdits((p) => ({ ...p, [selected]: { clear: true } })); setEditing(false); setSave({ state: "idle", message: "" }); }
   function discardDay() { setEdits((p) => { const n = { ...p }; delete n[selected]; return n; }); }
+  function updateToken(v) {
+    setToken(v);
+    try { localStorage.setItem("planEditToken", v); } catch { /* ignore storage errors */ }
+  }
 
   async function saveAll() {
     const payload = {
@@ -202,15 +211,18 @@ export default function TrainingCalendar() {
     };
     setSave({ state: "saving", message: "" });
     try {
+      const headers = { "content-type": "application/json" };
+      if (token) headers["x-edit-token"] = token;
       const res = await fetch("/api/plan-edit", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers,
         body: JSON.stringify(payload),
       });
       const raw = await res.text();
       let body;
       try { body = JSON.parse(raw); }
       catch { throw new Error("editing is temporarily unavailable, please try again in a moment"); }
+      if (res.status === 401) throw new Error("edit token missing or incorrect, check the token below");
       if (!res.ok || !body.ok) throw new Error(body.error || `HTTP ${res.status}`);
       setSave({ state: "done", message: body.note || "Saved. Changes appear after the next rebuild." });
       setEdits({});
@@ -296,6 +308,15 @@ export default function TrainingCalendar() {
           </span>
           {editCount > 0 && save.state !== "done" && (
             <div className="cal-savebar-actions">
+              <input
+                type="password"
+                className="cal-token"
+                placeholder="Edit token"
+                value={token}
+                onChange={(e) => updateToken(e.target.value)}
+                autoComplete="off"
+                aria-label="Edit token"
+              />
               <button type="button" className="pe-cancel" onClick={() => { setEdits({}); setSave({ state: "idle", message: "" }); }}>Discard all</button>
               <button type="button" className="pe-apply" disabled={save.state === "saving"} onClick={saveAll}>
                 {save.state === "saving" ? "Saving…" : "Save to plan"}
