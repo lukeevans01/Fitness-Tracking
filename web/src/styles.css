@@ -396,6 +396,10 @@ header p { color: var(--muted); margin: 0 0 24px; font-size: 14px; }
   margin-top: 16px; padding: 12px 14px; border-radius: 10px; font-size: 13px;
   background: #eef1f6; color: var(--ink); border: 1px solid #dfe3ea;
 }
-.cal-savebar-actions { display: flex; gap: 10px; }
+.cal-savebar-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.cal-token {
+  font: inherit; font-size: 13px; padding: 8px 10px; border: 1px solid #d7dae0;
+  border-radius: 8px; background: #fff; color: var(--ink); width: 140px;
+}
 .cal-savebar-done { background: #eef6ee; border-color: #cfe6cf; color: #2c5e2c; }
 .cal-savebar-error { background: #fbeeed; border-color: #f0cdca; color: var(--quality); }
