@@ -26,6 +26,7 @@ from zoneinfo import ZoneInfo
 import coach_orchestrator
 import intent_classifier
 import nutrition_logger
+import plan_cycle
 import store
 import training_summary as ts
 import weekly_load
@@ -193,15 +194,12 @@ def _decode_header(value: str) -> str:
 # ──────────────────────────────────────────────────────────────────────────
 
 def _cycle_day(target_date: date, plan: dict) -> tuple[int, dict, dict]:
-    """Return (day_num, session, day_after_session) for target_date from the training cycle."""
-    start = date.fromisoformat(plan["cycle_start_date"])
-    cycle = plan["cycle_length_days"]
-    days_in = (target_date - start).days
-    day_num = (days_in % cycle) + 1
-    day_after_num = ((days_in + 1) % cycle) + 1
-    session = next(d for d in plan["cycle_days"] if d["day_num"] == day_num)
-    day_after = next(d for d in plan["cycle_days"] if d["day_num"] == day_after_num)
-    return day_num, session, day_after
+    """Return (day_num, session, day_after_session) for target_date from the training cycle.
+
+    Thin wrapper around the shared plan_cycle.cycle_day so the dashboard builder and
+    the email coach use identical date->cycle-day maths.
+    """
+    return plan_cycle.cycle_day(target_date, plan)
 
 
 def _get_current_session(target_date: date, plan: dict, overrides: dict) -> tuple[dict, int]:

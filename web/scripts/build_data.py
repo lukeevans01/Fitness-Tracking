@@ -25,7 +25,9 @@ sys.path.insert(0, str(FITNESS_DIR))
 
 from zoneinfo import ZoneInfo  # noqa: E402
 
+import plan_cycle  # noqa: E402
 import progression  # noqa: E402
+import store  # noqa: E402
 from ingest import strava_csv, strong_csv  # noqa: E402
 
 # All "what block am I in" date logic uses the coach's timezone, matching the rest of
@@ -793,6 +795,118 @@ def build_plan() -> dict:
     }
 
 
+# Calendar window: how far back / forward the dated calendar reaches.
+CAL_WEEKS_BACK = 4
+CAL_WEEKS_FWD = 8
+
+
+def _profile_id() -> str:
+    """Profile key for store lookups; falls back to 'luke' if the file is missing."""
+    try:
+        return json.loads(PROFILE_JSON.read_text(encoding="utf-8")).get("id", "luke")
+    except (FileNotFoundError, ValueError):
+        return "luke"
+
+
+def _session_view(session: dict) -> dict:
+    """Project a raw cycle/override session into the compact shape the UI reads,
+    matching build_plan's day shape so the calendar and Plan tab agree."""
+    rd = session.get("run_details") or {}
+    return {
+        "day_label": session.get("day_label"),
+        "session_type": session.get("session_type"),
+        "session_kind": session.get("session_kind"),
+        "duration_min": session.get("duration_min"),
+        "run": {
+            "pace": rd.get("pace"),
+            "hr_target": rd.get("hr_target"),
+            "distance": rd.get("distance"),
+            "effort": rd.get("effort"),
+        } if rd else None,
+        "exercises": [
+            {"name": e.get("name"), "sets_reps": e.get("sets_reps"),
+             "weight": e.get("weight")}
+            for e in (session.get("exercises") or [])
+        ],
+        "details": session.get("details") or "",
+        "purpose": session.get("purpose") or "",
+        # Carried so a web edit can round-trip the full session (these feed the
+        # daily email but are not shown on the calendar card itself).
+        "warm_up": session.get("warm_up") or "",
+        "extras": session.get("extras") or "",
+        "short_version": session.get("short_version") or "",
+    }
+
+
+def build_calendar() -> dict:
+    """A dated calendar around today: the repeating cycle projected onto real dates,
+    with per-date overrides applied and past dates flagged where activity was logged.
+
+    This is also the only place overrides reach the dashboard (build_plan shows the
+    bare template), so an edited day shows up here once the data is rebuilt."""
+    try:
+        tmpl = json.loads(PLAN_TEMPLATE.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return {"generated_at": date.today().isoformat(), "empty": True}
+
+    today = datetime.now(TZ).date()
+    overrides = store.get_overrides(_profile_id())
+
+    # Dates with logged activity, for the "completed" flag on past days.
+    run_dates = {a.date for a in strava_csv.read_activities(STRAVA_CSV)
+                 if a.kind == "run" and a.distance_km > 0}
+    try:
+        lift_dates = {s.date for s in strong_csv.read_lifts(STRONG_CSV)}
+    except FileNotFoundError:
+        lift_dates = set()
+
+    start = today - timedelta(weeks=CAL_WEEKS_BACK)
+    # Snap the window start back to Monday so the UI grid lines up by week.
+    start -= timedelta(days=start.weekday())
+    end = today + timedelta(weeks=CAL_WEEKS_FWD)
+
+    days = []
+    d = start
+    while d <= end:
+        iso = d.isoformat()
+        _, template_session, _ = plan_cycle.cycle_day(d, tmpl)
+        record = overrides.get(iso)
+        if record and record.get("session"):
+            view = _session_view(record["session"])
+            source = "override"
+        else:
+            view = _session_view(template_session)
+            source = "template"
+
+        ran, lifted = d in run_dates, d in lift_dates
+        if d == today:
+            status = "today"
+        elif d > today:
+            status = "upcoming"
+        elif ran or lifted:
+            status = "completed"
+        else:
+            status = "past"
+
+        days.append({
+            "date": iso,
+            **view,
+            "source": source,
+            "status": status,
+            "completed": {"run": ran, "lift": lifted},
+        })
+        d += timedelta(days=1)
+
+    return {
+        "generated_at": today.isoformat(),
+        "empty": False,
+        "profile_id": _profile_id(),
+        "today": today.isoformat(),
+        "window": {"start": start.isoformat(), "end": end.isoformat()},
+        "days": days,
+    }
+
+
 def _plan_headline(plan: dict) -> dict:
     if plan.get("empty"):
         return {}
@@ -825,10 +939,12 @@ def main() -> int:
     lifting = build_lifting()
     nutrition = build_nutrition()
     plan = build_plan()
+    calendar = build_calendar()
     home = build_home(running, lifting, nutrition, plan)
 
     for name, data in [("running", running), ("lifting", lifting),
-                       ("nutrition", nutrition), ("plan", plan), ("home", home)]:
+                       ("nutrition", nutrition), ("plan", plan),
+                       ("calendar", calendar), ("home", home)]:
         path = OUT_DIR / f"{name}.json"
         path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
         print(f"Wrote {path.relative_to(FITNESS_DIR)}")
