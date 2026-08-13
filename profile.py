@@ -39,6 +39,10 @@ class Profile:
     daily_targets: dict
     profile_text: str
     specialist_overrides: dict | None = None
+    # Explicit marathon pace, e.g. "4:51/km". None means there is no time goal, so
+    # quality work is prescribed by effort and heart rate instead of a pace.
+    marathon_pace: str | None = None
+    marathon_pace_hr: str | None = None
 
 
 def load_profile(profile_id: str) -> Profile:
@@ -66,6 +70,8 @@ def load_profile(profile_id: str) -> Profile:
         daily_targets=data["daily_targets"],
         profile_text=data["profile_text"],
         specialist_overrides=data.get("specialist_overrides"),
+        marathon_pace=data.get("marathon_pace"),
+        marathon_pace_hr=data.get("marathon_pace_hr"),
     )
 
 

@@ -711,7 +711,7 @@ def _nutrition_headline(days: list, avg: dict, targets: dict) -> dict:
 
 def _race_info() -> tuple[date, str, str]:
     """Race date, label and target, from the profile if available else the constants."""
-    race_date, label, target = MARATHON_DATE, "San Sebastian marathon", "sub-3:25 (4:51/km)"
+    race_date, label, target = MARATHON_DATE, "San Sebastian marathon", "no time goal set"
     try:
         prof = json.loads(PROFILE_JSON.read_text(encoding="utf-8"))
         if prof.get("race_date"):

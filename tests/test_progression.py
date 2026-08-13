@@ -123,5 +123,40 @@ class ApplyToSessionTests(unittest.TestCase):
         self.assertIn("Build", footer)
 
 
+def _quality_template() -> dict:
+    return {
+        "session_type": "Quality Run - Easy with Optional Tempo Segment",
+        "session_kind": "run",
+        "duration_min": 60,
+        "run_details": {"distance": "~10-11 km", "pace": "5:25-5:45/km", "effort": ""},
+    }
+
+
+class QualityPrescriptionTests(unittest.TestCase):
+    """A marathon pace is prescribed only when the profile actually sets a time goal."""
+
+    def test_pace_used_when_profile_supplies_one(self):
+        scaled, _ = progression.apply_to_session(
+            _quality_template(), BUILD_DATE, RACE,
+            marathon_pace="4:51/km", marathon_pace_hr="165-170",
+        )
+        effort = scaled["run_details"]["effort"]
+        self.assertIn("4:51/km", effort)
+        self.assertIn("165-170", effort)
+        self.assertIn("marathon pace", effort)
+
+    def test_effort_based_when_no_time_goal(self):
+        scaled, _ = progression.apply_to_session(_quality_template(), BUILD_DATE, RACE)
+        effort = scaled["run_details"]["effort"]
+        self.assertNotIn("4:51", effort)
+        self.assertNotIn("marathon pace", effort)
+        self.assertIn("tempo effort", effort)
+        self.assertIn("No time goal", effort)
+
+    def test_base_phase_adds_no_quality_segment(self):
+        scaled, _ = progression.apply_to_session(_quality_template(), BASE_DATE, RACE)
+        self.assertEqual(scaled["run_details"]["effort"], "")
+
+
 if __name__ == "__main__":
     unittest.main()
