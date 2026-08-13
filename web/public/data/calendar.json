@@ -48,9 +48,9 @@
       "extras": "",
       "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -119,9 +119,9 @@
       "extras": "",
       "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -144,10 +144,10 @@
       "extras": "",
       "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
         "run": false,
-        "lift": false
+        "lift": true
       }
     },
     {
@@ -235,9 +235,9 @@
       "extras": "",
       "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -377,9 +377,9 @@
       "extras": "",
       "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -468,10 +468,10 @@
       "extras": "",
       "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
         "run": false,
-        "lift": false
+        "lift": true
       }
     },
     {
@@ -585,10 +585,10 @@
       "extras": "",
       "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
         "run": false,
-        "lift": false
+        "lift": true
       }
     },
     {
@@ -701,9 +701,9 @@
       "extras": "",
       "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -747,10 +747,10 @@
       "extras": "",
       "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
         "run": false,
-        "lift": false
+        "lift": true
       }
     },
     {
@@ -818,9 +818,9 @@
       "extras": "",
       "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -843,10 +843,10 @@
       "extras": "",
       "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
         "run": false,
-        "lift": false
+        "lift": true
       }
     },
     {
@@ -889,9 +889,9 @@
       "extras": "",
       "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -934,9 +934,9 @@
       "extras": "",
       "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -1051,9 +1051,9 @@
       "extras": "",
       "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
       "source": "template",
-      "status": "past",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -1079,7 +1079,7 @@
       "status": "today",
       "completed": {
         "run": false,
-        "lift": false
+        "lift": true
       }
     },
     {

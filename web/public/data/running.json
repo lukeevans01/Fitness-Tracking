@@ -2,26 +2,26 @@
   "generated_at": "2026-08-13",
   "recent": {
     "weeks": 4,
-    "window_start": "2026-04-27",
-    "window_end": "2026-05-24",
-    "runs": 8,
-    "km": 65.6,
-    "avg_km_per_week": 16.4,
-    "longest_km": 16.3,
+    "window_start": "2026-07-20",
+    "window_end": "2026-08-16",
+    "runs": 6,
+    "km": 72.4,
+    "avg_km_per_week": 18.1,
+    "longest_km": 21.4,
     "active_weeks": 4,
-    "easy_pct": 1,
-    "moderate_pct": 91,
-    "quality_pct": 8,
-    "trend_pct": 8,
-    "weeks_to_race": 26,
+    "easy_pct": 0,
+    "moderate_pct": 100,
+    "quality_pct": 0,
+    "trend_pct": 43,
+    "weeks_to_race": 14,
     "narrative": [
       {
         "heading": "What you have been up to",
-        "text": "Over the last 4 weeks you logged 8 runs totalling 66 km, averaging 16 km per week across 4 of 4 weeks. That is up 8% on the previous 4 weeks. Your longest run was 16 km. By pace, your classified running split 1% easy, 91% moderate and 8% quality."
+        "text": "Over the last 4 weeks you logged 6 runs totalling 72 km, averaging 18 km per week across 4 of 4 weeks. That is up 43% on the previous 4 weeks. Your longest run was 21 km. By pace, your classified running split 0% easy, 100% moderate and 0% quality."
       },
       {
         "heading": "Where to push next",
-        "text": "Most of your volume sits in the moderate zone. Aim to slow your easy runs until at least 70% of weekly km is genuinely easy (6:00/km or slower). Easy running you are currently at 1%, so the grey-zone moderate work is the first thing to trim. With about 26 weeks to the marathon, your long run has room to grow. Extend it gradually, by no more than 1 to 2 km a week."
+        "text": "Most of your volume sits in the moderate zone. Aim to slow your easy runs until at least 70% of weekly km is genuinely easy (6:00/km or slower). Easy running you are currently at 0%, so the grey-zone moderate work is the first thing to trim. You are doing very little quality work. One structured session a week, a tempo or intervals, would build the speed you need to hold sub-3:25 pace. With about 14 weeks to the marathon, your long run has room to grow. Extend it gradually, by no more than 1 to 2 km a week."
       }
     ]
   },
@@ -126,10 +126,31 @@
     },
     {
       "month": "2026-05",
-      "ef": 1.166,
-      "avg_pace": 5.67,
-      "avg_hr": 152,
-      "runs": 6
+      "ef": 1.164,
+      "avg_pace": 5.61,
+      "avg_hr": 154,
+      "runs": 8
+    },
+    {
+      "month": "2026-06",
+      "ef": 1.132,
+      "avg_pace": 5.51,
+      "avg_hr": 160,
+      "runs": 3
+    },
+    {
+      "month": "2026-07",
+      "ef": 1.099,
+      "avg_pace": 5.5,
+      "avg_hr": 165,
+      "runs": 5
+    },
+    {
+      "month": "2026-08",
+      "ef": 1.144,
+      "avg_pace": 5.51,
+      "avg_hr": 159,
+      "runs": 5
     }
   ],
   "weekly": [
@@ -2544,6 +2565,87 @@
       "moderate_km": 16.3,
       "quality_km": 0.0,
       "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-05-25",
+      "km": 17.6,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 17.6,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-06-08",
+      "km": 10.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 10.0,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-06-15",
+      "km": 14.0,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 14.0,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-06-29",
+      "km": 18.4,
+      "runs": 2,
+      "easy_km": 0.0,
+      "moderate_km": 18.4,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-07-13",
+      "km": 32.2,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 32.2,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-07-20",
+      "km": 9.2,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 9.2,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-07-27",
+      "km": 16.3,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 16.3,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-08-03",
+      "km": 37.2,
+      "runs": 3,
+      "easy_km": 0.0,
+      "moderate_km": 37.2,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
+    },
+    {
+      "week_start": "2026-08-10",
+      "km": 9.7,
+      "runs": 1,
+      "easy_km": 0.0,
+      "moderate_km": 9.7,
+      "quality_km": 0.0,
+      "unzoned_km": 0.0
     }
   ],
   "zone_trend": [
@@ -4154,6 +4256,60 @@
       "easy_pct": 1,
       "moderate_pct": 91,
       "quality_pct": 8
+    },
+    {
+      "week_start": "2026-05-25",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-06-08",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-06-15",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-06-29",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-07-13",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-07-20",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-07-27",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-08-03",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
+    },
+    {
+      "week_start": "2026-08-10",
+      "easy_pct": 0,
+      "moderate_pct": 100,
+      "quality_pct": 0
     }
   ],
   "easy_target_pct": 70,
@@ -4200,32 +4356,32 @@
     },
     {
       "year": 2026,
-      "km": 271.4,
-      "runs": 32
+      "km": 436.1,
+      "runs": 47
     }
   ],
   "summary": {
-    "total_runs": 505,
-    "total_km": 4383.4,
-    "runs_with_hr": 151,
+    "total_runs": 520,
+    "total_km": 4548.0,
+    "runs_with_hr": 166,
     "first_run": "2018-04-08",
-    "last_run": "2026-05-24"
+    "last_run": "2026-08-12"
   },
   "headline": {
     "kpis": [
       {
-        "value": "16 km",
+        "value": "18 km",
         "label": "per week"
       },
       {
-        "value": "1%",
+        "value": "0%",
         "label": "easy pace"
       },
       {
-        "value": 26,
+        "value": 14,
         "label": "weeks to race"
       }
     ],
-    "narrative": "8 runs and 66 km over the last 4 weeks. Only 1% of your running is genuinely easy, so the priority is slowing easy days out of the moderate grey zone."
+    "narrative": "6 runs and 72 km over the last 4 weeks. Only 0% of your running is genuinely easy, so the priority is slowing easy days out of the moderate grey zone."
   }
 }
