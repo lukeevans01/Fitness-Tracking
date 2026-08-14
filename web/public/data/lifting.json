@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-21",
+  "generated_at": "2026-08-13",
   "empty": false,
   "e1rm": [
     {
@@ -368,10 +368,31 @@
     },
     {
       "month": "2026-05",
-      "Squat": 113.3,
+      "Squat": 128.3,
+      "Bench": 85.0,
+      "RDL": 110.0,
+      "OHP": 51.3
+    },
+    {
+      "month": "2026-06",
+      "Squat": 108.0,
       "Bench": null,
-      "RDL": 108.0,
-      "OHP": null
+      "RDL": 96.0,
+      "OHP": 43.2
+    },
+    {
+      "month": "2026-07",
+      "Squat": 108.0,
+      "Bench": 88.0,
+      "RDL": 96.0,
+      "OHP": 44.3
+    },
+    {
+      "month": "2026-08",
+      "Squat": 108.0,
+      "Bench": null,
+      "RDL": 96.0,
+      "OHP": 48.0
     }
   ],
   "tonnage": [
@@ -569,7 +590,7 @@
     },
     {
       "month": "2025-12",
-      "tonnes": 40.9
+      "tonnes": 40.8
     },
     {
       "month": "2026-01",
@@ -589,7 +610,19 @@
     },
     {
       "month": "2026-05",
-      "tonnes": 78.4
+      "tonnes": 133.8
+    },
+    {
+      "month": "2026-06",
+      "tonnes": 63.9
+    },
+    {
+      "month": "2026-07",
+      "tonnes": 37.9
+    },
+    {
+      "month": "2026-08",
+      "tonnes": 30.2
     }
   ],
   "benchmarks": {
@@ -611,42 +644,42 @@
     }
   },
   "current_e1rm": {
-    "Squat": 116.7,
-    "RDL": 108.0,
-    "OHP": 55.7,
-    "Bench": 85.0
+    "Squat": 128.3,
+    "RDL": 102.0,
+    "OHP": 51.3,
+    "Bench": 88.0
   },
   "summary": {
-    "total_sessions": 493,
+    "total_sessions": 510,
     "first_session": "2021-12-31",
-    "last_session": "2026-05-23",
-    "sessions_4w": 8
+    "last_session": "2026-08-13",
+    "sessions_4w": 5
   },
   "recap": [
     {
       "heading": "What you have been up to",
-      "text": "You have logged 8 strength sessions in the last 4 weeks, and 493 sessions all-time. Your current best estimated one-rep maxes are Squat 117 kg, Bench 85 kg, RDL 108 kg, OHP 56 kg. Training volume held steady at about 78.4 tonnes lifted last month."
+      "text": "You have logged 5 strength sessions in the last 4 weeks, and 510 sessions all-time. Your current best estimated one-rep maxes are Squat 128 kg, Bench 88 kg, RDL 102 kg, OHP 51 kg. Training volume eased about 20% last month, to 30.2 tonnes lifted."
     },
     {
       "heading": "Where to push next",
-      "text": "Your Squat is the biggest gap to target, about 117 kg against 130 kg, so give it priority in the next block. Your OHP is already at or above its target, so hold it there."
+      "text": "Your RDL is the biggest gap to target, about 102 kg against 120 kg, so give it priority in the next block. Aim for two to three quality strength sessions a week to keep progressing alongside the marathon training."
     }
   ],
   "headline": {
     "kpis": [
       {
-        "value": 8,
+        "value": 5,
         "label": "sessions / 4wk"
       },
       {
-        "value": "117 kg",
+        "value": "128 kg",
         "label": "Squat e1RM"
       },
       {
-        "value": "85 kg",
+        "value": "88 kg",
         "label": "Bench e1RM"
       }
     ],
-    "narrative": "8 strength sessions in the last 4 weeks. Your Squat e1RM is about 117 kg against a 130 kg target, the biggest gap right now, so prioritise it."
+    "narrative": "5 strength sessions in the last 4 weeks. Your RDL e1RM is about 102 kg against a 120 kg target, the biggest gap right now, so prioritise it."
   }
 }

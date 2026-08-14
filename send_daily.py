@@ -356,7 +356,9 @@ def main():
             # Scale the template long-run / quality-run days toward race day. Overrides win,
             # so progression only applies to the unmodified template session.
             day, progression_note = progression.apply_to_session(
-                day, target_date, profile.race_date
+                day, target_date, profile.race_date,
+                marathon_pace=profile.marathon_pace,
+                marathon_pace_hr=profile.marathon_pace_hr,
             )
 
         date_str = target_date.strftime("%a %d %b")

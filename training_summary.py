@@ -68,7 +68,7 @@ def build_stats(days: int = 7, today: "date | None" = None) -> dict:
         try:
             runs = [
                 a for a in _read_activities(today)
-                if a.kind == "run" and a.date > cutoff
+                if a.kind == "run" and cutoff < a.date <= today
             ]
             run_sessions = len(runs)
             run_km_total = sum(a.distance_km for a in runs if a.distance_km > 0)
@@ -80,7 +80,7 @@ def build_stats(days: int = 7, today: "date | None" = None) -> dict:
     if STRONG_CSV.exists():
         try:
             strength_sessions = len({
-                lift.date for lift in _read_lifts() if lift.date > cutoff
+                lift.date for lift in _read_lifts() if cutoff < lift.date <= today
             })
         except Exception as exc:
             warnings.append(f"Could not parse strong.csv: {exc}")
@@ -117,7 +117,7 @@ def build_strength_tonnage(days: int = 7, today: "date | None" = None) -> float:
                 try:
                     date_str = (row.get("Date") or "")[:10]
                     act_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-                    if act_date <= cutoff:
+                    if not (cutoff < act_date <= today):
                         continue
                     if _match_key_lift((row.get("Exercise Name") or "").strip()) is None:
                         continue
@@ -165,7 +165,7 @@ def build_squash_sessions(days: int = 7, today: "date | None" = None) -> int:
                     if date_col is None or date_col >= len(row):
                         continue
                     act_date = _parse_strava_date(row[date_col])
-                    if act_date is None or act_date <= cutoff:
+                    if act_date is None or not (cutoff < act_date <= today):
                         continue
                     count += 1
                 except Exception:
@@ -187,7 +187,7 @@ def build_summary(days: int = 14, today: "date | None" = None) -> str:
         try:
             runs = [
                 a for a in _read_activities(today)
-                if a.kind == "run" and a.date > cutoff and a.distance_km > 0
+                if a.kind == "run" and cutoff < a.date <= today and a.distance_km > 0
             ]
         except Exception as exc:
             lines.append(f"[warning: could not parse strava.csv: {exc}]")
@@ -225,7 +225,7 @@ def build_summary(days: int = 14, today: "date | None" = None) -> str:
     if STRONG_CSV.exists():
         in_window = []
         try:
-            in_window = [lift for lift in _read_lifts() if lift.date > cutoff]
+            in_window = [lift for lift in _read_lifts() if cutoff < lift.date <= today]
         except Exception as exc:
             lines.append(f"[warning: could not parse strong.csv: {exc}]")
 
@@ -297,7 +297,7 @@ def build_daily_breakdown(days: int = 7, today: "date | None" = None) -> dict:
                             if date_col is None or date_col >= len(row):
                                 continue
                             act_date = _parse_strava_date(row[date_col])
-                            if act_date is None or act_date <= cutoff:
+                            if act_date is None or not (cutoff < act_date <= today):
                                 continue
                             distance_km = None
                             if dist_col is not None and dist_col < len(row):
@@ -334,7 +334,7 @@ def build_daily_breakdown(days: int = 7, today: "date | None" = None) -> dict:
                     try:
                         date_str = (row.get("Date") or "")[:10]
                         act_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-                        if act_date <= cutoff:
+                        if not (cutoff < act_date <= today):
                             continue
                         exercise = (row.get("Exercise Name") or "").strip()
                         weight = float(row.get("Weight") or 0)

@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-06-21",
+  "generated_at": "2026-08-13",
   "empty": false,
   "race": {
     "date": "2026-11-22",
     "label": "San Sebasti\u00e1n marathon",
-    "target": "sub-3:25 (4:51/km)",
-    "weeks_to_race": 22
+    "target": "controlled effort, no time goal",
+    "weeks_to_race": 15
   },
   "block": {
     "name": "base",
-    "label": "Base phase, 22 weeks to race. Long run holding around 12 km while you build aerobic volume before the specific work.",
-    "long_run_km": 12.0,
+    "label": "Base phase, 15 weeks to race. Long run holding around 15 km while you build aerobic volume before the specific work.",
+    "long_run_km": 14.8,
     "quality_minutes": 0
   },
   "cycle_start_date": "2026-05-25",
@@ -104,18 +104,18 @@
     },
     {
       "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
       "session_kind": "run",
       "duration_min": 60,
       "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
         "hr_target": "See pace details.",
         "distance": "~10-11 km",
         "effort": "Controlled quality, focus on hitting MP segments precisely."
       },
       "exercises": [],
       "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency."
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace."
     },
     {
       "day_label": "Friday",
@@ -180,7 +180,7 @@
     }
   ],
   "hard_rules": [
-    "If labour starts, stop. No 'one last session.'",
+    "No time goal for San Sebastian - run it as a controlled effort.",
     "Easy means easy \u2014 HR <150 on easy runs.",
     "Sleep is the override: <6h = drop to a walk or skip.",
     "No PB attempts."

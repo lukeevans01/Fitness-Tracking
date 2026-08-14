@@ -136,7 +136,33 @@ def block_label(today: date, race_date: date) -> str:
     return f"Taper ({weeks} weeks to race) — easy running only, the taper rules apply."
 
 
-def apply_to_session(session: dict, target_date: date, race_date: date) -> tuple[dict, str]:
+def _quality_prescription(qmin: int, marathon_pace: str | None, pace_hr: str | None) -> str:
+    """Wording for the build-phase quality segment.
+
+    With a marathon-pace target, prescribe the pace. Without one (no time goal), the
+    segment is prescribed by effort and heart rate so it stays useful without pulling
+    the athlete onto a pace they have not built up to.
+    """
+    if marathon_pace:
+        hr = f", HR {pace_hr}" if pace_hr else ""
+        return (
+            f"Build-phase quality: include about {qmin} min at marathon pace "
+            f"({marathon_pace}{hr}) split into segments, easy either side."
+        )
+    return (
+        f"Build-phase quality: include about {qmin} min at controlled tempo effort "
+        "(comfortably hard, conversational in short phrases only) split into segments, "
+        "easy either side. No time goal is set, so run this by feel, not a pace."
+    )
+
+
+def apply_to_session(
+    session: dict,
+    target_date: date,
+    race_date: date,
+    marathon_pace: str | None = None,
+    marathon_pace_hr: str | None = None,
+) -> tuple[dict, str]:
     """Return (possibly scaled session, footer note) for the rendered daily email.
 
     Scales only the long-run and quality-run days, and only outside the taper — during
@@ -166,8 +192,8 @@ def apply_to_session(session: dict, target_date: date, race_date: date) -> tuple
         run = dict(session.get("run_details") or {})
         if qmin > 0:
             run["effort"] = (
-                f"Build-phase quality: include about {qmin} min at marathon pace "
-                "(4:51/km, HR 165-170) split into segments, easy either side. "
+                _quality_prescription(qmin, marathon_pace, marathon_pace_hr)
+                + " "
                 + (run.get("effort") or "")
             ).strip()
         scaled["run_details"] = run

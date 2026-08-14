@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-06-21",
+  "generated_at": "2026-08-13",
   "plan": {
     "block_name": "base",
-    "weeks_to_race": 22,
+    "weeks_to_race": 15,
     "race_label": "San Sebasti\u00e1n marathon"
   },
   "sections": {
     "running": {
       "kpis": [
         {
-          "value": "16 km",
+          "value": "18 km",
           "label": "per week"
         },
         {
-          "value": "1%",
+          "value": "0%",
           "label": "easy pace"
         },
         {
-          "value": 26,
+          "value": 14,
           "label": "weeks to race"
         }
       ],
-      "narrative": "8 runs and 66 km over the last 4 weeks. Only 1% of your running is genuinely easy, so the priority is slowing easy days out of the moderate grey zone."
+      "narrative": "6 runs and 72 km over the last 4 weeks. Only 0% of your running is genuinely easy, so the priority is slowing easy days out of the moderate grey zone."
     },
     "lifting": {
       "kpis": [
         {
-          "value": 8,
+          "value": 5,
           "label": "sessions / 4wk"
         },
         {
-          "value": "117 kg",
+          "value": "128 kg",
           "label": "Squat e1RM"
         },
         {
-          "value": "85 kg",
+          "value": "88 kg",
           "label": "Bench e1RM"
         }
       ],
-      "narrative": "8 strength sessions in the last 4 weeks. Your Squat e1RM is about 117 kg against a 130 kg target, the biggest gap right now, so prioritise it."
+      "narrative": "5 strength sessions in the last 4 weeks. Your RDL e1RM is about 102 kg against a 120 kg target, the biggest gap right now, so prioritise it."
     },
     "nutrition": {
       "kpis": [

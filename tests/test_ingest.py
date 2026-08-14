@@ -112,16 +112,30 @@ class BuildSummaryGoldenParityTests(unittest.TestCase):
     pre-refactor (pack 02) output exactly."""
 
     def test_runs_block_matches_golden(self):
+        # Values refreshed with the Aug 2026 Strava export, which backfilled a 27 May
+        # run absent from the earlier export (hence 2 runs in this window, not 1).
         summary = ts.build_summary(days=14, today=date(2026, 5, 28))
         expected_runs = [
-            "RUNS (last 14 days): 1 runs, 16.3 km total",
-            "  Pace distribution -- easy (>=6:00/km): 0, moderate (5:06-5:59/km): 1, "
+            "RUNS (last 14 days): 2 runs, 25.4 km total",
+            "  Pace distribution -- easy (>=6:00/km): 0, moderate (5:06-5:59/km): 2, "
             "quality (<5:06/km): 0",
             "  Longest run: 16.32 km on 2026-05-24 at 5.57 min/km",
-            "  Avg HR across runs with data: 153 bpm",
+            "  Avg HR across runs with data: 156 bpm",
         ]
         for line in expected_runs:
             self.assertIn(line, summary)
+
+    def test_window_excludes_activity_after_today(self):
+        """The window is bounded at both ends.
+
+        Regression: the cutoff filter only had a lower bound, so a historical `today`
+        pulled in every later activity. It looked correct only while the CSV happened to
+        end at the window. data/strava.csv now runs to Aug 2026, which exposes it.
+        """
+        summary = ts.build_summary(days=14, today=date(2026, 5, 28))
+        # The 9 Aug 21.36 km run is the longest in the file and sits well after `today`.
+        self.assertNotIn("21.36", summary)
+        self.assertIn("Longest run: 16.32 km on 2026-05-24", summary)
 
 
 if __name__ == "__main__":

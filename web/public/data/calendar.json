@@ -1,1877 +1,13 @@
 {
-  "generated_at": "2026-06-21",
+  "generated_at": "2026-08-13",
   "empty": false,
   "profile_id": "luke",
-  "today": "2026-06-21",
+  "today": "2026-08-13",
   "window": {
-    "start": "2026-05-18",
-    "end": "2026-08-16"
+    "start": "2026-07-13",
+    "end": "2026-10-08"
   },
   "days": [
-    {
-      "date": "2026-05-18",
-      "day_label": "Monday",
-      "session_type": "Full Body Strength - Squat Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Back Squat",
-          "sets_reps": "3x6-8",
-          "weight": "90kg"
-        },
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x8-10",
-          "weight": "81kg"
-        },
-        {
-          "name": "Incline Dumbbell Press",
-          "sets_reps": "3x8-10",
-          "weight": "20kg/hand"
-        },
-        {
-          "name": "Bent-Over Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pallof Press",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
-      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-05-19",
-      "day_label": "Tuesday",
-      "session_type": "Easy Recovery Run + Evening Squash",
-      "session_kind": "run",
-      "duration_min": 45,
-      "run": {
-        "pace": "5:35-6:00/km",
-        "hr_target": "<150",
-        "distance": "~7.5-8 km",
-        "effort": "Truly easy, conversational."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
-      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-05-20",
-      "day_label": "Wednesday",
-      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Barbell Bench Press",
-          "sets_reps": "3x6-8",
-          "weight": "62.5kg"
-        },
-        {
-          "name": "Overhead Press (Barbell)",
-          "sets_reps": "3x6-8",
-          "weight": "35kg"
-        },
-        {
-          "name": "Romanian Deadlift (lighter)",
-          "sets_reps": "3x10-12",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pull-ups",
-          "sets_reps": "3x6-8",
-          "weight": "BW+5kg"
-        },
-        {
-          "name": "Side Plank",
-          "sets_reps": "3x30-45s/side",
-          "weight": "BW"
-        }
-      ],
-      "details": "",
-      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
-      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-05-21",
-      "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
-      "session_kind": "run",
-      "duration_min": 60,
-      "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
-        "hr_target": "See pace details.",
-        "distance": "~10-11 km",
-        "effort": "Controlled quality, focus on hitting MP segments precisely."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-05-22",
-      "day_label": "Friday",
-      "session_type": "Full Body Strength - Hinge Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x6-8",
-          "weight": "81kg"
-        },
-        {
-          "name": "Front Squat",
-          "sets_reps": "3x8-10",
-          "weight": "70kg"
-        },
-        {
-          "name": "Dumbbell Bench Press",
-          "sets_reps": "3x8-10",
-          "weight": "25kg/hand"
-        },
-        {
-          "name": "Seated Cable Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Woodchoppers (cable)",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
-      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
-      "extras": "",
-      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
-      "source": "template",
-      "status": "completed",
-      "completed": {
-        "run": false,
-        "lift": true
-      }
-    },
-    {
-      "date": "2026-05-23",
-      "day_label": "Saturday",
-      "session_type": "Rest Day & Active Recovery",
-      "session_kind": "rest",
-      "duration_min": 40,
-      "run": null,
-      "exercises": [],
-      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
-      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
-      "warm_up": "",
-      "extras": "",
-      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
-      "source": "template",
-      "status": "completed",
-      "completed": {
-        "run": false,
-        "lift": true
-      }
-    },
-    {
-      "date": "2026-05-24",
-      "day_label": "Sunday",
-      "session_type": "Long Run - Aerobic Base",
-      "session_kind": "run",
-      "duration_min": 90,
-      "run": {
-        "pace": "5:25-5:45/km",
-        "hr_target": "150-160",
-        "distance": "~15-16 km",
-        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
-      "source": "template",
-      "status": "completed",
-      "completed": {
-        "run": true,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-05-25",
-      "day_label": "Monday",
-      "session_type": "Full Body Strength - Squat Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Back Squat",
-          "sets_reps": "3x6-8",
-          "weight": "90kg"
-        },
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x8-10",
-          "weight": "81kg"
-        },
-        {
-          "name": "Incline Dumbbell Press",
-          "sets_reps": "3x8-10",
-          "weight": "20kg/hand"
-        },
-        {
-          "name": "Bent-Over Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pallof Press",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
-      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-05-26",
-      "day_label": "Tuesday",
-      "session_type": "Easy Recovery Run + Evening Squash",
-      "session_kind": "run",
-      "duration_min": 45,
-      "run": {
-        "pace": "5:35-6:00/km",
-        "hr_target": "<150",
-        "distance": "~7.5-8 km",
-        "effort": "Truly easy, conversational."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
-      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-05-27",
-      "day_label": "Wednesday",
-      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Barbell Bench Press",
-          "sets_reps": "3x6-8",
-          "weight": "62.5kg"
-        },
-        {
-          "name": "Overhead Press (Barbell)",
-          "sets_reps": "3x6-8",
-          "weight": "35kg"
-        },
-        {
-          "name": "Romanian Deadlift (lighter)",
-          "sets_reps": "3x10-12",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pull-ups",
-          "sets_reps": "3x6-8",
-          "weight": "BW+5kg"
-        },
-        {
-          "name": "Side Plank",
-          "sets_reps": "3x30-45s/side",
-          "weight": "BW"
-        }
-      ],
-      "details": "",
-      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
-      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-05-28",
-      "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
-      "session_kind": "run",
-      "duration_min": 60,
-      "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
-        "hr_target": "See pace details.",
-        "distance": "~10-11 km",
-        "effort": "Controlled quality, focus on hitting MP segments precisely."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-05-29",
-      "day_label": "Friday",
-      "session_type": "Full Body Strength - Hinge Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x6-8",
-          "weight": "81kg"
-        },
-        {
-          "name": "Front Squat",
-          "sets_reps": "3x8-10",
-          "weight": "70kg"
-        },
-        {
-          "name": "Dumbbell Bench Press",
-          "sets_reps": "3x8-10",
-          "weight": "25kg/hand"
-        },
-        {
-          "name": "Seated Cable Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Woodchoppers (cable)",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
-      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
-      "extras": "",
-      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-05-30",
-      "day_label": "Saturday",
-      "session_type": "Rest Day & Active Recovery",
-      "session_kind": "rest",
-      "duration_min": 40,
-      "run": null,
-      "exercises": [],
-      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
-      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
-      "warm_up": "",
-      "extras": "",
-      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-05-31",
-      "day_label": "Sunday",
-      "session_type": "Long Run - Aerobic Base",
-      "session_kind": "run",
-      "duration_min": 90,
-      "run": {
-        "pace": "5:25-5:45/km",
-        "hr_target": "150-160",
-        "distance": "~15-16 km",
-        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-01",
-      "day_label": "Monday",
-      "session_type": "Full Body Strength - Squat Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Back Squat",
-          "sets_reps": "3x6-8",
-          "weight": "90kg"
-        },
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x8-10",
-          "weight": "81kg"
-        },
-        {
-          "name": "Incline Dumbbell Press",
-          "sets_reps": "3x8-10",
-          "weight": "20kg/hand"
-        },
-        {
-          "name": "Bent-Over Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pallof Press",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
-      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-02",
-      "day_label": "Tuesday",
-      "session_type": "Easy Recovery Run + Evening Squash",
-      "session_kind": "run",
-      "duration_min": 45,
-      "run": {
-        "pace": "5:35-6:00/km",
-        "hr_target": "<150",
-        "distance": "~7.5-8 km",
-        "effort": "Truly easy, conversational."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
-      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-03",
-      "day_label": "Wednesday",
-      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Barbell Bench Press",
-          "sets_reps": "3x6-8",
-          "weight": "62.5kg"
-        },
-        {
-          "name": "Overhead Press (Barbell)",
-          "sets_reps": "3x6-8",
-          "weight": "35kg"
-        },
-        {
-          "name": "Romanian Deadlift (lighter)",
-          "sets_reps": "3x10-12",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pull-ups",
-          "sets_reps": "3x6-8",
-          "weight": "BW+5kg"
-        },
-        {
-          "name": "Side Plank",
-          "sets_reps": "3x30-45s/side",
-          "weight": "BW"
-        }
-      ],
-      "details": "",
-      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
-      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-04",
-      "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
-      "session_kind": "run",
-      "duration_min": 60,
-      "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
-        "hr_target": "See pace details.",
-        "distance": "~10-11 km",
-        "effort": "Controlled quality, focus on hitting MP segments precisely."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-05",
-      "day_label": "Friday",
-      "session_type": "Full Body Strength - Hinge Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x6-8",
-          "weight": "81kg"
-        },
-        {
-          "name": "Front Squat",
-          "sets_reps": "3x8-10",
-          "weight": "70kg"
-        },
-        {
-          "name": "Dumbbell Bench Press",
-          "sets_reps": "3x8-10",
-          "weight": "25kg/hand"
-        },
-        {
-          "name": "Seated Cable Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Woodchoppers (cable)",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
-      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
-      "extras": "",
-      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-06",
-      "day_label": "Saturday",
-      "session_type": "Rest Day & Active Recovery",
-      "session_kind": "rest",
-      "duration_min": 40,
-      "run": null,
-      "exercises": [],
-      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
-      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
-      "warm_up": "",
-      "extras": "",
-      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-07",
-      "day_label": "Sunday",
-      "session_type": "Long Run - Aerobic Base",
-      "session_kind": "run",
-      "duration_min": 90,
-      "run": {
-        "pace": "5:25-5:45/km",
-        "hr_target": "150-160",
-        "distance": "~15-16 km",
-        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-08",
-      "day_label": "Monday",
-      "session_type": "Full Body Strength - Squat Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Back Squat",
-          "sets_reps": "3x6-8",
-          "weight": "90kg"
-        },
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x8-10",
-          "weight": "81kg"
-        },
-        {
-          "name": "Incline Dumbbell Press",
-          "sets_reps": "3x8-10",
-          "weight": "20kg/hand"
-        },
-        {
-          "name": "Bent-Over Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pallof Press",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
-      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-09",
-      "day_label": "Tuesday",
-      "session_type": "Easy Recovery Run + Evening Squash",
-      "session_kind": "run",
-      "duration_min": 45,
-      "run": {
-        "pace": "5:35-6:00/km",
-        "hr_target": "<150",
-        "distance": "~7.5-8 km",
-        "effort": "Truly easy, conversational."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
-      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-10",
-      "day_label": "Wednesday",
-      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Barbell Bench Press",
-          "sets_reps": "3x6-8",
-          "weight": "62.5kg"
-        },
-        {
-          "name": "Overhead Press (Barbell)",
-          "sets_reps": "3x6-8",
-          "weight": "35kg"
-        },
-        {
-          "name": "Romanian Deadlift (lighter)",
-          "sets_reps": "3x10-12",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pull-ups",
-          "sets_reps": "3x6-8",
-          "weight": "BW+5kg"
-        },
-        {
-          "name": "Side Plank",
-          "sets_reps": "3x30-45s/side",
-          "weight": "BW"
-        }
-      ],
-      "details": "",
-      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
-      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-11",
-      "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
-      "session_kind": "run",
-      "duration_min": 60,
-      "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
-        "hr_target": "See pace details.",
-        "distance": "~10-11 km",
-        "effort": "Controlled quality, focus on hitting MP segments precisely."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-12",
-      "day_label": "Friday",
-      "session_type": "Full Body Strength - Hinge Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x6-8",
-          "weight": "81kg"
-        },
-        {
-          "name": "Front Squat",
-          "sets_reps": "3x8-10",
-          "weight": "70kg"
-        },
-        {
-          "name": "Dumbbell Bench Press",
-          "sets_reps": "3x8-10",
-          "weight": "25kg/hand"
-        },
-        {
-          "name": "Seated Cable Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Woodchoppers (cable)",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
-      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
-      "extras": "",
-      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-13",
-      "day_label": "Saturday",
-      "session_type": "Rest Day & Active Recovery",
-      "session_kind": "rest",
-      "duration_min": 40,
-      "run": null,
-      "exercises": [],
-      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
-      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
-      "warm_up": "",
-      "extras": "",
-      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-14",
-      "day_label": "Sunday",
-      "session_type": "Long Run - Aerobic Base",
-      "session_kind": "run",
-      "duration_min": 90,
-      "run": {
-        "pace": "5:25-5:45/km",
-        "hr_target": "150-160",
-        "distance": "~15-16 km",
-        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-15",
-      "day_label": "Monday",
-      "session_type": "Full Body Strength - Squat Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Back Squat",
-          "sets_reps": "3x6-8",
-          "weight": "90kg"
-        },
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x8-10",
-          "weight": "81kg"
-        },
-        {
-          "name": "Incline Dumbbell Press",
-          "sets_reps": "3x8-10",
-          "weight": "20kg/hand"
-        },
-        {
-          "name": "Bent-Over Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pallof Press",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
-      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-16",
-      "day_label": "Tuesday",
-      "session_type": "Easy Recovery Run + Evening Squash",
-      "session_kind": "run",
-      "duration_min": 45,
-      "run": {
-        "pace": "5:35-6:00/km",
-        "hr_target": "<150",
-        "distance": "~7.5-8 km",
-        "effort": "Truly easy, conversational."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
-      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-17",
-      "day_label": "Wednesday",
-      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Barbell Bench Press",
-          "sets_reps": "3x6-8",
-          "weight": "62.5kg"
-        },
-        {
-          "name": "Overhead Press (Barbell)",
-          "sets_reps": "3x6-8",
-          "weight": "35kg"
-        },
-        {
-          "name": "Romanian Deadlift (lighter)",
-          "sets_reps": "3x10-12",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pull-ups",
-          "sets_reps": "3x6-8",
-          "weight": "BW+5kg"
-        },
-        {
-          "name": "Side Plank",
-          "sets_reps": "3x30-45s/side",
-          "weight": "BW"
-        }
-      ],
-      "details": "",
-      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
-      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-18",
-      "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
-      "session_kind": "run",
-      "duration_min": 60,
-      "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
-        "hr_target": "See pace details.",
-        "distance": "~10-11 km",
-        "effort": "Controlled quality, focus on hitting MP segments precisely."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-19",
-      "day_label": "Friday",
-      "session_type": "Full Body Strength - Hinge Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x6-8",
-          "weight": "81kg"
-        },
-        {
-          "name": "Front Squat",
-          "sets_reps": "3x8-10",
-          "weight": "70kg"
-        },
-        {
-          "name": "Dumbbell Bench Press",
-          "sets_reps": "3x8-10",
-          "weight": "25kg/hand"
-        },
-        {
-          "name": "Seated Cable Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Woodchoppers (cable)",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
-      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
-      "extras": "",
-      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-20",
-      "day_label": "Saturday",
-      "session_type": "Rest Day & Active Recovery",
-      "session_kind": "rest",
-      "duration_min": 40,
-      "run": null,
-      "exercises": [],
-      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
-      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
-      "warm_up": "",
-      "extras": "",
-      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
-      "source": "template",
-      "status": "past",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-21",
-      "day_label": "Sunday",
-      "session_type": "Long Run - Aerobic Base",
-      "session_kind": "run",
-      "duration_min": 90,
-      "run": {
-        "pace": "5:25-5:45/km",
-        "hr_target": "150-160",
-        "distance": "~15-16 km",
-        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
-      "source": "template",
-      "status": "today",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-22",
-      "day_label": "Monday",
-      "session_type": "Full Body Strength - Squat Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Back Squat",
-          "sets_reps": "3x6-8",
-          "weight": "90kg"
-        },
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x8-10",
-          "weight": "81kg"
-        },
-        {
-          "name": "Incline Dumbbell Press",
-          "sets_reps": "3x8-10",
-          "weight": "20kg/hand"
-        },
-        {
-          "name": "Bent-Over Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pallof Press",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
-      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-23",
-      "day_label": "Tuesday",
-      "session_type": "Easy Recovery Run + Evening Squash",
-      "session_kind": "run",
-      "duration_min": 45,
-      "run": {
-        "pace": "5:35-6:00/km",
-        "hr_target": "<150",
-        "distance": "~7.5-8 km",
-        "effort": "Truly easy, conversational."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
-      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-24",
-      "day_label": "Wednesday",
-      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Barbell Bench Press",
-          "sets_reps": "3x6-8",
-          "weight": "62.5kg"
-        },
-        {
-          "name": "Overhead Press (Barbell)",
-          "sets_reps": "3x6-8",
-          "weight": "35kg"
-        },
-        {
-          "name": "Romanian Deadlift (lighter)",
-          "sets_reps": "3x10-12",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pull-ups",
-          "sets_reps": "3x6-8",
-          "weight": "BW+5kg"
-        },
-        {
-          "name": "Side Plank",
-          "sets_reps": "3x30-45s/side",
-          "weight": "BW"
-        }
-      ],
-      "details": "",
-      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
-      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-25",
-      "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
-      "session_kind": "run",
-      "duration_min": 60,
-      "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
-        "hr_target": "See pace details.",
-        "distance": "~10-11 km",
-        "effort": "Controlled quality, focus on hitting MP segments precisely."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-26",
-      "day_label": "Friday",
-      "session_type": "Full Body Strength - Hinge Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x6-8",
-          "weight": "81kg"
-        },
-        {
-          "name": "Front Squat",
-          "sets_reps": "3x8-10",
-          "weight": "70kg"
-        },
-        {
-          "name": "Dumbbell Bench Press",
-          "sets_reps": "3x8-10",
-          "weight": "25kg/hand"
-        },
-        {
-          "name": "Seated Cable Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Woodchoppers (cable)",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
-      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
-      "extras": "",
-      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-27",
-      "day_label": "Saturday",
-      "session_type": "Rest Day & Active Recovery",
-      "session_kind": "rest",
-      "duration_min": 40,
-      "run": null,
-      "exercises": [],
-      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
-      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
-      "warm_up": "",
-      "extras": "",
-      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-28",
-      "day_label": "Sunday",
-      "session_type": "Long Run - Aerobic Base",
-      "session_kind": "run",
-      "duration_min": 90,
-      "run": {
-        "pace": "5:25-5:45/km",
-        "hr_target": "150-160",
-        "distance": "~15-16 km",
-        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-29",
-      "day_label": "Monday",
-      "session_type": "Full Body Strength - Squat Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Back Squat",
-          "sets_reps": "3x6-8",
-          "weight": "90kg"
-        },
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x8-10",
-          "weight": "81kg"
-        },
-        {
-          "name": "Incline Dumbbell Press",
-          "sets_reps": "3x8-10",
-          "weight": "20kg/hand"
-        },
-        {
-          "name": "Bent-Over Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pallof Press",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
-      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-06-30",
-      "day_label": "Tuesday",
-      "session_type": "Easy Recovery Run + Evening Squash",
-      "session_kind": "run",
-      "duration_min": 45,
-      "run": {
-        "pace": "5:35-6:00/km",
-        "hr_target": "<150",
-        "distance": "~7.5-8 km",
-        "effort": "Truly easy, conversational."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
-      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-07-01",
-      "day_label": "Wednesday",
-      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Barbell Bench Press",
-          "sets_reps": "3x6-8",
-          "weight": "62.5kg"
-        },
-        {
-          "name": "Overhead Press (Barbell)",
-          "sets_reps": "3x6-8",
-          "weight": "35kg"
-        },
-        {
-          "name": "Romanian Deadlift (lighter)",
-          "sets_reps": "3x10-12",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pull-ups",
-          "sets_reps": "3x6-8",
-          "weight": "BW+5kg"
-        },
-        {
-          "name": "Side Plank",
-          "sets_reps": "3x30-45s/side",
-          "weight": "BW"
-        }
-      ],
-      "details": "",
-      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
-      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-07-02",
-      "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
-      "session_kind": "run",
-      "duration_min": 60,
-      "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
-        "hr_target": "See pace details.",
-        "distance": "~10-11 km",
-        "effort": "Controlled quality, focus on hitting MP segments precisely."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-07-03",
-      "day_label": "Friday",
-      "session_type": "Full Body Strength - Hinge Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x6-8",
-          "weight": "81kg"
-        },
-        {
-          "name": "Front Squat",
-          "sets_reps": "3x8-10",
-          "weight": "70kg"
-        },
-        {
-          "name": "Dumbbell Bench Press",
-          "sets_reps": "3x8-10",
-          "weight": "25kg/hand"
-        },
-        {
-          "name": "Seated Cable Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Woodchoppers (cable)",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
-      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
-      "extras": "",
-      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-07-04",
-      "day_label": "Saturday",
-      "session_type": "Rest Day & Active Recovery",
-      "session_kind": "rest",
-      "duration_min": 40,
-      "run": null,
-      "exercises": [],
-      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
-      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
-      "warm_up": "",
-      "extras": "",
-      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-07-05",
-      "day_label": "Sunday",
-      "session_type": "Long Run - Aerobic Base",
-      "session_kind": "run",
-      "duration_min": 90,
-      "run": {
-        "pace": "5:25-5:45/km",
-        "hr_target": "150-160",
-        "distance": "~15-16 km",
-        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-07-06",
-      "day_label": "Monday",
-      "session_type": "Full Body Strength - Squat Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Back Squat",
-          "sets_reps": "3x6-8",
-          "weight": "90kg"
-        },
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x8-10",
-          "weight": "81kg"
-        },
-        {
-          "name": "Incline Dumbbell Press",
-          "sets_reps": "3x8-10",
-          "weight": "20kg/hand"
-        },
-        {
-          "name": "Bent-Over Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pallof Press",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
-      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-07-07",
-      "day_label": "Tuesday",
-      "session_type": "Easy Recovery Run + Evening Squash",
-      "session_kind": "run",
-      "duration_min": 45,
-      "run": {
-        "pace": "5:35-6:00/km",
-        "hr_target": "<150",
-        "distance": "~7.5-8 km",
-        "effort": "Truly easy, conversational."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
-      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-07-08",
-      "day_label": "Wednesday",
-      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Barbell Bench Press",
-          "sets_reps": "3x6-8",
-          "weight": "62.5kg"
-        },
-        {
-          "name": "Overhead Press (Barbell)",
-          "sets_reps": "3x6-8",
-          "weight": "35kg"
-        },
-        {
-          "name": "Romanian Deadlift (lighter)",
-          "sets_reps": "3x10-12",
-          "weight": "60kg"
-        },
-        {
-          "name": "Pull-ups",
-          "sets_reps": "3x6-8",
-          "weight": "BW+5kg"
-        },
-        {
-          "name": "Side Plank",
-          "sets_reps": "3x30-45s/side",
-          "weight": "BW"
-        }
-      ],
-      "details": "",
-      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
-      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
-      "extras": "",
-      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-07-09",
-      "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
-      "session_kind": "run",
-      "duration_min": 60,
-      "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
-        "hr_target": "See pace details.",
-        "distance": "~10-11 km",
-        "effort": "Controlled quality, focus on hitting MP segments precisely."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-07-10",
-      "day_label": "Friday",
-      "session_type": "Full Body Strength - Hinge Focus",
-      "session_kind": "strength",
-      "duration_min": 60,
-      "run": null,
-      "exercises": [
-        {
-          "name": "Romanian Deadlift",
-          "sets_reps": "3x6-8",
-          "weight": "81kg"
-        },
-        {
-          "name": "Front Squat",
-          "sets_reps": "3x8-10",
-          "weight": "70kg"
-        },
-        {
-          "name": "Dumbbell Bench Press",
-          "sets_reps": "3x8-10",
-          "weight": "25kg/hand"
-        },
-        {
-          "name": "Seated Cable Row",
-          "sets_reps": "3x8-10",
-          "weight": "60kg"
-        },
-        {
-          "name": "Woodchoppers (cable)",
-          "sets_reps": "3x10/side",
-          "weight": "moderate resistance"
-        }
-      ],
-      "details": "",
-      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
-      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
-      "extras": "",
-      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-07-11",
-      "day_label": "Saturday",
-      "session_type": "Rest Day & Active Recovery",
-      "session_kind": "rest",
-      "duration_min": 40,
-      "run": null,
-      "exercises": [],
-      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
-      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
-      "warm_up": "",
-      "extras": "",
-      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
-    {
-      "date": "2026-07-12",
-      "day_label": "Sunday",
-      "session_type": "Long Run - Aerobic Base",
-      "session_kind": "run",
-      "duration_min": 90,
-      "run": {
-        "pace": "5:25-5:45/km",
-        "hr_target": "150-160",
-        "distance": "~15-16 km",
-        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
-      },
-      "exercises": [],
-      "details": "",
-      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
-      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
-      "extras": "",
-      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
-      "source": "template",
-      "status": "upcoming",
-      "completed": {
-        "run": false,
-        "lift": false
-      }
-    },
     {
       "date": "2026-07-13",
       "day_label": "Monday",
@@ -1912,9 +48,9 @@
       "extras": "",
       "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -1937,7 +73,7 @@
       "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
       "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -1983,35 +119,35 @@
       "extras": "",
       "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
     {
       "date": "2026-07-16",
       "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
       "session_kind": "run",
       "duration_min": 60,
       "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
         "hr_target": "See pace details.",
         "distance": "~10-11 km",
         "effort": "Controlled quality, focus on hitting MP segments precisely."
       },
       "exercises": [],
       "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency.",
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace.",
       "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
       "extras": "",
       "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
         "run": false,
-        "lift": false
+        "lift": true
       }
     },
     {
@@ -2054,7 +190,7 @@
       "extras": "",
       "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2074,7 +210,7 @@
       "extras": "",
       "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2099,9 +235,9 @@
       "extras": "",
       "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -2145,7 +281,7 @@
       "extras": "",
       "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2170,7 +306,7 @@
       "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
       "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2216,7 +352,7 @@
       "extras": "",
       "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2225,25 +361,25 @@
     {
       "date": "2026-07-23",
       "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
       "session_kind": "run",
       "duration_min": 60,
       "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
         "hr_target": "See pace details.",
         "distance": "~10-11 km",
         "effort": "Controlled quality, focus on hitting MP segments precisely."
       },
       "exercises": [],
       "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency.",
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace.",
       "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
       "extras": "",
       "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -2287,7 +423,7 @@
       "extras": "",
       "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2307,7 +443,7 @@
       "extras": "",
       "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2332,10 +468,10 @@
       "extras": "",
       "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
         "run": false,
-        "lift": false
+        "lift": true
       }
     },
     {
@@ -2378,7 +514,7 @@
       "extras": "",
       "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2403,7 +539,7 @@
       "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
       "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2449,32 +585,32 @@
       "extras": "",
       "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
         "run": false,
-        "lift": false
+        "lift": true
       }
     },
     {
       "date": "2026-07-30",
       "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
       "session_kind": "run",
       "duration_min": 60,
       "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
         "hr_target": "See pace details.",
         "distance": "~10-11 km",
         "effort": "Controlled quality, focus on hitting MP segments precisely."
       },
       "exercises": [],
       "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency.",
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace.",
       "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
       "extras": "",
       "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2520,7 +656,7 @@
       "extras": "",
       "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2540,7 +676,7 @@
       "extras": "",
       "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2565,9 +701,9 @@
       "extras": "",
       "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -2611,10 +747,10 @@
       "extras": "",
       "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
         "run": false,
-        "lift": false
+        "lift": true
       }
     },
     {
@@ -2636,7 +772,7 @@
       "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
       "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2682,35 +818,35 @@
       "extras": "",
       "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
     {
       "date": "2026-08-06",
       "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
       "session_kind": "run",
       "duration_min": 60,
       "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
         "hr_target": "See pace details.",
         "distance": "~10-11 km",
         "effort": "Controlled quality, focus on hitting MP segments precisely."
       },
       "exercises": [],
       "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency.",
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace.",
       "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
       "extras": "",
       "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
         "run": false,
-        "lift": false
+        "lift": true
       }
     },
     {
@@ -2753,9 +889,9 @@
       "extras": "",
       "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -2773,7 +909,7 @@
       "extras": "",
       "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2798,9 +934,9 @@
       "extras": "",
       "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
@@ -2844,7 +980,7 @@
       "extras": "",
       "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2869,7 +1005,7 @@
       "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
       "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -2915,35 +1051,35 @@
       "extras": "",
       "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
       "source": "template",
-      "status": "upcoming",
+      "status": "completed",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
     {
       "date": "2026-08-13",
       "day_label": "Thursday",
-      "session_type": "Quality Run - Easy with Optional Marathon Pace Segment",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
       "session_kind": "run",
       "duration_min": 60,
       "run": {
-        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160) with 3-4 x 5 min at Marathon Pace (4:51/km, HR 165-170) embedded, 10 min Easy cool-down.",
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
         "hr_target": "See pace details.",
         "distance": "~10-11 km",
         "effort": "Controlled quality, focus on hitting MP segments precisely."
       },
       "exercises": [],
       "details": "",
-      "purpose": "Introduce marathon pace work to build specific endurance and efficiency.",
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace.",
       "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
       "extras": "",
       "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
       "source": "template",
-      "status": "upcoming",
+      "status": "today",
       "completed": {
         "run": false,
-        "lift": false
+        "lift": true
       }
     },
     {
@@ -3030,6 +1166,1779 @@
       "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
       "extras": "",
       "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-17",
+      "day_label": "Monday",
+      "session_type": "Full Body Strength - Squat Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Back Squat",
+          "sets_reps": "3x6-8",
+          "weight": "90kg"
+        },
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x8-10",
+          "weight": "81kg"
+        },
+        {
+          "name": "Incline Dumbbell Press",
+          "sets_reps": "3x8-10",
+          "weight": "20kg/hand"
+        },
+        {
+          "name": "Bent-Over Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pallof Press",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
+      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-18",
+      "day_label": "Tuesday",
+      "session_type": "Easy Recovery Run + Evening Squash",
+      "session_kind": "run",
+      "duration_min": 45,
+      "run": {
+        "pace": "5:35-6:00/km",
+        "hr_target": "<150",
+        "distance": "~7.5-8 km",
+        "effort": "Truly easy, conversational."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
+      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-19",
+      "day_label": "Wednesday",
+      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Barbell Bench Press",
+          "sets_reps": "3x6-8",
+          "weight": "62.5kg"
+        },
+        {
+          "name": "Overhead Press (Barbell)",
+          "sets_reps": "3x6-8",
+          "weight": "35kg"
+        },
+        {
+          "name": "Romanian Deadlift (lighter)",
+          "sets_reps": "3x10-12",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pull-ups",
+          "sets_reps": "3x6-8",
+          "weight": "BW+5kg"
+        },
+        {
+          "name": "Side Plank",
+          "sets_reps": "3x30-45s/side",
+          "weight": "BW"
+        }
+      ],
+      "details": "",
+      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
+      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-20",
+      "day_label": "Thursday",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
+      "session_kind": "run",
+      "duration_min": 60,
+      "run": {
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
+        "hr_target": "See pace details.",
+        "distance": "~10-11 km",
+        "effort": "Controlled quality, focus on hitting MP segments precisely."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-21",
+      "day_label": "Friday",
+      "session_type": "Full Body Strength - Hinge Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x6-8",
+          "weight": "81kg"
+        },
+        {
+          "name": "Front Squat",
+          "sets_reps": "3x8-10",
+          "weight": "70kg"
+        },
+        {
+          "name": "Dumbbell Bench Press",
+          "sets_reps": "3x8-10",
+          "weight": "25kg/hand"
+        },
+        {
+          "name": "Seated Cable Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Woodchoppers (cable)",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
+      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
+      "extras": "",
+      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-22",
+      "day_label": "Saturday",
+      "session_type": "Rest Day & Active Recovery",
+      "session_kind": "rest",
+      "duration_min": 40,
+      "run": null,
+      "exercises": [],
+      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
+      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
+      "warm_up": "",
+      "extras": "",
+      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-23",
+      "day_label": "Sunday",
+      "session_type": "Long Run - Aerobic Base",
+      "session_kind": "run",
+      "duration_min": 90,
+      "run": {
+        "pace": "5:25-5:45/km",
+        "hr_target": "150-160",
+        "distance": "~15-16 km",
+        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-24",
+      "day_label": "Monday",
+      "session_type": "Full Body Strength - Squat Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Back Squat",
+          "sets_reps": "3x6-8",
+          "weight": "90kg"
+        },
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x8-10",
+          "weight": "81kg"
+        },
+        {
+          "name": "Incline Dumbbell Press",
+          "sets_reps": "3x8-10",
+          "weight": "20kg/hand"
+        },
+        {
+          "name": "Bent-Over Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pallof Press",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
+      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-25",
+      "day_label": "Tuesday",
+      "session_type": "Easy Recovery Run + Evening Squash",
+      "session_kind": "run",
+      "duration_min": 45,
+      "run": {
+        "pace": "5:35-6:00/km",
+        "hr_target": "<150",
+        "distance": "~7.5-8 km",
+        "effort": "Truly easy, conversational."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
+      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-26",
+      "day_label": "Wednesday",
+      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Barbell Bench Press",
+          "sets_reps": "3x6-8",
+          "weight": "62.5kg"
+        },
+        {
+          "name": "Overhead Press (Barbell)",
+          "sets_reps": "3x6-8",
+          "weight": "35kg"
+        },
+        {
+          "name": "Romanian Deadlift (lighter)",
+          "sets_reps": "3x10-12",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pull-ups",
+          "sets_reps": "3x6-8",
+          "weight": "BW+5kg"
+        },
+        {
+          "name": "Side Plank",
+          "sets_reps": "3x30-45s/side",
+          "weight": "BW"
+        }
+      ],
+      "details": "",
+      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
+      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-27",
+      "day_label": "Thursday",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
+      "session_kind": "run",
+      "duration_min": 60,
+      "run": {
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
+        "hr_target": "See pace details.",
+        "distance": "~10-11 km",
+        "effort": "Controlled quality, focus on hitting MP segments precisely."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-28",
+      "day_label": "Friday",
+      "session_type": "Full Body Strength - Hinge Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x6-8",
+          "weight": "81kg"
+        },
+        {
+          "name": "Front Squat",
+          "sets_reps": "3x8-10",
+          "weight": "70kg"
+        },
+        {
+          "name": "Dumbbell Bench Press",
+          "sets_reps": "3x8-10",
+          "weight": "25kg/hand"
+        },
+        {
+          "name": "Seated Cable Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Woodchoppers (cable)",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
+      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
+      "extras": "",
+      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-29",
+      "day_label": "Saturday",
+      "session_type": "Rest Day & Active Recovery",
+      "session_kind": "rest",
+      "duration_min": 40,
+      "run": null,
+      "exercises": [],
+      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
+      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
+      "warm_up": "",
+      "extras": "",
+      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-30",
+      "day_label": "Sunday",
+      "session_type": "Long Run - Aerobic Base",
+      "session_kind": "run",
+      "duration_min": 90,
+      "run": {
+        "pace": "5:25-5:45/km",
+        "hr_target": "150-160",
+        "distance": "~15-16 km",
+        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-08-31",
+      "day_label": "Monday",
+      "session_type": "Full Body Strength - Squat Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Back Squat",
+          "sets_reps": "3x6-8",
+          "weight": "90kg"
+        },
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x8-10",
+          "weight": "81kg"
+        },
+        {
+          "name": "Incline Dumbbell Press",
+          "sets_reps": "3x8-10",
+          "weight": "20kg/hand"
+        },
+        {
+          "name": "Bent-Over Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pallof Press",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
+      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-01",
+      "day_label": "Tuesday",
+      "session_type": "Easy Recovery Run + Evening Squash",
+      "session_kind": "run",
+      "duration_min": 45,
+      "run": {
+        "pace": "5:35-6:00/km",
+        "hr_target": "<150",
+        "distance": "~7.5-8 km",
+        "effort": "Truly easy, conversational."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
+      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-02",
+      "day_label": "Wednesday",
+      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Barbell Bench Press",
+          "sets_reps": "3x6-8",
+          "weight": "62.5kg"
+        },
+        {
+          "name": "Overhead Press (Barbell)",
+          "sets_reps": "3x6-8",
+          "weight": "35kg"
+        },
+        {
+          "name": "Romanian Deadlift (lighter)",
+          "sets_reps": "3x10-12",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pull-ups",
+          "sets_reps": "3x6-8",
+          "weight": "BW+5kg"
+        },
+        {
+          "name": "Side Plank",
+          "sets_reps": "3x30-45s/side",
+          "weight": "BW"
+        }
+      ],
+      "details": "",
+      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
+      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-03",
+      "day_label": "Thursday",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
+      "session_kind": "run",
+      "duration_min": 60,
+      "run": {
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
+        "hr_target": "See pace details.",
+        "distance": "~10-11 km",
+        "effort": "Controlled quality, focus on hitting MP segments precisely."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-04",
+      "day_label": "Friday",
+      "session_type": "Full Body Strength - Hinge Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x6-8",
+          "weight": "81kg"
+        },
+        {
+          "name": "Front Squat",
+          "sets_reps": "3x8-10",
+          "weight": "70kg"
+        },
+        {
+          "name": "Dumbbell Bench Press",
+          "sets_reps": "3x8-10",
+          "weight": "25kg/hand"
+        },
+        {
+          "name": "Seated Cable Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Woodchoppers (cable)",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
+      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
+      "extras": "",
+      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-05",
+      "day_label": "Saturday",
+      "session_type": "Rest Day & Active Recovery",
+      "session_kind": "rest",
+      "duration_min": 40,
+      "run": null,
+      "exercises": [],
+      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
+      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
+      "warm_up": "",
+      "extras": "",
+      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-06",
+      "day_label": "Sunday",
+      "session_type": "Long Run - Aerobic Base",
+      "session_kind": "run",
+      "duration_min": 90,
+      "run": {
+        "pace": "5:25-5:45/km",
+        "hr_target": "150-160",
+        "distance": "~15-16 km",
+        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-07",
+      "day_label": "Monday",
+      "session_type": "Full Body Strength - Squat Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Back Squat",
+          "sets_reps": "3x6-8",
+          "weight": "90kg"
+        },
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x8-10",
+          "weight": "81kg"
+        },
+        {
+          "name": "Incline Dumbbell Press",
+          "sets_reps": "3x8-10",
+          "weight": "20kg/hand"
+        },
+        {
+          "name": "Bent-Over Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pallof Press",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
+      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-08",
+      "day_label": "Tuesday",
+      "session_type": "Easy Recovery Run + Evening Squash",
+      "session_kind": "run",
+      "duration_min": 45,
+      "run": {
+        "pace": "5:35-6:00/km",
+        "hr_target": "<150",
+        "distance": "~7.5-8 km",
+        "effort": "Truly easy, conversational."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
+      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-09",
+      "day_label": "Wednesday",
+      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Barbell Bench Press",
+          "sets_reps": "3x6-8",
+          "weight": "62.5kg"
+        },
+        {
+          "name": "Overhead Press (Barbell)",
+          "sets_reps": "3x6-8",
+          "weight": "35kg"
+        },
+        {
+          "name": "Romanian Deadlift (lighter)",
+          "sets_reps": "3x10-12",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pull-ups",
+          "sets_reps": "3x6-8",
+          "weight": "BW+5kg"
+        },
+        {
+          "name": "Side Plank",
+          "sets_reps": "3x30-45s/side",
+          "weight": "BW"
+        }
+      ],
+      "details": "",
+      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
+      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-10",
+      "day_label": "Thursday",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
+      "session_kind": "run",
+      "duration_min": 60,
+      "run": {
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
+        "hr_target": "See pace details.",
+        "distance": "~10-11 km",
+        "effort": "Controlled quality, focus on hitting MP segments precisely."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-11",
+      "day_label": "Friday",
+      "session_type": "Full Body Strength - Hinge Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x6-8",
+          "weight": "81kg"
+        },
+        {
+          "name": "Front Squat",
+          "sets_reps": "3x8-10",
+          "weight": "70kg"
+        },
+        {
+          "name": "Dumbbell Bench Press",
+          "sets_reps": "3x8-10",
+          "weight": "25kg/hand"
+        },
+        {
+          "name": "Seated Cable Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Woodchoppers (cable)",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
+      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
+      "extras": "",
+      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-12",
+      "day_label": "Saturday",
+      "session_type": "Rest Day & Active Recovery",
+      "session_kind": "rest",
+      "duration_min": 40,
+      "run": null,
+      "exercises": [],
+      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
+      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
+      "warm_up": "",
+      "extras": "",
+      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-13",
+      "day_label": "Sunday",
+      "session_type": "Long Run - Aerobic Base",
+      "session_kind": "run",
+      "duration_min": 90,
+      "run": {
+        "pace": "5:25-5:45/km",
+        "hr_target": "150-160",
+        "distance": "~15-16 km",
+        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-14",
+      "day_label": "Monday",
+      "session_type": "Full Body Strength - Squat Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Back Squat",
+          "sets_reps": "3x6-8",
+          "weight": "90kg"
+        },
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x8-10",
+          "weight": "81kg"
+        },
+        {
+          "name": "Incline Dumbbell Press",
+          "sets_reps": "3x8-10",
+          "weight": "20kg/hand"
+        },
+        {
+          "name": "Bent-Over Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pallof Press",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
+      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-15",
+      "day_label": "Tuesday",
+      "session_type": "Easy Recovery Run + Evening Squash",
+      "session_kind": "run",
+      "duration_min": 45,
+      "run": {
+        "pace": "5:35-6:00/km",
+        "hr_target": "<150",
+        "distance": "~7.5-8 km",
+        "effort": "Truly easy, conversational."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
+      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-16",
+      "day_label": "Wednesday",
+      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Barbell Bench Press",
+          "sets_reps": "3x6-8",
+          "weight": "62.5kg"
+        },
+        {
+          "name": "Overhead Press (Barbell)",
+          "sets_reps": "3x6-8",
+          "weight": "35kg"
+        },
+        {
+          "name": "Romanian Deadlift (lighter)",
+          "sets_reps": "3x10-12",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pull-ups",
+          "sets_reps": "3x6-8",
+          "weight": "BW+5kg"
+        },
+        {
+          "name": "Side Plank",
+          "sets_reps": "3x30-45s/side",
+          "weight": "BW"
+        }
+      ],
+      "details": "",
+      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
+      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-17",
+      "day_label": "Thursday",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
+      "session_kind": "run",
+      "duration_min": 60,
+      "run": {
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
+        "hr_target": "See pace details.",
+        "distance": "~10-11 km",
+        "effort": "Controlled quality, focus on hitting MP segments precisely."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-18",
+      "day_label": "Friday",
+      "session_type": "Full Body Strength - Hinge Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x6-8",
+          "weight": "81kg"
+        },
+        {
+          "name": "Front Squat",
+          "sets_reps": "3x8-10",
+          "weight": "70kg"
+        },
+        {
+          "name": "Dumbbell Bench Press",
+          "sets_reps": "3x8-10",
+          "weight": "25kg/hand"
+        },
+        {
+          "name": "Seated Cable Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Woodchoppers (cable)",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
+      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
+      "extras": "",
+      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-19",
+      "day_label": "Saturday",
+      "session_type": "Rest Day & Active Recovery",
+      "session_kind": "rest",
+      "duration_min": 40,
+      "run": null,
+      "exercises": [],
+      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
+      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
+      "warm_up": "",
+      "extras": "",
+      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-20",
+      "day_label": "Sunday",
+      "session_type": "Long Run - Aerobic Base",
+      "session_kind": "run",
+      "duration_min": 90,
+      "run": {
+        "pace": "5:25-5:45/km",
+        "hr_target": "150-160",
+        "distance": "~15-16 km",
+        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-21",
+      "day_label": "Monday",
+      "session_type": "Full Body Strength - Squat Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Back Squat",
+          "sets_reps": "3x6-8",
+          "weight": "90kg"
+        },
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x8-10",
+          "weight": "81kg"
+        },
+        {
+          "name": "Incline Dumbbell Press",
+          "sets_reps": "3x8-10",
+          "weight": "20kg/hand"
+        },
+        {
+          "name": "Bent-Over Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pallof Press",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
+      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-22",
+      "day_label": "Tuesday",
+      "session_type": "Easy Recovery Run + Evening Squash",
+      "session_kind": "run",
+      "duration_min": 45,
+      "run": {
+        "pace": "5:35-6:00/km",
+        "hr_target": "<150",
+        "distance": "~7.5-8 km",
+        "effort": "Truly easy, conversational."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
+      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-23",
+      "day_label": "Wednesday",
+      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Barbell Bench Press",
+          "sets_reps": "3x6-8",
+          "weight": "62.5kg"
+        },
+        {
+          "name": "Overhead Press (Barbell)",
+          "sets_reps": "3x6-8",
+          "weight": "35kg"
+        },
+        {
+          "name": "Romanian Deadlift (lighter)",
+          "sets_reps": "3x10-12",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pull-ups",
+          "sets_reps": "3x6-8",
+          "weight": "BW+5kg"
+        },
+        {
+          "name": "Side Plank",
+          "sets_reps": "3x30-45s/side",
+          "weight": "BW"
+        }
+      ],
+      "details": "",
+      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
+      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-24",
+      "day_label": "Thursday",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
+      "session_kind": "run",
+      "duration_min": 60,
+      "run": {
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
+        "hr_target": "See pace details.",
+        "distance": "~10-11 km",
+        "effort": "Controlled quality, focus on hitting MP segments precisely."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-25",
+      "day_label": "Friday",
+      "session_type": "Full Body Strength - Hinge Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x6-8",
+          "weight": "81kg"
+        },
+        {
+          "name": "Front Squat",
+          "sets_reps": "3x8-10",
+          "weight": "70kg"
+        },
+        {
+          "name": "Dumbbell Bench Press",
+          "sets_reps": "3x8-10",
+          "weight": "25kg/hand"
+        },
+        {
+          "name": "Seated Cable Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Woodchoppers (cable)",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
+      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
+      "extras": "",
+      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-26",
+      "day_label": "Saturday",
+      "session_type": "Rest Day & Active Recovery",
+      "session_kind": "rest",
+      "duration_min": 40,
+      "run": null,
+      "exercises": [],
+      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
+      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
+      "warm_up": "",
+      "extras": "",
+      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-27",
+      "day_label": "Sunday",
+      "session_type": "Long Run - Aerobic Base",
+      "session_kind": "run",
+      "duration_min": 90,
+      "run": {
+        "pace": "5:25-5:45/km",
+        "hr_target": "150-160",
+        "distance": "~15-16 km",
+        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-28",
+      "day_label": "Monday",
+      "session_type": "Full Body Strength - Squat Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Back Squat",
+          "sets_reps": "3x6-8",
+          "weight": "90kg"
+        },
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x8-10",
+          "weight": "81kg"
+        },
+        {
+          "name": "Incline Dumbbell Press",
+          "sets_reps": "3x8-10",
+          "weight": "20kg/hand"
+        },
+        {
+          "name": "Bent-Over Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pallof Press",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
+      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-29",
+      "day_label": "Tuesday",
+      "session_type": "Easy Recovery Run + Evening Squash",
+      "session_kind": "run",
+      "duration_min": 45,
+      "run": {
+        "pace": "5:35-6:00/km",
+        "hr_target": "<150",
+        "distance": "~7.5-8 km",
+        "effort": "Truly easy, conversational."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
+      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-09-30",
+      "day_label": "Wednesday",
+      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Barbell Bench Press",
+          "sets_reps": "3x6-8",
+          "weight": "62.5kg"
+        },
+        {
+          "name": "Overhead Press (Barbell)",
+          "sets_reps": "3x6-8",
+          "weight": "35kg"
+        },
+        {
+          "name": "Romanian Deadlift (lighter)",
+          "sets_reps": "3x10-12",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pull-ups",
+          "sets_reps": "3x6-8",
+          "weight": "BW+5kg"
+        },
+        {
+          "name": "Side Plank",
+          "sets_reps": "3x30-45s/side",
+          "weight": "BW"
+        }
+      ],
+      "details": "",
+      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
+      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-10-01",
+      "day_label": "Thursday",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
+      "session_kind": "run",
+      "duration_min": 60,
+      "run": {
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
+        "hr_target": "See pace details.",
+        "distance": "~10-11 km",
+        "effort": "Controlled quality, focus on hitting MP segments precisely."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-10-02",
+      "day_label": "Friday",
+      "session_type": "Full Body Strength - Hinge Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x6-8",
+          "weight": "81kg"
+        },
+        {
+          "name": "Front Squat",
+          "sets_reps": "3x8-10",
+          "weight": "70kg"
+        },
+        {
+          "name": "Dumbbell Bench Press",
+          "sets_reps": "3x8-10",
+          "weight": "25kg/hand"
+        },
+        {
+          "name": "Seated Cable Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Woodchoppers (cable)",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
+      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
+      "extras": "",
+      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-10-03",
+      "day_label": "Saturday",
+      "session_type": "Rest Day & Active Recovery",
+      "session_kind": "rest",
+      "duration_min": 40,
+      "run": null,
+      "exercises": [],
+      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
+      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
+      "warm_up": "",
+      "extras": "",
+      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-10-04",
+      "day_label": "Sunday",
+      "session_type": "Long Run - Aerobic Base",
+      "session_kind": "run",
+      "duration_min": 90,
+      "run": {
+        "pace": "5:25-5:45/km",
+        "hr_target": "150-160",
+        "distance": "~15-16 km",
+        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-10-05",
+      "day_label": "Monday",
+      "session_type": "Full Body Strength - Squat Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Back Squat",
+          "sets_reps": "3x6-8",
+          "weight": "90kg"
+        },
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x8-10",
+          "weight": "81kg"
+        },
+        {
+          "name": "Incline Dumbbell Press",
+          "sets_reps": "3x8-10",
+          "weight": "20kg/hand"
+        },
+        {
+          "name": "Bent-Over Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pallof Press",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Build lower body strength and support running economy with squat and hinge patterns.",
+      "warm_up": "5 min dynamic: leg swings, hip circles, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Back Squat 1x6-8, RDL 1x8-10, Incline DB Press 1x8-10, Bent-Over Row 1x8-10. Skip Pallof Press.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-10-06",
+      "day_label": "Tuesday",
+      "session_type": "Easy Recovery Run + Evening Squash",
+      "session_kind": "run",
+      "duration_min": 45,
+      "run": {
+        "pace": "5:35-6:00/km",
+        "hr_target": "<150",
+        "distance": "~7.5-8 km",
+        "effort": "Truly easy, conversational."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Active recovery and maintain aerobic base without adding fatigue before squash.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "Pre-squash (5 min): 10 thoracic rotations/side, lateral band walks x15/side. Post-squash (10 min): thoracic foam roll, standing adductor stretch.",
+      "short_version": "Drop run to 20-30 min walk or skip. Prioritise squash.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-10-07",
+      "day_label": "Wednesday",
+      "session_type": "Full Body Strength - Push Focus (Bench Priority)",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Barbell Bench Press",
+          "sets_reps": "3x6-8",
+          "weight": "62.5kg"
+        },
+        {
+          "name": "Overhead Press (Barbell)",
+          "sets_reps": "3x6-8",
+          "weight": "35kg"
+        },
+        {
+          "name": "Romanian Deadlift (lighter)",
+          "sets_reps": "3x10-12",
+          "weight": "60kg"
+        },
+        {
+          "name": "Pull-ups",
+          "sets_reps": "3x6-8",
+          "weight": "BW+5kg"
+        },
+        {
+          "name": "Side Plank",
+          "sets_reps": "3x30-45s/side",
+          "weight": "BW"
+        }
+      ],
+      "details": "",
+      "purpose": "Maintain upper body strength with a focus on bench press, support overall athleticism.",
+      "warm_up": "5 min dynamic: arm circles, band pull-aparts, cat-cow, bird-dog.",
+      "extras": "",
+      "short_version": "Bench Press 1x6-8, OHP 1x6-8, RDL 1x10-12, Pull-ups 1x6-8. Skip Side Plank.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-10-08",
+      "day_label": "Thursday",
+      "session_type": "Quality Run - Easy with Optional Tempo Segment",
+      "session_kind": "run",
+      "duration_min": 60,
+      "run": {
+        "pace": "10 min Easy (5:35-6:00/km, HR <150), then 40 min General Aerobic (5:25-5:45/km, HR 150-160). Optional 3-4 x 5 min at controlled tempo effort (comfortably hard, by feel) embedded, 10 min Easy cool-down.",
+        "hr_target": "See pace details.",
+        "distance": "~10-11 km",
+        "effort": "Controlled quality, focus on hitting MP segments precisely."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build specific endurance and efficiency with controlled tempo work, judged by effort rather than a target race pace.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
       "source": "template",
       "status": "upcoming",
       "completed": {
