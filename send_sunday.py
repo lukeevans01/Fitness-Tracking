@@ -25,6 +25,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import coach_orchestrator
+import notify_telegram
 import nutrition_logger
 import progression
 import store
@@ -644,6 +645,10 @@ def main():
     # Persist A/B/C options for reply detection this week
     _save_pending_choice(summary, week_label, week_start, profile.id)
     print("[ok] Pending choice saved to the store.")
+
+    # Mirror to Telegram if configured. Replies are still handled over email, so the
+    # A/B/C choice must be answered there; this is a notification copy only.
+    notify_telegram.notify(subject, text)
 
 
 if __name__ == "__main__":
