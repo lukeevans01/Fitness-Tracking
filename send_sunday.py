@@ -27,6 +27,7 @@ from zoneinfo import ZoneInfo
 import coach_orchestrator
 import notify_telegram
 import nutrition_logger
+import plan_writer
 import progression
 import store
 import training_summary as ts
@@ -94,6 +95,37 @@ def _recent_weekly_km(today: date, weeks: int = progression.ANCHOR_WEEKS) -> lis
             if a.kind == "run" and start <= a.date < end
         ), 1))
     return totals
+
+
+def _auto_apply_recommended(summary: dict, week_start: date, today: date, profile) -> str:
+    """Write the recommended option's week into the plan, and say what happened.
+
+    The review is unattended, so the recommendation becomes the default rather than waiting
+    for a reply that may never come. An A/B/C reply later in the week still overwrites this,
+    so nothing is lost by applying early. Guardrail rejections leave the template in place.
+    """
+    letter = (summary.get("recommendation") or "").upper()
+    option = summary.get(f"option_{letter.lower()}") if letter in ("A", "B", "C") else None
+    if not option:
+        return "No valid recommendation to apply, so the standard cycle stands."
+
+    written, _, message = plan_writer.apply_week(
+        profile.id,
+        option.get("plan"),
+        week_start,
+        today=today,
+        source="weekly_review_auto",
+        last_week_km=plan_writer.last_week_running_km(week_start, ts.STRAVA_CSV),
+        race_date=profile.race_date,
+    )
+    print(f"[auto-apply] option {letter}: {message}")
+
+    if not written:
+        return f"Option {letter} was not applied. {message}"
+    return (
+        f"Option {letter} ({option.get('label', '')}) has been applied to your plan "
+        f"automatically. {message} Reply A, B or C at any point this week to switch."
+    )
 
 
 def _compute_standard_week(today: date, plan: dict, race_date: date | None = None,
@@ -663,6 +695,14 @@ def main():
         )
     except Exception as exc:
         sys.exit(f"Weekly summary generation failed: {exc}")
+
+    # Apply the coach's recommendation straight away. The review runs unattended, so waiting
+    # for an A/B/C reply meant a week of calibration was silently discarded whenever Luke did
+    # not answer. Replying still switches to another option; this only sets the default.
+    applied_note = _auto_apply_recommended(summary, week_start, today, profile)
+    summary["coach_note"] = (
+        f"{summary.get('coach_note', '').strip()}\n\n{applied_note}".strip()
+    )
 
     exercise_html = html_weekly_exercise(breakdown, week_dates)
     exercise_text = text_weekly_exercise(breakdown, week_dates)

@@ -62,22 +62,25 @@ class WeeklyLoopTests(unittest.TestCase):
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
         os.environ["FITNESS_DB_PATH"] = str(Path(self._tmp.name) / "app.db")
-        for mod in ("store", "process_replies"):
+        for mod in ("store", "plan_writer", "process_replies"):
             sys.modules.pop(mod, None)
         import store
+        import plan_writer
         import process_replies
         self.store = store
+        self.pw = plan_writer
         self.pr = process_replies
         self.pid = process_replies._active_profile_id()
         # No Strava history in the temp env, so the week-on-week ceiling is skipped.
-        self._patch = mock.patch.object(process_replies, "_last_week_running_km", return_value=None)
+        # Patched on plan_writer, which now owns the shared validate-and-write step.
+        self._patch = mock.patch.object(plan_writer, "last_week_running_km", return_value=None)
         self._patch.start()
 
     def tearDown(self):
         self._patch.stop()
         os.environ.pop("FITNESS_DB_PATH", None)
         self._tmp.cleanup()
-        for mod in ("store", "process_replies"):
+        for mod in ("store", "plan_writer", "process_replies"):
             sys.modules.pop(mod, None)
 
     def _overrides(self):
@@ -99,7 +102,8 @@ class WeeklyLoopTests(unittest.TestCase):
         self.pr._apply_week_choice("B", {}, TODAY)
 
         record = self._overrides()[WEEK_START.isoformat()]
-        self.assertEqual(record["edit_source"], "weekly_review")
+        # Distinct per path: reply vs cli vs the Sunday auto-apply.
+        self.assertEqual(record["edit_source"], "weekly_review_reply")
         self.assertIn("applied_at", record)
         session = record["session"]
         self.assertEqual(session["session_kind"], "run")
@@ -126,7 +130,7 @@ class WeeklyLoopTests(unittest.TestCase):
         self.assertEqual(self._overrides(), {})
 
     def test_clamped_week_is_written_and_reported(self):
-        with mock.patch.object(self.pr, "_last_week_running_km", return_value=20.0):
+        with mock.patch.object(self.pw, "last_week_running_km", return_value=20.0):
             self.store.set_pending_choice(self.pid, _pending(_plan((20, 20, 20, 20, 20, None, None))))
             result = self.pr._apply_week_choice("B", {}, TODAY)
 
@@ -179,3 +183,90 @@ class WeeklyLoopTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AutoApplyTests(unittest.TestCase):
+    """The Sunday review applies its own recommendation, unattended."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        os.environ["FITNESS_DB_PATH"] = str(Path(self._tmp.name) / "app.db")
+        for mod in ("store", "plan_writer", "send_sunday"):
+            sys.modules.pop(mod, None)
+        import store
+        import plan_writer
+        import send_sunday
+        self.store = store
+        self.pw = plan_writer
+        self.ss = send_sunday
+        self.profile = send_sunday.default_profile()
+        self._patch = mock.patch.object(plan_writer, "last_week_running_km", return_value=None)
+        self._patch.start()
+
+    def tearDown(self):
+        self._patch.stop()
+        os.environ.pop("FITNESS_DB_PATH", None)
+        self._tmp.cleanup()
+        for mod in ("store", "plan_writer", "send_sunday"):
+            sys.modules.pop(mod, None)
+
+    def _summary(self, recommendation="B", plan=None):
+        def option(label):
+            opt = {"label": label, "sessions": "Mon: ...", "rationale": "Because."}
+            return opt
+        summary = {
+            "option_a": option("Continue"),
+            "option_b": option("Lighter"),
+            "option_c": option("Recovery"),
+            "recommendation": recommendation,
+        }
+        if plan is not None:
+            summary[f"option_{recommendation.lower()}"]["plan"] = plan
+        return summary
+
+    def test_recommended_option_is_written_without_a_reply(self):
+        note = self.ss._auto_apply_recommended(
+            self._summary("B", _plan()), WEEK_START, TODAY, self.profile)
+        overrides = self.store.get_overrides(self.profile.id)
+        self.assertEqual(len(overrides), 7)
+        self.assertEqual(overrides[WEEK_START.isoformat()]["edit_source"], "weekly_review_auto")
+        self.assertIn("has been applied", note)
+        self.assertIn("Reply A, B or C", note)
+
+    def test_unsafe_recommendation_is_not_written(self):
+        unsafe = _plan((2, 2, 2, 30, None, None, None))
+        note = self.ss._auto_apply_recommended(
+            self._summary("B", unsafe), WEEK_START, TODAY, self.profile)
+        self.assertEqual(self.store.get_overrides(self.profile.id), {})
+        self.assertIn("not applied", note)
+
+    def test_recommendation_without_a_plan_leaves_the_template(self):
+        note = self.ss._auto_apply_recommended(
+            self._summary("B", None), WEEK_START, TODAY, self.profile)
+        self.assertEqual(self.store.get_overrides(self.profile.id), {})
+        self.assertIn("standard cycle stands", note)
+
+    def test_garbage_recommendation_is_handled(self):
+        for bad in ("D", "", None):
+            note = self.ss._auto_apply_recommended(
+                {"recommendation": bad}, WEEK_START, TODAY, self.profile)
+            self.assertIn("No valid recommendation", note)
+        self.assertEqual(self.store.get_overrides(self.profile.id), {})
+
+    def test_a_later_reply_overwrites_the_auto_applied_week(self):
+        """Auto-apply sets the default; replying must still switch options."""
+        self.ss._auto_apply_recommended(self._summary("B", _plan()), WEEK_START, TODAY, self.profile)
+        first = self.store.get_overrides(self.profile.id)[WEEK_START.isoformat()]
+        self.assertEqual(first["session"]["session_type"], "Easy Run")
+
+        swapped = _plan()
+        for day in swapped:
+            if day["session_kind"] == "run":
+                day["session_type"] = "Tempo Run"
+        _, _, _ = self.pw.apply_week(
+            self.profile.id, swapped, WEEK_START,
+            today=TODAY, source="weekly_review_reply", race_date=self.profile.race_date,
+        )
+        after = self.store.get_overrides(self.profile.id)[WEEK_START.isoformat()]
+        self.assertEqual(after["session"]["session_type"], "Tempo Run")
+        self.assertEqual(after["edit_source"], "weekly_review_reply")
