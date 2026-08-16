@@ -71,7 +71,11 @@ class VolumePlan:
 
     @classmethod
     def from_profile(cls, profile) -> "VolumePlan":
-        """Build from a Profile, falling back to the module defaults per field."""
+        """Build from a Profile, falling back to the module defaults per field.
+
+        The profile holds the *initial* anchor. Once the weekly review has recalibrated
+        it, prefer from_store, which reads the live value.
+        """
         anchor_week = getattr(profile, "weekly_volume_anchor_week", None)
         anchor_km = getattr(profile, "weekly_volume_anchor_km", None)
         peak_km = getattr(profile, "peak_weekly_km", None)
@@ -80,6 +84,40 @@ class VolumePlan:
             anchor_week=anchor_week or DEFAULT_VOLUME_PLAN.anchor_week,
             peak_km=float(peak_km) if peak_km else DEFAULT_VOLUME_PLAN.peak_km,
         )
+
+    def merged_with_store(self, adaptation: "dict | None") -> "VolumePlan":
+        """Overlay the store's recalibrated anchor on this plan, field by field.
+
+        This is what makes the anchor stop being a hand-edited constant: the weekly review
+        writes the measured value back, and every reader picks it up from here. Anything the
+        store does not carry keeps this plan's value.
+        """
+        adaptation = adaptation or {}
+        km = adaptation.get("volume_anchor_km")
+        week = adaptation.get("volume_anchor_week")
+        peak = adaptation.get("peak_weekly_km")
+        try:
+            anchor_week = date.fromisoformat(week) if week else self.anchor_week
+        except (TypeError, ValueError):
+            anchor_week = self.anchor_week
+        return VolumePlan(
+            anchor_km=float(km) if km else self.anchor_km,
+            anchor_week=anchor_week,
+            peak_km=float(peak) if peak else self.peak_km,
+        )
+
+    @classmethod
+    def from_store(cls, profile, adaptation: "dict | None") -> "VolumePlan":
+        """Convenience for callers holding a Profile: profile defaults, store overlaid."""
+        return cls.from_profile(profile).merged_with_store(adaptation)
+
+    def as_store_fields(self) -> dict:
+        """The shape store.set_adaptation expects."""
+        return {
+            "volume_anchor_km": round(self.anchor_km, 1),
+            "volume_anchor_week": self.anchor_week.isoformat(),
+            "peak_weekly_km": round(self.peak_km, 1),
+        }
 
 
 # Fallback when a profile carries no volume anchor. Mirrors Luke's Aug 2026 restart.
@@ -92,6 +130,52 @@ DEFAULT_VOLUME_PLAN = VolumePlan(
 
 def _monday_of(day: date) -> date:
     return day - timedelta(days=day.weekday())
+
+
+# Anchor recalibration. The anchor tracks measured reality so it never needs hand-editing,
+# but it moves in bounded steps. An average over several weeks rather than the last week
+# alone, floored so one missed week cannot collapse the plan, and capped so one big week
+# cannot spike it. Without those bounds an adaptive anchor either death-spirals after a bad
+# week or runs away after a good one.
+ANCHOR_WEEKS = 3
+ANCHOR_MAX_RISE = 1.15
+ANCHOR_MAX_FALL = 0.85
+
+
+def recalibrate_anchor(
+    previous: VolumePlan, weekly_actuals: "list[float]", next_week: date
+) -> "tuple[VolumePlan, str]":
+    """Move the volume anchor toward what was actually run. Returns (plan, explanation).
+
+    weekly_actuals  measured running km per week, oldest first. Only the most recent
+                    ANCHOR_WEEKS are used. Zero weeks count: not running is real data.
+    next_week       Monday the new anchor should apply from.
+
+    The previous anchor is kept unchanged when there is no data to move it with.
+    """
+    recent = [float(km) for km in (weekly_actuals or [])][-ANCHOR_WEEKS:]
+    if not recent:
+        return (
+            VolumePlan(previous.anchor_km, next_week, previous.peak_km),
+            f"No recent running data, so the anchor stays at {previous.anchor_km:.0f} km.",
+        )
+
+    measured = sum(recent) / len(recent)
+    floor = previous.anchor_km * ANCHOR_MAX_FALL
+    ceiling = previous.anchor_km * ANCHOR_MAX_RISE
+    anchor = min(ceiling, max(floor, measured))
+
+    plan = VolumePlan(round(anchor, 1), next_week, previous.peak_km)
+
+    detail = (
+        f"{len(recent)}-week average was {measured:.0f} km against an anchor of "
+        f"{previous.anchor_km:.0f} km"
+    )
+    if anchor >= ceiling - 0.05 and measured > ceiling:
+        return plan, f"{detail}; anchor raised to {anchor:.0f} km (capped rise)."
+    if anchor <= floor + 0.05 and measured < floor:
+        return plan, f"{detail}; anchor eased to {anchor:.0f} km (limited fall)."
+    return plan, f"{detail}; anchor now {anchor:.0f} km."
 
 
 def weeks_to_race(today: date, race_date: date) -> int:
