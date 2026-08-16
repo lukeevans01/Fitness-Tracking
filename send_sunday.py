@@ -728,7 +728,14 @@ def main():
 
     # Mirror to Telegram if configured. Replies are still handled over email, so the
     # A/B/C choice must be answered there; this is a notification copy only.
-    notify_telegram.notify(subject, text)
+    # A/B/C as taps rather than a typed reply: the email path saw 11 replies in the
+    # system's lifetime, so friction was the limiter, not the options.
+    rec = (summary.get("recommendation") or "").upper()
+    buttons = notify_telegram.inline_keyboard([[
+        (f"{letter}{' (rec)' if letter == rec else ''}", f"wk:{letter}")
+        for letter in ("A", "B", "C")
+    ]])
+    notify_telegram.notify(subject, text, reply_markup=buttons)
 
 
 if __name__ == "__main__":

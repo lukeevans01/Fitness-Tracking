@@ -396,7 +396,14 @@ def main():
 
     # Mirror to Telegram if configured. Best-effort: the email is the source of truth and
     # the day is already marked, so a Telegram failure must not fail the run.
-    notify_telegram.notify(subject, text)
+    # Buttons log how the session went and act on it: "skipped" and "too hard" both send
+    # the coach to revise tomorrow, while "done" needs no repair and changes nothing.
+    buttons = notify_telegram.inline_keyboard([[
+        ("Done", f"fb:{target_date.isoformat()}:done"),
+        ("Skipped", f"fb:{target_date.isoformat()}:skip"),
+        ("Too hard", f"fb:{target_date.isoformat()}:hard"),
+    ]])
+    notify_telegram.notify(subject, text, reply_markup=buttons)
 
 
 if __name__ == "__main__":

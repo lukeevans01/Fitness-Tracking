@@ -1,0 +1,49 @@
+name: Telegram inbound
+
+# Fired by the webhook at /api/telegram via repository_dispatch. Runs the handler, then
+# commits any store change so the plan edit reaches the daily email and the dashboard.
+#
+# Concurrency is serialised: two updates arriving together would otherwise race on
+# data/app.db and one commit would lose the other's write.
+on:
+  repository_dispatch:
+    types: [telegram-message]
+
+concurrency:
+  group: telegram-inbound
+  cancel-in-progress: false
+
+jobs:
+  handle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write # to persist store changes
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Handle the update
+        env:
+          # Untrusted input: telegram_router re-checks the chat id before acting.
+          TELEGRAM_UPDATE: ${{ toJSON(github.event.client_payload.update) }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python3 handle_telegram.py
+
+      - name: Persist store changes if any
+        run: |
+          git config user.name "fitness-bot"
+          git config user.email "bot@noreply"
+          git add data/app.db nutrition_log 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "telegram: store updated ($(date -u +%FT%TZ))"
+          git pull --rebase --autostash || true
+          git push

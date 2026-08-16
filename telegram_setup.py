@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
-"""One-off helper to find your Telegram chat id and prove the bot can message you.
+"""One-off helper for Telegram setup: find the chat id, and register the webhook.
 
 Run it, paste your bot token when prompted (it is not echoed, and never stored or
 printed), and it will tell you exactly what to do next.
 
-    python3 telegram_setup.py
+    python3 telegram_setup.py                 # find the chat id, send a test message
+    python3 telegram_setup.py --set-webhook   # also point Telegram at the live endpoint
+    python3 telegram_setup.py --show-webhook  # what is currently registered
+    python3 telegram_setup.py --delete-webhook
+
+Building the setWebhook URL by hand is easy to get wrong: leaving the angle brackets in
+gives a 404 from Telegram that looks like a broken endpoint rather than a bad token, so
+this does the substitution for you.
 
 The token is read from the TELEGRAM_BOT_TOKEN env var if set, otherwise prompted for.
 Nothing is written to disk and the token never appears in output or shell history.
@@ -12,6 +19,7 @@ Nothing is written to disk and the token never appears in output or shell histor
 
 from __future__ import annotations
 
+import argparse
 import getpass
 import json
 import os
@@ -19,6 +27,7 @@ import subprocess
 import sys
 
 API_BASE = "https://api.telegram.org"
+WEBHOOK_URL = "https://evansgale.com/api/telegram"
 
 
 def _curl_json(url: str, payload: "dict | None" = None) -> "tuple[int, dict]":
@@ -62,7 +71,74 @@ def _explain_failure(status: int, body: dict) -> None:
         print("\n  -> Unexpected error. Check the token and your network, then retry.")
 
 
+def _webhook_secret() -> str:
+    secret = os.environ.get("TELEGRAM_WEBHOOK_SECRET") or ""
+    if secret:
+        return secret
+    print("\nPaste the same secret you set as TELEGRAM_WEBHOOK_SECRET on Cloudflare Pages.")
+    print("It is not shown as you type.")
+    try:
+        return getpass.getpass("Webhook secret: ").strip()
+    except (EOFError, KeyboardInterrupt):
+        return ""
+
+
+def _show_webhook(token: str) -> int:
+    status, body = _curl_json(f"{API_BASE}/bot{token}/getWebhookInfo")
+    if not body.get("ok"):
+        _explain_failure(status, body)
+        return 1
+    info = body.get("result", {})
+    url = info.get("url") or "(none)"
+    print(f"\n  registered url        : {url}")
+    print(f"  pending updates       : {info.get('pending_update_count', 0)}")
+    print(f"  custom secret in use  : {bool(info.get('has_custom_certificate') or url)}")
+    if info.get("last_error_message"):
+        print(f"  last error            : {info['last_error_date']} {info['last_error_message']}")
+        print("  -> Telegram could not deliver. Check the endpoint is deployed and returns 200.")
+    return 0
+
+
+def _set_webhook(token: str) -> int:
+    secret = _webhook_secret()
+    if not secret:
+        print("No secret given; not registering.")
+        return 1
+    print(f"\nPointing Telegram at {WEBHOOK_URL} ...")
+    status, body = _curl_json(f"{API_BASE}/bot{token}/setWebhook", {
+        "url": WEBHOOK_URL,
+        "secret_token": secret,
+        "allowed_updates": ["message", "edited_message", "callback_query"],
+    })
+    if not body.get("ok"):
+        _explain_failure(status, body)
+        return 1
+    print("      Registered.")
+    print("\n  If taps do nothing, the usual causes are:")
+    print("    - the endpoint is not deployed yet (merge and deploy first)")
+    print("    - the secret here does not match TELEGRAM_WEBHOOK_SECRET on Pages")
+    return _show_webhook(token)
+
+
+def _delete_webhook(token: str) -> int:
+    status, body = _curl_json(f"{API_BASE}/bot{token}/deleteWebhook")
+    if not body.get("ok"):
+        _explain_failure(status, body)
+        return 1
+    print("Webhook removed. getUpdates polling works again.")
+    return 0
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Telegram setup helper.")
+    parser.add_argument("--set-webhook", action="store_true",
+                        help="register the live endpoint with Telegram")
+    parser.add_argument("--show-webhook", action="store_true",
+                        help="show what is currently registered")
+    parser.add_argument("--delete-webhook", action="store_true",
+                        help="unregister the webhook")
+    args = parser.parse_args()
+
     token = os.environ.get("TELEGRAM_BOT_TOKEN") or ""
     if not token:
         print("Paste your bot token from @BotFather (it will not be shown as you type).")
@@ -84,6 +160,13 @@ def main() -> int:
     bot = body["result"]
     username = bot.get("username", "?")
     print(f"      Token is valid. Bot is @{username}.")
+
+    if args.show_webhook:
+        return _show_webhook(token)
+    if args.delete_webhook:
+        return _delete_webhook(token)
+    if args.set_webhook:
+        return _set_webhook(token)
 
     # 2. Look for messages sent to the bot.
     print("\n[2/3] Looking for messages you have sent to the bot...")
