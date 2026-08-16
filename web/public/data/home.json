@@ -9,7 +9,7 @@
     "running": {
       "kpis": [
         {
-          "value": "18 km",
+          "value": "22 km",
           "label": "per week"
         },
         {
@@ -21,7 +21,7 @@
           "label": "weeks to race"
         }
       ],
-      "narrative": "6 runs and 72 km over the last 4 weeks. Only 0% of your running is genuinely easy, so the priority is slowing easy days out of the moderate grey zone."
+      "narrative": "7 runs and 90 km over the last 4 weeks. Only 0% of your running is genuinely easy, so the priority is slowing easy days out of the moderate grey zone."
     },
     "lifting": {
       "kpis": [

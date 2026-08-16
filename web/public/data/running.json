@@ -4,20 +4,20 @@
     "weeks": 4,
     "window_start": "2026-07-20",
     "window_end": "2026-08-16",
-    "runs": 6,
-    "km": 72.4,
-    "avg_km_per_week": 18.1,
+    "runs": 7,
+    "km": 89.8,
+    "avg_km_per_week": 22.4,
     "longest_km": 21.4,
     "active_weeks": 4,
     "easy_pct": 0,
     "moderate_pct": 100,
     "quality_pct": 0,
-    "trend_pct": 43,
+    "trend_pct": 77,
     "weeks_to_race": 14,
     "narrative": [
       {
         "heading": "What you have been up to",
-        "text": "Over the last 4 weeks you logged 6 runs totalling 72 km, averaging 18 km per week across 4 of 4 weeks. That is up 43% on the previous 4 weeks. Your longest run was 21 km. By pace, your classified running split 0% easy, 100% moderate and 0% quality."
+        "text": "Over the last 4 weeks you logged 7 runs totalling 90 km, averaging 22 km per week across 4 of 4 weeks. That is up 77% on the previous 4 weeks. Your longest run was 21 km. By pace, your classified running split 0% easy, 100% moderate and 0% quality."
       },
       {
         "heading": "Where to push next",
@@ -147,10 +147,10 @@
     },
     {
       "month": "2026-08",
-      "ef": 1.144,
+      "ef": 1.147,
       "avg_pace": 5.51,
       "avg_hr": 159,
-      "runs": 5
+      "runs": 6
     }
   ],
   "weekly": [
@@ -2640,10 +2640,10 @@
     },
     {
       "week_start": "2026-08-10",
-      "km": 9.7,
-      "runs": 1,
+      "km": 27.0,
+      "runs": 2,
       "easy_km": 0.0,
-      "moderate_km": 9.7,
+      "moderate_km": 27.0,
       "quality_km": 0.0,
       "unzoned_km": 0.0
     }
@@ -4356,21 +4356,21 @@
     },
     {
       "year": 2026,
-      "km": 436.1,
-      "runs": 47
+      "km": 453.4,
+      "runs": 48
     }
   ],
   "summary": {
-    "total_runs": 520,
-    "total_km": 4548.0,
-    "runs_with_hr": 166,
+    "total_runs": 521,
+    "total_km": 4565.3,
+    "runs_with_hr": 167,
     "first_run": "2018-04-08",
-    "last_run": "2026-08-12"
+    "last_run": "2026-08-16"
   },
   "headline": {
     "kpis": [
       {
-        "value": "18 km",
+        "value": "22 km",
         "label": "per week"
       },
       {
@@ -4382,6 +4382,6 @@
         "label": "weeks to race"
       }
     ],
-    "narrative": "6 runs and 72 km over the last 4 weeks. Only 0% of your running is genuinely easy, so the priority is slowing easy days out of the moderate grey zone."
+    "narrative": "7 runs and 90 km over the last 4 weeks. Only 0% of your running is genuinely easy, so the priority is slowing easy days out of the moderate grey zone."
   }
 }

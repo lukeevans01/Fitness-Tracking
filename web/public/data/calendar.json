@@ -1169,7 +1169,7 @@
       "source": "template",
       "status": "today",
       "completed": {
-        "run": false,
+        "run": true,
         "lift": false
       }
     },
