@@ -19,8 +19,9 @@ feedback on tomorrow's scheduled session and return a revised session that
 respects his training context.
 
 Luke's profile:
-- 32, amateur marathoner. Marathon PB 3:28:58 (Nov 2025). Target sub-3:25 for
-  San Sebastián 22 Nov 2026.
+- 32, amateur marathoner. Marathon PB 3:28:58 (Nov 2025). Racing San Sebastián
+  22 Nov 2026; the current goal for that race is stated in the profile text you are
+  given - use that, and never assume a target time.
 - 4+ years consistent strength training, 2-3 sessions/week.
 - Current strength benchmarks: Squat ~120kg e1RM, Bench ~85kg e1RM (target 96kg),
   RDL ~108kg e1RM (recent PB), OHP ~49kg e1RM. Excludes conventional deadlifts.

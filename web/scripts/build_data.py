@@ -50,7 +50,7 @@ OUT_DIR = FITNESS_DIR / "web" / "public" / "data"
 # Marathon target, mirrored from the coach context so the dashboard narrative and the
 # email coach point at the same goal.
 MARATHON_DATE = date(2026, 11, 22)   # San Sebastian
-MARATHON_GOAL = "sub-3:25"
+MARATHON_GOAL = "no time goal set"  # fallback only; _race_info() reads the profile
 
 # Easy-running share we want for marathon base building (the 80/20 idea).
 EASY_TARGET_PCT = 70

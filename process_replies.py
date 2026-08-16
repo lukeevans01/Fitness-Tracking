@@ -27,6 +27,7 @@ import coach_orchestrator
 import intent_classifier
 import nutrition_logger
 import plan_cycle
+import plan_guardrails
 import store
 import training_summary as ts
 import weekly_load
@@ -71,7 +72,8 @@ _MODE_NOTICES = {
     ),
     "normal": (
         "Back in training. Daily emails will resume tonight.\n\n"
-        "Training continues toward sub-3:25 at San Sebastián (22 Nov 2026)."
+        "Training continues toward San Sebastián (22 Nov 2026), run as a controlled "
+        "effort with no time goal."
     ),
     "paused": (
         "All emails paused. Edit state.json and set mode to 'normal' to resume."
@@ -255,8 +257,79 @@ def _update_adaptation_state_mode(new_mode: str, prev_mode: str, today_local: da
 # Week-plan choice (A/B/C from Sunday summary)
 # ──────────────────────────────────────────────────────────────────────────
 
+def _last_week_running_km(week_start: date) -> float | None:
+    """Actual running volume for the seven days before `week_start`, or None if unknown.
+
+    Feeds the week-on-week ceiling in plan_guardrails. None means "no history", which the
+    guardrail treats as "skip that particular ceiling" rather than blocking the week.
+    """
+    try:
+        from ingest import get_reader
+        activities = get_reader("activities")(ts.STRAVA_CSV)
+    except Exception as exc:
+        print(f"[warn] could not read activities for the load ceiling: {exc}")
+        return None
+    previous_start = week_start - timedelta(days=7)
+    km = sum(
+        a.distance_km for a in activities
+        if a.kind == "run" and previous_start <= a.date < week_start
+    )
+    return round(km, 1) if km > 0 else None
+
+
+def _write_week_plan(option: dict, week_start: date, today_local: date) -> str:
+    """Validate a chosen option's structured plan and write it as per-date overrides.
+
+    Returns a human-readable line describing what happened. The plan is optional: when the
+    coach did not produce one, or it fails validation, the template stands and Luke is told
+    so rather than silently getting a week he did not agree to.
+    """
+    plan = option.get("plan")
+    if not plan:
+        return "No structured plan on this option, so the standard cycle stands."
+
+    profile = default_profile()
+    verdict = plan_guardrails.validate_week(
+        plan,
+        week_start,
+        last_week_km=_last_week_running_km(week_start),
+        race_date=profile.race_date,
+        today=today_local,
+    )
+    if not verdict.ok:
+        print(f"[guardrails] rejected the proposed week: {verdict.errors}")
+        return (
+            "The proposed week did not pass the safety checks, so the standard cycle "
+            f"stands. Reason: {'; '.join(verdict.errors)}"
+        )
+
+    applied_at = datetime.now(TZ_AMSTERDAM).isoformat(timespec="seconds")
+    written = 0
+    for session in verdict.days:
+        iso = session["date"]
+        if iso < today_local.isoformat():
+            continue  # never rewrite a day that has already happened
+        record = {
+            "applied_at": applied_at,
+            "edit_source": "weekly_review",
+            "session": {k: v for k, v in session.items() if k != "date"},
+        }
+        store.set_override(_active_profile_id(), iso, record)
+        written += 1
+
+    detail = f"{written} of 7 days written to your plan."
+    if verdict.notes:
+        detail += " Adjusted for safety: " + "; ".join(verdict.notes) + "."
+    return detail
+
+
 def _apply_week_choice(letter: str, state: dict, today_local: date) -> str | None:
-    """Record Luke's A/B/C pick. Returns confirmation text, or None if no valid pending choice."""
+    """Record Luke's A/B/C pick and write it into the plan.
+
+    Returns confirmation text, or None if no valid pending choice. Until this wrote
+    overrides the pick was advisory only: the chosen sessions were stored as prose and
+    every daily email still rendered the untouched template.
+    """
     pending = store.get_pending_choice(_active_profile_id())
     if not pending:
         return None
@@ -272,10 +345,17 @@ def _apply_week_choice(letter: str, state: dict, today_local: date) -> str | Non
     _save_state(state)
     pending["chosen"] = letter_upper
     store.set_pending_choice(_active_profile_id(), pending)
+
+    week_start = date.fromisoformat(
+        pending.get("week_start") or today_local.isoformat()
+    )
+    outcome = _write_week_plan(opt, week_start, today_local)
+
     return (
         f"Week plan confirmed: Option {letter_upper} — {opt['label']}\n\n"
         f"{opt['sessions']}\n\n"
-        f"{opt['rationale']}"
+        f"{opt['rationale']}\n\n"
+        f"{outcome}"
     )
 
 

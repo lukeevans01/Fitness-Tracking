@@ -254,20 +254,62 @@ def answer_training_question(
     return answer
 
 
+# Each option carries both prose (for the email) and a structured `plan` (written to the
+# override store when Luke picks that option). The plan is what actually changes his
+# training, so it must be internally consistent with the prose in `sessions`.
 _WEEKLY_SUMMARY_SCHEMA = """\
 {
   "week_review": "2-3 sentences: what was done last week, any notable patterns or concerns",
   "option_a": {
+    "plan": [
+      {
+        "date": "YYYY-MM-DD for each of the seven days, Monday first",
+        "session_type": "e.g. Easy Run, Full Body Strength - Squat Focus, Rest Day",
+        "session_kind": "run or strength or rest",
+        "duration_min": 60,
+        "run_details": {"distance_km": 8.0, "pace": "5:35-6:00/km", "hr_target": "<150", "effort": "easy"},
+        "exercises": [{"name": "Back Squat", "sets_reps": "4x6", "weight": "100kg", "rest": "3 min"}],
+        "details": "What to do and why, one or two sentences",
+        "short_version": "The cut-down version for a bad-sleep day",
+        "purpose": "One sentence on what this session is for"
+      }
+    ],
     "label": "Continue as planned",
     "sessions": "One line per day, e.g. Mon 01 Jun: Strength A3 (50 min)\\nTue 02 Jun: ...",
     "rationale": "One sentence"
   },
   "option_b": {
+    "plan": [
+      {
+        "date": "YYYY-MM-DD for each of the seven days, Monday first",
+        "session_type": "e.g. Easy Run, Full Body Strength - Squat Focus, Rest Day",
+        "session_kind": "run or strength or rest",
+        "duration_min": 60,
+        "run_details": {"distance_km": 8.0, "pace": "5:35-6:00/km", "hr_target": "<150", "effort": "easy"},
+        "exercises": [{"name": "Back Squat", "sets_reps": "4x6", "weight": "100kg", "rest": "3 min"}],
+        "details": "What to do and why, one or two sentences",
+        "short_version": "The cut-down version for a bad-sleep day",
+        "purpose": "One sentence on what this session is for"
+      }
+    ],
     "label": "Short descriptive label",
     "sessions": "One line per day",
     "rationale": "One sentence"
   },
   "option_c": {
+    "plan": [
+      {
+        "date": "YYYY-MM-DD for each of the seven days, Monday first",
+        "session_type": "e.g. Easy Run, Full Body Strength - Squat Focus, Rest Day",
+        "session_kind": "run or strength or rest",
+        "duration_min": 60,
+        "run_details": {"distance_km": 8.0, "pace": "5:35-6:00/km", "hr_target": "<150", "effort": "easy"},
+        "exercises": [{"name": "Back Squat", "sets_reps": "4x6", "weight": "100kg", "rest": "3 min"}],
+        "details": "What to do and why, one or two sentences",
+        "short_version": "The cut-down version for a bad-sleep day",
+        "purpose": "One sentence on what this session is for"
+      }
+    ],
     "label": "Short descriptive label",
     "sessions": "One line per day",
     "rationale": "One sentence"
@@ -291,9 +333,20 @@ _OPTION_REQUIRED = frozenset({"label", "sessions", "rationale"})
 
 _WEEKLY_COACH_CONTEXT = """\
 You are reviewing Luke Evans's recent training and proposing three options for the coming week.
-Apply your full knowledge of his profile: sub-3:25 target at San Sebastián (22 Nov 2026),
-polarised 80/20 training distribution, RIR 3 strength default, squash Tuesday evenings,
-sleep deprivation as an ongoing factor from late May 2026.
+You are an expert coach across distance running and marathon preparation, strength training,
+and sports nutrition. The race, the goal and the current block are given in the profile and
+context above - read them there rather than assuming a target time, because the goal changes.
+
+Review before you prescribe. Work through, in order:
+1. What was actually done last week against what was planned: volume, sessions completed,
+   sessions missed.
+2. Whether he is undertraining (load flat or falling while the block calls for progression),
+   overtraining (load or intensity rising faster than recovery supports, poor sleep, easy
+   pace creeping up), or on track.
+3. What single variable to change as a result. Change one thing, and say why.
+
+Judge easy/hard distribution too: if almost none of his running is genuinely easy, the
+priority is slowing the easy days down, not adding volume.
 
 Produce three genuinely distinct options — not trivial variants:
 - Option A: The standard plan as scheduled. Use the provided "standard week" exactly. Do not modify it.
@@ -301,10 +354,11 @@ Produce three genuinely distinct options — not trivial variants:
   more than planned: add recovery. If he did less: keep volume stable. If he nailed it: progress
   one variable (distance, weight, or add a short quality segment).
 - Option C: An alternative focus — e.g., if fatigue is building: recovery week with easy runs only;
-  if strength has slipped: extra lifting; if marathon date pressure is rising: marathon-pace work.
+  if strength has slipped: extra lifting; if race-specific fitness is the gap: controlled
+  tempo work.
 
-Recommendation: pick the option that best serves sub-3:25 given the data. If training data
-is sparse (no CSV loaded), recommend A with a coach_note explaining the data gap.
+Recommendation: pick the option that best serves the stated goal given the data. If
+training data is sparse (no CSV loaded), recommend A with a coach_note explaining the gap.
 
 Tone: direct, specific, no fluff. One line per day in sessions fields. Name the session type
 and duration. State specifically what changes between options.\
@@ -336,6 +390,9 @@ def generate_weekly_summary(
     profile = profile or default_profile()
     today = _today()
     parts = [profile.profile_text, _WEEKLY_COACH_CONTEXT]
+    # The weekly review spans all three domains, so inject every specialist's context
+    # rather than routing to one. Keeps the review and the per-session coach consistent.
+    parts += [running.system_context(), lifting.system_context(), nutrition.system_context()]
     if is_taper_active(today, profile.race_date):
         parts.append(_taper_prompt_block(today, profile))
     if progression_note:
@@ -367,9 +424,21 @@ def generate_weekly_summary(
         raise ValueError(f"Weekly summary missing required keys: {missing}")
 
     for key in ("option_a", "option_b", "option_c"):
-        opt_missing = _OPTION_REQUIRED - set(result.get(key, {}).keys())
+        option = result.get(key, {})
+        opt_missing = _OPTION_REQUIRED - set(option.keys())
         if opt_missing:
             raise ValueError(f"{key} missing keys: {opt_missing}")
+        # `plan` is optional on purpose. If the model omits or malforms it we drop it and
+        # keep the prose, so the weekly email still goes out and the plan simply stays on
+        # the template rather than the send failing outright.
+        plan = option.get("plan")
+        if plan is not None and not (
+            isinstance(plan, list)
+            and len(plan) == 7
+            and all(isinstance(day, dict) and day.get("date") for day in plan)
+        ):
+            print(f"[warn] {key}.plan malformed; dropping it and keeping the prose option.")
+            option.pop("plan", None)
 
     if result.get("recommendation") not in ("A", "B", "C"):
         raise ValueError(f"recommendation must be A, B, or C, got: {result.get('recommendation')!r}")
