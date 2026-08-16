@@ -9,6 +9,12 @@ Reviews what Luke actually trained, proposes three options for the coming week, 
 write the chosen one into his plan. This is the plan-changing counterpart to the
 `coach` skill, which is advice only.
 
+**This is not the primary path.** The review already runs unattended every Sunday at 08:00
+Amsterdam (`.github/workflows/sunday-reminder.yml`), and that run applies its own
+recommendation to the plan. Use this skill when Luke wants a review *off-schedule*, for
+example mid-week after illness or a missed block. Never tell him a weekly review requires
+him to run anything.
+
 ## When to use
 
 Use this when Luke wants the **plan changed** on the basis of how last week went:

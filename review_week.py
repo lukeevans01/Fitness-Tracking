@@ -30,6 +30,7 @@ from pathlib import Path
 import coach_orchestrator
 import nutrition_logger
 import plan_guardrails
+import plan_writer
 import progression
 import store
 import training_summary as ts
@@ -199,20 +200,12 @@ def main(argv=None) -> int:
         print(f"\nOption {letter} failed the guardrails; refusing to write it.", file=sys.stderr)
         return 1
 
-    applied_at = datetime.now(TZ_AMSTERDAM).isoformat(timespec="seconds")
-    written = 0
-    for session in verdict.days:
-        iso = session["date"]
-        if iso < today.isoformat():
-            continue
-        store.set_override(profile.id, iso, {
-            "applied_at": applied_at,
-            "edit_source": "weekly_review_cli",
-            "session": {k: v for k, v in session.items() if k != "date"},
-        })
-        written += 1
-
-    print(f"\nWrote option {letter}: {written} day(s) to the plan.")
+    written, _, message = plan_writer.apply_week(
+        profile.id, verdict.days, week_start,
+        today=today, source="weekly_review_cli",
+        last_week_km=last_week_km, race_date=profile.race_date,
+    )
+    print(f"\nWrote option {letter}: {message}")
     print("Commit data/app.db to make it live on the site and in the daily emails.")
     return 0
 

@@ -27,7 +27,7 @@ import coach_orchestrator
 import intent_classifier
 import nutrition_logger
 import plan_cycle
-import plan_guardrails
+import plan_writer
 import store
 import training_summary as ts
 import weekly_load
@@ -257,70 +257,23 @@ def _update_adaptation_state_mode(new_mode: str, prev_mode: str, today_local: da
 # Week-plan choice (A/B/C from Sunday summary)
 # ──────────────────────────────────────────────────────────────────────────
 
-def _last_week_running_km(week_start: date) -> float | None:
-    """Actual running volume for the seven days before `week_start`, or None if unknown.
-
-    Feeds the week-on-week ceiling in plan_guardrails. None means "no history", which the
-    guardrail treats as "skip that particular ceiling" rather than blocking the week.
-    """
-    try:
-        from ingest import get_reader
-        activities = get_reader("activities")(ts.STRAVA_CSV)
-    except Exception as exc:
-        print(f"[warn] could not read activities for the load ceiling: {exc}")
-        return None
-    previous_start = week_start - timedelta(days=7)
-    km = sum(
-        a.distance_km for a in activities
-        if a.kind == "run" and previous_start <= a.date < week_start
-    )
-    return round(km, 1) if km > 0 else None
-
-
 def _write_week_plan(option: dict, week_start: date, today_local: date) -> str:
     """Validate a chosen option's structured plan and write it as per-date overrides.
 
-    Returns a human-readable line describing what happened. The plan is optional: when the
-    coach did not produce one, or it fails validation, the template stands and Luke is told
-    so rather than silently getting a week he did not agree to.
+    Thin wrapper over plan_writer so the reply path, the Sunday auto-apply and the CLI all
+    share one implementation.
     """
-    plan = option.get("plan")
-    if not plan:
-        return "No structured plan on this option, so the standard cycle stands."
-
     profile = default_profile()
-    verdict = plan_guardrails.validate_week(
-        plan,
+    _, _, message = plan_writer.apply_week(
+        _active_profile_id(),
+        option.get("plan"),
         week_start,
-        last_week_km=_last_week_running_km(week_start),
-        race_date=profile.race_date,
         today=today_local,
+        source="weekly_review_reply",
+        last_week_km=plan_writer.last_week_running_km(week_start, ts.STRAVA_CSV),
+        race_date=profile.race_date,
     )
-    if not verdict.ok:
-        print(f"[guardrails] rejected the proposed week: {verdict.errors}")
-        return (
-            "The proposed week did not pass the safety checks, so the standard cycle "
-            f"stands. Reason: {'; '.join(verdict.errors)}"
-        )
-
-    applied_at = datetime.now(TZ_AMSTERDAM).isoformat(timespec="seconds")
-    written = 0
-    for session in verdict.days:
-        iso = session["date"]
-        if iso < today_local.isoformat():
-            continue  # never rewrite a day that has already happened
-        record = {
-            "applied_at": applied_at,
-            "edit_source": "weekly_review",
-            "session": {k: v for k, v in session.items() if k != "date"},
-        }
-        store.set_override(_active_profile_id(), iso, record)
-        written += 1
-
-    detail = f"{written} of 7 days written to your plan."
-    if verdict.notes:
-        detail += " Adjusted for safety: " + "; ".join(verdict.notes) + "."
-    return detail
+    return message
 
 
 def _apply_week_choice(letter: str, state: dict, today_local: date) -> str | None:
