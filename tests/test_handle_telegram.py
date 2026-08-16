@@ -151,19 +151,55 @@ class ButtonTests(HandleTelegramTests):
         self.assertIn("No week is currently open", self.sent[0])
         self.assertEqual(self.store.get_overrides(self.pid), {})
 
-    def test_session_feedback_is_logged_not_replanned(self):
-        code = self._run(_callback("fb:2026-08-17:skip"))
+    def test_skipped_changes_tomorrow(self):
+        """A tap has to have an effect, not just leave a note."""
+        revised = {"session_type": "Easy Run (eased)", "session_kind": "run",
+                   "duration_min": 40, "coach_note": "Absorbing the missed session."}
+        with mock.patch.object(self.ht, "_adjust_next_session",
+                               wraps=self.ht._adjust_next_session) as spy, \
+             mock.patch("coach_orchestrator.generate_session", return_value=revised):
+            code = self._run(_callback("fb:2026-08-17:skip"))
         self.assertEqual(code, 0)
-        # Recorded as feedback...
-        entries = self.store.get_feedback(self.pid) if hasattr(self.store, "get_feedback") else None
-        self.assertIn("Logged", self.sent[0])
-        # ...and explicitly does not rewrite the plan.
+        self.assertTrue(spy.called, "skipped should ask the coach to revise")
+        tomorrow = (TODAY + timedelta(days=1)).isoformat()
+        self.assertIn(tomorrow, self.store.get_overrides(self.pid))
+
+    def test_too_hard_changes_tomorrow(self):
+        revised = {"session_type": "Easy Run (lighter)", "session_kind": "run",
+                   "duration_min": 35, "coach_note": "Backed off."}
+        with mock.patch("coach_orchestrator.generate_session", return_value=revised):
+            self._run(_callback("fb:2026-08-17:hard"))
+        tomorrow = (TODAY + timedelta(days=1)).isoformat()
+        override = self.store.get_overrides(self.pid)[tomorrow]
+        self.assertEqual(override["session"]["session_type"], "Easy Run (lighter)")
+        self.assertIn("Backed off", self.sent[0])
+
+    def test_done_records_but_changes_nothing(self):
+        """Adherence needs no repair; inventing a change would make the plan wander."""
+        with mock.patch("coach_orchestrator.generate_session") as coach:
+            code = self._run(_callback("fb:2026-08-17:done"))
+        self.assertEqual(code, 0)
+        coach.assert_not_called()
         self.assertEqual(self.store.get_overrides(self.pid), {})
+        self.assertIn("plan stands", self.sent[0])
+
+    def test_a_malformed_revision_is_refused(self):
+        """The weekly guardrails do not cover a single day, so the shape is checked here."""
+        for bad in ({"session_kind": "yoga", "session_type": "X"},
+                    {"session_kind": "run"},
+                    {"session_kind": "run", "session_type": "X", "duration_min": 9000}):
+            self.sent.clear()
+            with mock.patch("coach_orchestrator.generate_session", return_value=bad):
+                self._run(_callback("fb:2026-08-17:hard", update_id=abs(hash(str(bad))) % 9999))
+            self.assertEqual(self.store.get_overrides(self.pid), {}, bad)
+            self.assertIn("did not look right", self.sent[0])
 
     def test_all_feedback_kinds_are_accepted(self):
+        revised = {"session_type": "Easy Run", "session_kind": "run", "duration_min": 40}
         for i, kind in enumerate(("done", "skip", "hard")):
             self.sent.clear()
-            self._run(_callback(f"fb:2026-08-17:{kind}", update_id=300 + i))
+            with mock.patch("coach_orchestrator.generate_session", return_value=revised):
+                self._run(_callback(f"fb:2026-08-17:{kind}", update_id=300 + i))
             self.assertIn("Logged", self.sent[0], kind)
 
     def test_unrecognised_callback_still_stops_the_spinner(self):

@@ -166,8 +166,8 @@ def help_text() -> str:
     """What the bot can do, for /help and for an unrecognised command."""
     return (
         "What I can do:\n\n"
-        "Tap a button on the Sunday review to pick your week, or on a daily session to log "
-        "how it went.\n\n"
+        "Tap a button on the Sunday review to pick your week. On a daily session, tap how it "
+        "went: Skipped or Too hard sends the coach to revise tomorrow, Done just records it.\n\n"
         "Or just type:\n"
         "  A, B or C - pick this week's plan\n"
         "  a question ending in '?' - training advice, changes nothing\n"

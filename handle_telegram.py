@@ -25,19 +25,13 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import notify_telegram
+import plan_guardrails
 import store
 import telegram_router as router
 from profile import default_profile
 
 ROOT = Path(__file__).parent
 TZ_AMSTERDAM = ZoneInfo("Europe/Amsterdam")
-
-FEEDBACK_LABELS = {
-    "done": "Done as prescribed",
-    "skip": "Skipped",
-    "hard": "Too hard / cut short",
-}
-
 
 def _today() -> date:
     return datetime.now(TZ_AMSTERDAM).date()
@@ -75,22 +69,152 @@ def _handle_week_choice(action, profile) -> str:
     return confirmation
 
 
-def _handle_session_feedback(action, profile) -> str:
-    """Record how a session went. Deliberately does not rewrite the plan.
+# What a tap means, and what the coach should do about it.
+FEEDBACK_LABELS = {
+    "done": "Done as prescribed",
+    "skip": "Skipped",
+    "hard": "Too hard / cut short",
+}
+# Instruction sent to the coach. "done" is absent on purpose: adherence needs no repair, and
+# inventing a change would make the plan wander for no reason.
+FEEDBACK_INSTRUCTIONS = {
+    "skip": (
+        "I skipped the {session} that was scheduled for {when}. Adjust the next session so "
+        "the week still works: decide whether to absorb the loss or pick up what matters "
+        "most from the missed one, and do not simply pile it on top."
+    ),
+    "hard": (
+        "The {session} on {when} was too hard and I cut it short. Ease the next session and "
+        "say what you changed. Do not increase anything."
+    ),
+}
 
-    A tap is a log, not an instruction: 'skipped' should not silently re-plan the week. The
-    Sunday review picks these up as context when it calibrates.
+
+def _adjust_next_session(reply_text: str, profile, intent: str) -> "tuple[str, dict | None]":
+    """Have the coach revise tomorrow's session from `reply_text`, and store it.
+
+    Returns (message, new_session). Tomorrow is the target because it is the next thing that
+    can still be changed, which is the same day the email reply path adjusts.
+    """
+    import coach_orchestrator
+    import process_replies
+    import training_summary as ts
+    import weekly_load
+
+    process_replies._ACTIVE_PROFILE_ID = profile.id
+    today = _today()
+    target = today + timedelta(days=1)
+    plan = json.loads((ROOT / "plan_template.json").read_text(encoding="utf-8"))
+    overrides = {"overrides": store.get_overrides(profile.id)}
+    current_session, _ = process_replies._get_current_session(target, plan, overrides)
+
+    try:
+        load = weekly_load.build_weekly_load(days=7, today=today, profile_id=profile.id)
+    except Exception:
+        load = None
+
+    new_session = coach_orchestrator.generate_session(
+        reply_text=reply_text,
+        current_session=current_session,
+        domain=coach_orchestrator.infer_domain(current_session.get("session_kind", "strength")),
+        profile=profile,
+        training_summary=ts.build_summary(days=14, today=today),
+        weekly_load=load,
+    )
+
+    problem = _session_problem(new_session)
+    if problem:
+        # A single day is not covered by the weekly guardrails, so the shape is checked here
+        # rather than writing something malformed into the plan.
+        print(f"[reject] coach returned an unusable session: {problem}", file=sys.stderr)
+        return (f"The coach's revision did not look right ({problem}), so {target:%a %d %b} "
+                "is unchanged."), None
+
+    now = datetime.now(TZ_AMSTERDAM).isoformat(timespec="seconds")
+    store.set_override(profile.id, target.isoformat(), {
+        "applied_at": now,
+        "feedback_source": f"telegram: {reply_text[:200]!r}",
+        "session": new_session,
+    })
+    store.append_feedback(profile.id, {
+        "timestamp": now,
+        "source": "telegram",
+        "intent": intent,
+        "target_date": target.isoformat(),
+        "reply_text": reply_text,
+        "override_applied": True,
+    })
+
+    note = (new_session.get("coach_note") or "").strip()
+    message = f"{target:%a %d %b} updated: {new_session.get('session_type', '?')}"
+    return (f"{message}\n\n{note}" if note else message), new_session
+
+
+def _session_problem(session: object) -> str:
+    """Return a reason the session is unusable, or an empty string if it is fine."""
+    if not isinstance(session, dict):
+        return "not an object"
+    if session.get("session_kind") not in plan_guardrails.VALID_KINDS:
+        return f"session_kind {session.get('session_kind')!r}"
+    if not session.get("session_type"):
+        return "no session_type"
+    duration = session.get("duration_min")
+    if duration is not None:
+        try:
+            duration = int(duration)
+        except (TypeError, ValueError):
+            return "duration_min is not a number"
+        if duration < 0 or duration > plan_guardrails.MAX_SESSION_MINUTES:
+            return f"duration_min {duration}"
+    return ""
+
+
+def _handle_session_feedback(action, profile) -> str:
+    """Log how a session went and, where there is something to fix, act on it.
+
+    "Done" needs no repair, so it is recorded and nothing moves. "Skipped" and "too hard"
+    both say the plan and reality have diverged, so the coach revises tomorrow.
     """
     label = FEEDBACK_LABELS.get(action.feedback, action.feedback)
-    store.append_feedback(profile.id, {
-        "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(timespec="seconds"),
-        "source": "telegram_button",
-        "intent": f"session_feedback:{action.feedback}",
-        "target_date": action.iso_date,
-        "reply_text": label,
-    })
     when = date.fromisoformat(action.iso_date).strftime("%a %d %b")
-    return f"Logged for {when}: {label.lower()}. It will feed into Sunday's review."
+    now = datetime.now(TZ_AMSTERDAM).isoformat(timespec="seconds")
+
+    instruction = FEEDBACK_INSTRUCTIONS.get(action.feedback)
+    if not instruction:
+        store.append_feedback(profile.id, {
+            "timestamp": now,
+            "source": "telegram_button",
+            "intent": f"session_feedback:{action.feedback}",
+            "target_date": action.iso_date,
+            "reply_text": label,
+        })
+        return (
+            f"Logged for {when}: {label.lower()}. Nothing to change, so the plan stands. "
+            "It feeds into Sunday's review."
+        )
+
+    session_name = _session_name_for(action.iso_date, profile)
+    reply_text = instruction.format(session=session_name, when=when)
+    message, _ = _adjust_next_session(
+        reply_text, profile, intent=f"session_feedback:{action.feedback}"
+    )
+    return f"Logged for {when}: {label.lower()}.\n\n{message}"
+
+
+def _session_name_for(iso_date: str, profile) -> str:
+    """The session that was scheduled on `iso_date`, for the coach's context."""
+    import process_replies
+
+    process_replies._ACTIVE_PROFILE_ID = profile.id
+    try:
+        plan = json.loads((ROOT / "plan_template.json").read_text(encoding="utf-8"))
+        overrides = {"overrides": store.get_overrides(profile.id)}
+        session, _ = process_replies._get_current_session(
+            date.fromisoformat(iso_date), plan, overrides
+        )
+        return session.get("session_type") or "session"
+    except Exception:
+        return "session"
 
 
 def _handle_mode_change(action, profile) -> str:
@@ -124,51 +248,8 @@ def _handle_question(action, profile) -> str:
 
 def _handle_training_feedback(action, profile) -> str:
     """Adjust tomorrow's session from free text, mirroring the email reply path."""
-    import coach_orchestrator
-    import process_replies
-    import training_summary as ts
-    import weekly_load
-
-    process_replies._ACTIVE_PROFILE_ID = profile.id
-    today = _today()
-    target = today + timedelta(days=1)
-    plan = json.loads((ROOT / "plan_template.json").read_text(encoding="utf-8"))
-    overrides = {"overrides": store.get_overrides(profile.id)}
-    current_session, _ = process_replies._get_current_session(target, plan, overrides)
-
-    try:
-        load = weekly_load.build_weekly_load(days=7, today=today, profile_id=profile.id)
-    except Exception:
-        load = None
-
-    new_session = coach_orchestrator.generate_session(
-        reply_text=action.text,
-        current_session=current_session,
-        domain=coach_orchestrator.infer_domain(current_session.get("session_kind", "strength")),
-        profile=profile,
-        training_summary=ts.build_summary(days=14, today=today),
-        weekly_load=load,
-    )
-
-    store.set_override(profile.id, target.isoformat(), {
-        "applied_at": datetime.now(TZ_AMSTERDAM).isoformat(timespec="seconds"),
-        "feedback_source": f"telegram: {action.text[:200]!r}",
-        "session": new_session,
-    })
-    store.append_feedback(profile.id, {
-        "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(timespec="seconds"),
-        "source": "telegram",
-        "intent": "training_feedback",
-        "target_date": target.isoformat(),
-        "reply_text": action.text,
-        "override_applied": True,
-    })
-
-    note = new_session.get("coach_note", "")
-    return (
-        f"{target:%a %d %b} updated: {new_session.get('session_type', '?')}"
-        f"{chr(10) + chr(10) + note if note else ''}"
-    )
+    message, _ = _adjust_next_session(action.text, profile, intent="training_feedback")
+    return message
 
 
 def _handle_food_log(action, profile) -> str:

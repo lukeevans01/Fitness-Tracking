@@ -396,8 +396,8 @@ def main():
 
     # Mirror to Telegram if configured. Best-effort: the email is the source of truth and
     # the day is already marked, so a Telegram failure must not fail the run.
-    # Buttons log how the session went. They record, they do not re-plan: Sunday's review
-    # reads them as context when it calibrates.
+    # Buttons log how the session went and act on it: "skipped" and "too hard" both send
+    # the coach to revise tomorrow, while "done" needs no repair and changes nothing.
     buttons = notify_telegram.inline_keyboard([[
         ("Done", f"fb:{target_date.isoformat()}:done"),
         ("Skipped", f"fb:{target_date.isoformat()}:skip"),
