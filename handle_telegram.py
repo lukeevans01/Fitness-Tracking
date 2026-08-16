@@ -274,6 +274,56 @@ def _handle_food_log(action, profile) -> str:
     return f"{line}\n\n{note}".strip()
 
 
+def _handle_mobility_log(action, profile) -> str:
+    """Record a mobility session. A log, so it changes no prescription."""
+    store.append_feedback(profile.id, {
+        "timestamp": datetime.now(TZ_AMSTERDAM).isoformat(timespec="seconds"),
+        "source": "telegram",
+        "intent": "mobility_log",
+        "target_date": _today().isoformat(),
+        "reply_text": action.text,
+    })
+    return "Mobility logged. Nothing else changed."
+
+
+def _handle_free_text(action, profile) -> str:
+    """Classify free text with the shared classifier, then dispatch.
+
+    The router no longer guesses. Anything unclear changes nothing and says so: a stray
+    message must never rewrite training, which is exactly what keyword guessing caused.
+    """
+    import intent_classifier
+
+    try:
+        result = intent_classifier.classify(action.text, today=_today())
+    except Exception as exc:
+        print(f"[warn] classifier failed: {exc}", file=sys.stderr)
+        return (
+            "I could not work out what you meant, so nothing has changed. Try naming the "
+            "day and what to change, ask a question, or tap a button on a session."
+        )
+
+    intents = [i for i in result.get("intents", []) if i.get("intent") != "none_clear"]
+    if not intents:
+        return (
+            "I am not sure what you wanted there, so nothing has changed.\n\n"
+            + router.help_text()
+        )
+
+    replies = []
+    for item in intents:
+        kind = item.get("intent")
+        text = item.get("text") or action.text
+        sub = router.Action(kind, text=text, chat_id=action.chat_id)
+        handler = HANDLERS.get(kind)
+        if not handler:
+            continue
+        replies.append(handler(sub, profile))
+    return "\n\n".join(r for r in replies if r) or (
+        "Nothing actionable in that, so the plan is unchanged."
+    )
+
+
 HANDLERS = {
     router.WEEK_CHOICE: _handle_week_choice,
     router.SESSION_FEEDBACK: _handle_session_feedback,
@@ -281,6 +331,8 @@ HANDLERS = {
     router.QUESTION: _handle_question,
     router.TRAINING_FEEDBACK: _handle_training_feedback,
     router.FOOD_LOG: _handle_food_log,
+    router.FREE_TEXT: _handle_free_text,
+    "mobility_log": _handle_mobility_log,
 }
 
 

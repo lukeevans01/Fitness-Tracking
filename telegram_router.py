@@ -10,6 +10,10 @@ bot by username and message it, so an update from an unexpected chat must be dro
 than acted on. Defence in depth, because the webhook and this module can be deployed
 independently.
 
+Free text is deliberately *not* classified here. Guessing intent from keywords meant any
+stray message mutated the plan, so anything that is not an explicit command or a greeting is
+returned as FREE_TEXT for the shared LLM classifier to judge.
+
 Callback data is capped at 64 bytes by Telegram, so it stays terse:
     wk:B                     pick option B for the coming week
     fb:2026-08-17:done       mark that day done / skipped / hard
@@ -27,6 +31,7 @@ MODE_CHANGE = "mode_change"
 TRAINING_FEEDBACK = "training_feedback"
 QUESTION = "question"
 FOOD_LOG = "food_log"
+FREE_TEXT = "free_text"
 HELP = "help"
 IGNORE = "ignore"
 UNAUTHORISED = "unauthorised"
@@ -44,12 +49,11 @@ _RE_SURVIVAL_EXIT = re.compile(r"\bi.?m\s+back\b|\bresume\s+training\b", re.IGNO
 _RE_PAUSE_ALL = re.compile(r"^\s*pause\s*$", re.IGNORECASE)
 _RE_WEEK_LETTER = re.compile(r"^\s*([ABC])\s*[.!?]?\s*$", re.IGNORECASE)
 _RE_HELP = re.compile(r"^\s*/?(help|start|commands)\s*$", re.IGNORECASE)
-_RE_QUESTION = re.compile(r"\?\s*$")
 
-# Words that suggest food rather than training, used only to split free text.
-_FOOD_HINTS = re.compile(
-    r"\b(ate|eaten|eating|breakfast|lunch|dinner|snack|meal|kcal|calories|protein|"
-    r"porridge|chicken|rice|eggs?|shake|yoghurt|yogurt)\b",
+# Greetings and other chatter that must never be read as an instruction.
+_RE_CHATTER = re.compile(
+    r"^\s*(hi|hey|hello|yo|thanks|thank\s+you|ta|cheers|ok|okay|k|cool|nice|"
+    r"morning|evening|test|testing)\s*[.!?]*\s*$",
     re.IGNORECASE,
 )
 
@@ -153,13 +157,14 @@ def _route_text(text: str, message: dict, update_id, chat_id: str) -> Action:
     if letter:
         return Action(WEEK_CHOICE, letter=letter.group(1).upper(), **common)
 
-    # Free text. A trailing question mark means advice; food words mean a log; anything
-    # else is treated as feedback on the plan, matching the email behaviour.
-    if _RE_QUESTION.search(text):
-        return Action(QUESTION, **common)
-    if _FOOD_HINTS.search(text):
-        return Action(FOOD_LOG, **common)
-    return Action(TRAINING_FEEDBACK, **common)
+    if _RE_CHATTER.match(text):
+        return Action(HELP, **common)
+
+    # Everything else goes to the same LLM classifier the email channel uses. Guessing the
+    # intent from keywords here was actively harmful: "hi" was read as feedback on the plan
+    # and sent the coach to rewrite the next session. Deciding meaning is the classifier's
+    # job, and sharing it keeps the two channels consistent.
+    return Action(FREE_TEXT, **common)
 
 
 def help_text() -> str:

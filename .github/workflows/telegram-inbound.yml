@@ -41,9 +41,34 @@ jobs:
 
       - name: Persist store changes if any
         run: |
+          set -u
           git config user.name "fitness-bot"
           git config user.email "bot@noreply"
           git add data/app.db nutrition_log 2>/dev/null || true
-          git diff --cached --quiet || git commit -m "telegram: store updated ($(date -u +%FT%TZ))"
-          git pull --rebase --autostash || true
-          git push
+          if git diff --cached --quiet; then
+            echo "Nothing to persist."
+            exit 0
+          fi
+          git commit -m "telegram: store updated ($(date -u +%FT%TZ))"
+
+          # data/app.db is a SQLite blob, so git cannot merge two concurrent writes. A rebase
+          # here left the repo on a detached HEAD and the push then failed outright, losing our
+          # write entirely. Retry the push instead, and where the histories really have diverged
+          # prefer our commit for the binary while still taking everything else from main.
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Pushed on attempt $attempt."
+              exit 0
+            fi
+            echo "Push rejected on attempt $attempt; reconciling with main."
+            git fetch origin main
+            if ! git merge -X ours --no-edit origin/main; then
+              git merge --abort || true
+              echo "::warning::Could not reconcile data/app.db with main automatically."
+              exit 1
+            fi
+            echo "::warning::Merged a concurrent store update; our version of data/app.db won, so the other write may have been superseded."
+            sleep 3
+          done
+          echo "::error::Could not push the store change after 3 attempts."
+          exit 1

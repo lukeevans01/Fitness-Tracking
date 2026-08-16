@@ -139,22 +139,24 @@ class TextRoutingTests(unittest.TestCase):
         action = tr.route(_message("pause"), CHAT)
         self.assertEqual(action.meta["mode"], "paused")
 
-    def test_question_mark_means_advice(self):
-        action = tr.route(_message("is 5:20/km too quick for easy runs?"), CHAT)
-        self.assertEqual(action.kind, tr.QUESTION)
+    def test_chatter_never_touches_the_plan(self):
+        """Regression: "hi" was read as feedback and rewrote the next session."""
+        for text in ("hi", "hey", "hello", "thanks", "cheers", "ok", "cool", "test", "Testing!"):
+            self.assertEqual(tr.route(_message(text), CHAT).kind, tr.HELP, text)
 
-    def test_food_words_mean_a_log(self):
-        for text in ("porridge and eggs for breakfast", "had chicken and rice for lunch"):
-            self.assertEqual(tr.route(_message(text), CHAT).kind, tr.FOOD_LOG, text)
+    def test_real_content_goes_to_the_classifier(self):
+        """Meaning is decided by the shared classifier, not by keywords here."""
+        for text in ("is 5:20/km too quick for easy runs?",
+                     "porridge and eggs for breakfast",
+                     "knees are sore, drop the squats tomorrow",
+                     "essage.chat.id"):
+            self.assertEqual(tr.route(_message(text), CHAT).kind, tr.FREE_TEXT, text)
 
-    def test_anything_else_is_training_feedback(self):
-        action = tr.route(_message("knees are sore, drop the squats tomorrow"), CHAT)
-        self.assertEqual(action.kind, tr.TRAINING_FEEDBACK)
-
-    def test_a_question_about_food_prefers_the_question(self):
-        """A trailing '?' is the stronger signal; it must not be logged as a meal."""
-        action = tr.route(_message("should I eat more protein?"), CHAT)
-        self.assertEqual(action.kind, tr.QUESTION)
+    def test_router_never_returns_a_mutating_intent_for_free_text(self):
+        """No text path may reach a plan change without the classifier agreeing."""
+        for text in ("drop tomorrow", "hi", "random words", "essage.chat.id", "?"):
+            kind = tr.route(_message(text), CHAT).kind
+            self.assertNotIn(kind, (tr.TRAINING_FEEDBACK, tr.FOOD_LOG, tr.QUESTION), text)
 
     def test_edited_messages_are_routed_too(self):
         action = tr.route(_message("B", key="edited_message"), CHAT)

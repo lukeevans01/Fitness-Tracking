@@ -255,7 +255,7 @@ class TextTests(HandleTelegramTests):
 
     def test_handler_failure_reports_without_claiming_a_change(self):
         with mock.patch.dict(self.ht.HANDLERS,
-                             {self.ht.router.QUESTION: mock.Mock(side_effect=RuntimeError("boom"))}):
+                             {self.ht.router.FREE_TEXT: mock.Mock(side_effect=RuntimeError("boom"))}):
             code = self._run(_message("is this too fast?"))
         self.assertEqual(code, 1)
         self.assertIn("Nothing has been changed", self.sent[0])
@@ -263,3 +263,53 @@ class TextTests(HandleTelegramTests):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class FreeTextTests(HandleTelegramTests):
+    """Free text must go through the classifier, and never mutate on ambiguity."""
+
+    def test_chatter_gets_help_and_changes_nothing(self):
+        with mock.patch("intent_classifier.classify") as classify, \
+             mock.patch("coach_orchestrator.generate_session") as coach:
+            code = self._run(_message("hi"))
+        self.assertEqual(code, 0)
+        classify.assert_not_called()   # the router already knows this is chatter
+        coach.assert_not_called()
+        self.assertEqual(self.store.get_overrides(self.pid), {})
+
+    def test_unclear_text_changes_nothing(self):
+        with mock.patch("intent_classifier.classify",
+                        return_value={"intents": [{"intent": "none_clear", "text": "?"}]}), \
+             mock.patch("coach_orchestrator.generate_session") as coach:
+            self._run(_message("essage.chat.id"))
+        coach.assert_not_called()
+        self.assertEqual(self.store.get_overrides(self.pid), {})
+        self.assertIn("not sure what you wanted", self.sent[0])
+
+    def test_classifier_failure_changes_nothing(self):
+        with mock.patch("intent_classifier.classify", side_effect=RuntimeError("gemini down")), \
+             mock.patch("coach_orchestrator.generate_session") as coach:
+            self._run(_message("something odd"))
+        coach.assert_not_called()
+        self.assertEqual(self.store.get_overrides(self.pid), {})
+        self.assertIn("could not work out", self.sent[0])
+
+    def test_classified_feedback_does_change_the_plan(self):
+        revised = {"session_type": "Easy Run (eased)", "session_kind": "run", "duration_min": 40}
+        with mock.patch("intent_classifier.classify",
+                        return_value={"intents": [
+                            {"intent": "training_feedback", "text": "knees sore, ease tomorrow"}]}), \
+             mock.patch("coach_orchestrator.generate_session", return_value=revised):
+            self._run(_message("knees sore, ease tomorrow"))
+        tomorrow = (TODAY + timedelta(days=1)).isoformat()
+        self.assertIn(tomorrow, self.store.get_overrides(self.pid))
+
+    def test_compound_reply_runs_every_intent(self):
+        revised = {"session_type": "Easy Run", "session_kind": "run", "duration_min": 40}
+        with mock.patch("intent_classifier.classify",
+                        return_value={"intents": [
+                            {"intent": "training_feedback", "text": "ease tomorrow"},
+                            {"intent": "mobility_log", "text": "did 20 min mobility"}]}), \
+             mock.patch("coach_orchestrator.generate_session", return_value=revised):
+            self._run(_message("ease tomorrow, also did 20 min mobility"))
+        self.assertIn("Mobility logged", self.sent[0])
