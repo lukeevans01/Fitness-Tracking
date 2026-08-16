@@ -43,6 +43,11 @@ class Profile:
     # quality work is prescribed by effort and heart rate instead of a pace.
     marathon_pace: str | None = None
     marathon_pace_hr: str | None = None
+    # Weekly running volume anchor. progression.py ramps from here rather than
+    # back-computing load from race day. Re-anchor after any lay-off.
+    weekly_volume_anchor_km: float | None = None
+    weekly_volume_anchor_week: date | None = None
+    peak_weekly_km: float | None = None
 
 
 def load_profile(profile_id: str) -> Profile:
@@ -72,6 +77,12 @@ def load_profile(profile_id: str) -> Profile:
         specialist_overrides=data.get("specialist_overrides"),
         marathon_pace=data.get("marathon_pace"),
         marathon_pace_hr=data.get("marathon_pace_hr"),
+        weekly_volume_anchor_km=data.get("weekly_volume_anchor_km"),
+        weekly_volume_anchor_week=(
+            date.fromisoformat(data["weekly_volume_anchor_week"])
+            if data.get("weekly_volume_anchor_week") else None
+        ),
+        peak_weekly_km=data.get("peak_weekly_km"),
     )
 
 

@@ -360,6 +360,8 @@ def main():
                 day, target_date, profile.race_date,
                 marathon_pace=profile.marathon_pace,
                 marathon_pace_hr=profile.marathon_pace_hr,
+                plan=progression.VolumePlan.from_profile(profile),
+                cycle_days=plan["cycle_days"],
             )
 
         date_str = target_date.strftime("%a %d %b")

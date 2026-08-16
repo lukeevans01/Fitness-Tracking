@@ -12,7 +12,8 @@
 //                        optional PLAN_EDIT_TOKEN gate and means deploying this file
 //                        before setting the secret cannot lock you out.
 // Optional:
-//   SITE_AUTH_USER       username, default "luke".
+//   SITE_AUTH_USER       username, default "levans092@gmail.com". Note that a value set
+//                        on the Pages project overrides this default.
 //
 // Paths that authenticate themselves and must not be challenged. Inbound webhooks cannot
 // send an Authorization header, so they carry their own shared secret instead.
@@ -32,7 +33,7 @@ export async function onRequest(context) {
     return next();
   }
 
-  const expectedUser = env.SITE_AUTH_USER || "luke";
+  const expectedUser = env.SITE_AUTH_USER || "levans092@gmail.com";
   const header = request.headers.get("authorization") || "";
 
   if (authorised(header, expectedUser, password)) return next();

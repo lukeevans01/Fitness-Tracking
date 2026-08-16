@@ -1,17 +1,19 @@
 {
-  "generated_at": "2026-08-13",
+  "generated_at": "2026-08-16",
   "empty": false,
   "race": {
     "date": "2026-11-22",
     "label": "San Sebasti\u00e1n marathon",
     "target": "controlled effort, no time goal",
-    "weeks_to_race": 15
+    "weeks_to_race": 14
   },
   "block": {
-    "name": "base",
-    "label": "Base phase, 15 weeks to race. Long run holding around 15 km while you build aerobic volume before the specific work.",
-    "long_run_km": 14.8,
-    "quality_minutes": 0
+    "name": "build",
+    "label": "Build phase, 14 weeks to race. Target 36 km this week. Long run building toward 20 km with about 20 min of controlled tempo work a week.",
+    "long_run_km": 19.8,
+    "quality_minutes": 20,
+    "weekly_volume_km": 36.0,
+    "deload_week": false
   },
   "cycle_start_date": "2026-05-25",
   "days": [

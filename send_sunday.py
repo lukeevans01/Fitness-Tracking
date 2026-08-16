@@ -71,7 +71,8 @@ def check_local_time_window():
 # Plan helpers
 # ──────────────────────────────────────────────────────────────────────────
 
-def _compute_standard_week(today: date, plan: dict, race_date: date | None = None) -> str:
+def _compute_standard_week(today: date, plan: dict, race_date: date | None = None,
+                          volume_plan=None) -> str:
     """Return a compact day-by-day summary of the coming week (Mon–Sun after today).
 
     When race_date is supplied, long-run and quality-run days reflect the progressed
@@ -87,7 +88,9 @@ def _compute_standard_week(today: date, plan: dict, race_date: date | None = Non
         day_num = (days_in % cycle) + 1
         session = next(d for d in plan["cycle_days"] if d["day_num"] == day_num)
         if race_date is not None:
-            session, _ = progression.apply_to_session(session, day_date, race_date)
+            session, _ = progression.apply_to_session(
+                session, day_date, race_date, plan=volume_plan,
+                cycle_days=plan["cycle_days"])
         label = day_date.strftime("%a %d %b")
         extra = ""
         if race_date is not None and progression.is_long_run_session(session):
@@ -586,9 +589,11 @@ def main():
     load = weekly_load.build_weekly_load(days=7, today=today, profile_id=profile.id)
     _update_weekly_counters(stats, week_start, profile.id, load.squash_sessions)
 
-    standard_week = _compute_standard_week(today, plan, profile.race_date)
+    standard_week = _compute_standard_week(
+        today, plan, profile.race_date, progression.VolumePlan.from_profile(profile))
     training_text = ts.build_summary(days=14, today=today)
-    progression_note = progression.block_label(week_start, profile.race_date)
+    progression_note = progression.block_label(
+        week_start, profile.race_date, progression.VolumePlan.from_profile(profile))
 
     week_dates = [today - timedelta(days=i) for i in range(6, -1, -1)]
     breakdown = ts.build_daily_breakdown(days=7, today=today)

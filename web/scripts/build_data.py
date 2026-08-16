@@ -723,15 +723,35 @@ def _race_info() -> tuple[date, str, str]:
     return race_date, label, target
 
 
-def _block_note(name: str, weeks: int, long_km: float, qmin: int) -> str:
+def _volume_plan() -> "progression.VolumePlan":
+    """The profile's weekly-volume anchor, or the module default if it has none."""
+    try:
+        prof = json.loads(PROFILE_JSON.read_text(encoding="utf-8"))
+        anchor_week = prof.get("weekly_volume_anchor_week")
+        return progression.VolumePlan(
+            anchor_km=float(prof.get("weekly_volume_anchor_km")
+                            or progression.DEFAULT_VOLUME_PLAN.anchor_km),
+            anchor_week=(date.fromisoformat(anchor_week) if anchor_week
+                         else progression.DEFAULT_VOLUME_PLAN.anchor_week),
+            peak_km=float(prof.get("peak_weekly_km")
+                          or progression.DEFAULT_VOLUME_PLAN.peak_km),
+        )
+    except Exception:
+        return progression.DEFAULT_VOLUME_PLAN
+
+
+def _block_note(name: str, weeks: int, long_km: float, qmin: int,
+                weekly_km: float = 0.0) -> str:
     """Clean, em-dash-free description of the current periodisation block."""
     if name == "build":
-        return (f"Build phase, {weeks} weeks to race. Long run building toward "
-                f"{long_km:.0f} km with about {qmin} min of marathon-pace work a week.")
+        return (f"Build phase, {weeks} weeks to race. Target {weekly_km:.0f} km this week. "
+                f"Long run building toward "
+                f"{long_km:.0f} km with about {qmin} min of controlled tempo work a week.")
     if name == "taper":
         return (f"Taper, {weeks} weeks to race. Easy running only as the taper rules "
                 "take over and you freshen up for race day.")
-    return (f"Base phase, {weeks} weeks to race. Long run holding around "
+    return (f"Base phase, {weeks} weeks to race. Target {weekly_km:.0f} km this week. "
+            f"Long run holding around "
             f"{long_km:.0f} km while you build aerobic volume before the specific work.")
 
 
@@ -747,13 +767,17 @@ def build_plan() -> dict:
     today = datetime.now(TZ).date()
     weeks = progression.weeks_to_race(today, race_date)
     block_name = progression.block_for(today, race_date)
-    long_km = progression.long_run_km(today, race_date)
+    volume_plan = _volume_plan()
+    long_km = progression.long_run_km(today, race_date, volume_plan)
     qmin = progression.quality_minutes(today, race_date)
+    weekly_km = progression.weekly_volume_km(today, race_date, volume_plan)
     block = {
         "name": block_name,
-        "label": _block_note(block_name, max(0, weeks), long_km, qmin),
+        "label": _block_note(block_name, max(0, weeks), long_km, qmin, weekly_km),
         "long_run_km": long_km,
         "quality_minutes": qmin,
+        "weekly_volume_km": weekly_km,
+        "deload_week": progression.is_deload_week(today, volume_plan),
     }
 
     days = []
