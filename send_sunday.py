@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Sunday 08:00 weekly summary.
+Sunday 18:00 weekly summary.
 
 Generates an AI-written week review with three options for the coming week and a
-recommendation. Sends at 08:00 Amsterdam time every Sunday. Skips if mode is
-survival or paused.
+recommendation. Sends at 18:00 Amsterdam time every Sunday, late enough that the week
+being reviewed is finished. Skips if mode is survival or paused.
 
 Env vars required:
   RESEND_API_KEY    Resend API key
@@ -61,10 +61,10 @@ def check_local_time_window():
     if now.weekday() != 6:
         print(f"[skip] Today is {now.strftime('%A')}, not Sunday.")
         sys.exit(0)
-    target = 8 * 60
+    target = 18 * 60
     cur = now.hour * 60 + now.minute
     if abs(cur - target) > 30:
-        print(f"[skip] Amsterdam time {now.strftime('%H:%M')} is outside 08:00 ±30min.")
+        print(f"[skip] Amsterdam time {now.strftime('%H:%M')} is outside 18:00 ±30min.")
         sys.exit(0)
 
 
@@ -86,8 +86,12 @@ def _recent_weekly_km(today: date, weeks: int = progression.ANCHOR_WEEKS) -> lis
         return []
 
     this_monday = today - timedelta(days=today.weekday())
+    # On a Sunday the current week is over, so count it: the review runs in the evening
+    # precisely so it can. Any other day it is still in progress and including it would
+    # understate the week, so fall back to the last fully finished weeks.
+    offset = 0 if today.weekday() == 6 else 1
     totals = []
-    for index in range(weeks, 0, -1):
+    for index in range(weeks - 1 + offset, offset - 1, -1):
         start = this_monday - timedelta(days=7 * index)
         end = start + timedelta(days=7)
         totals.append(round(sum(

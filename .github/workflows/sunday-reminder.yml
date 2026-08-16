@@ -1,9 +1,10 @@
 name: Sunday weekly summary
 
-# 08:00 Amsterdam = 06:00 UTC (CEST) or 07:00 UTC (CET). Fire both; script gates on local time.
+# 18:00 Amsterdam = 16:00 UTC (CEST) or 17:00 UTC (CET). Fire both; script gates on local time.
+# Evening rather than morning so the review sees a finished week, including Sunday's long run.
 on:
   schedule:
-    - cron: '0 6,7 * * 0'
+    - cron: '0 16,17 * * 0'
   workflow_dispatch: {}
 
 jobs:
