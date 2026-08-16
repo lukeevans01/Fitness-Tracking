@@ -30,6 +30,9 @@ jobs:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           TO_EMAIL: ${{ vars.TO_EMAIL || 'levans092@gmail.com' }}
           FROM_EMAIL: ${{ vars.FROM_EMAIL }}
+          # Optional Telegram mirror. Absent secrets simply skip the notification.
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python3 send_sunday.py
 
       - name: Commit store + plan view

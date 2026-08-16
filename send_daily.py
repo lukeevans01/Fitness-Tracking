@@ -21,6 +21,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import notify_telegram
 import progression
 import routine_selector
 import store
@@ -380,6 +381,10 @@ def main():
     state["last_email_sent_date"] = today_local.isoformat()
     store.set_state(profile.id, state)
     print(f"[sent] Daily email sent and marked for {today_local.isoformat()}.")
+
+    # Mirror to Telegram if configured. Best-effort: the email is the source of truth and
+    # the day is already marked, so a Telegram failure must not fail the run.
+    notify_telegram.notify(subject, text)
 
 
 if __name__ == "__main__":
