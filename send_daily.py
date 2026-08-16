@@ -37,6 +37,15 @@ GMAIL_USER = os.environ.get("GMAIL_USER") or ""
 RESEND_URL = "https://api.resend.com/emails"
 
 
+def _goal_footer() -> str:
+    """Footer line describing the race and current goal, read from the profile."""
+    prof = default_profile()
+    return (
+        f"Training cycle, {prof.race_label} on {prof.race_date:%d %b %Y}. "
+        f"Goal: {prof.race_target}."
+    )
+
+
 def load_json(path: Path) -> dict:
     with open(path) as f:
         return json.load(f)
@@ -212,7 +221,7 @@ def build_cycle_html(day: dict, tomorrow: dict, day_num: int, today: date, hard_
 """
 
     body += html_callout_green(hard_rules)
-    footer = "Training cycle, sub-3:25 marathon target for 22 Nov 2026."
+    footer = _goal_footer()
     if progression_note:
         footer += " " + progression_note
     body += f'<p style="color: #888; font-size: 13px; margin-top: 24px;">{footer}</p>'
@@ -260,7 +269,7 @@ def build_cycle_text(day: dict, tomorrow: dict, day_num: int, today: date, hard_
     for r in hard_rules:
         lines.append(f"  - {r}")
     lines.append("")
-    footer = "Training cycle, sub-3:25 marathon target for 22 Nov 2026."
+    footer = _goal_footer()
     if progression_note:
         footer += " " + progression_note
     lines.append(footer)

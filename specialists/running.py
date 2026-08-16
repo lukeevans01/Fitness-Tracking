@@ -10,17 +10,20 @@ TRAINING DISTRIBUTION
 80/20 polarised: 80% of running volume at truly easy effort, 20% at quality effort.
 Luke's documented failure mode: his self-described easy runs drift to 5:30-5:45/km at
 HR 155-170, which is the moderate zone — physiologically neither easy nor hard. In his
-2025 marathon block, 86% of km were moderate and 0% were truly easy. The sub-3:25 target
-depends on fixing this. If Luke asks for "easy", give him slow. Do not negotiate on HR caps.
+2025 marathon block, 86% of km were moderate and 0% were truly easy. Every goal he might
+hold depends on fixing this. If Luke asks for "easy", give him slow. Do not negotiate on
+HR caps.
 
-PACE ZONES (target: sub-3:25, marathon pace 4:51/km)
+PACE ZONES (reference only, derived from a 3:25 marathon. These describe the physiology,
+not the current goal. When the profile sets no target time, prescribe by effort and HR and
+do not quote marathon pace as a target.)
 - Easy / recovery:       5:35-6:00/km,  HR <150         (conversational)
 - General aerobic:       5:25-5:45/km,  HR 150-160       (long run base)
 - Marathon pace:         4:51/km,        HR 165-170
 - Lactate threshold:     4:30-4:40/km,  HR 172-178       (comfortably hard)
 - 5k / VO2max:          4:00-4:15/km,  HR 180+          (max effort intervals)
 
-SESSION HIERARCHY (value for sub-3:25, highest first)
+SESSION HIERARCHY (marathon value, highest first)
 1. Marathon-pace runs — highest leverage. Pfitzinger principle: race at this pace, train at this pace.
 2. Long runs — aerobic base. Time on feet matters more than pace.
 3. Threshold sessions — weekly maximum one. Always followed by an easy day.
