@@ -272,3 +272,59 @@ class QualityPrescriptionTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AnchorRecalibrationTests(unittest.TestCase):
+    """The anchor must track reality without death-spiralling or running away."""
+
+    def _plan(self, km=40.0):
+        return progression.VolumePlan(anchor_km=km, anchor_week=LOAD_W0, peak_km=55.0)
+
+    def test_no_data_keeps_the_anchor(self):
+        plan, note = progression.recalibrate_anchor(self._plan(), [], LOAD_W1)
+        self.assertEqual(plan.anchor_km, 40.0)
+        self.assertEqual(plan.anchor_week, LOAD_W1)
+        self.assertIn("stays at", note)
+
+    def test_tracks_a_steady_average(self):
+        plan, note = progression.recalibrate_anchor(self._plan(), [41.0, 42.0, 43.0], LOAD_W1)
+        self.assertAlmostEqual(plan.anchor_km, 42.0, places=1)
+        self.assertIn("anchor now", note)
+
+    def test_one_missed_week_cannot_collapse_the_plan(self):
+        """The death spiral this guards against: a zero week halving next week's plan."""
+        plan, note = progression.recalibrate_anchor(self._plan(), [40.0, 40.0, 0.0], LOAD_W1)
+        self.assertAlmostEqual(plan.anchor_km, 40.0 * progression.ANCHOR_MAX_FALL, places=1)
+        self.assertIn("limited fall", note)
+
+    def test_one_huge_week_cannot_spike_the_plan(self):
+        plan, note = progression.recalibrate_anchor(self._plan(), [40.0, 40.0, 200.0], LOAD_W1)
+        self.assertAlmostEqual(plan.anchor_km, 40.0 * progression.ANCHOR_MAX_RISE, places=1)
+        self.assertIn("capped rise", note)
+
+    def test_sustained_detraining_does_lower_the_anchor(self):
+        """Bounded, not frozen: repeated zero weeks must walk the anchor down."""
+        plan = self._plan()
+        for _ in range(5):
+            plan, _ = progression.recalibrate_anchor(plan, [0.0, 0.0, 0.0], LOAD_W1)
+        self.assertLess(plan.anchor_km, 20.0)
+
+    def test_sustained_growth_does_raise_the_anchor(self):
+        plan = self._plan()
+        for _ in range(4):
+            plan, _ = progression.recalibrate_anchor(plan, [80.0, 80.0, 80.0], LOAD_W1)
+        self.assertGreater(plan.anchor_km, 60.0)
+
+    def test_only_the_most_recent_weeks_count(self):
+        long_history = [5.0] * 20 + [45.0, 45.0, 45.0]
+        plan, _ = progression.recalibrate_anchor(self._plan(), long_history, LOAD_W1)
+        self.assertGreater(plan.anchor_km, 40.0)
+
+    def test_peak_is_preserved(self):
+        plan, _ = progression.recalibrate_anchor(self._plan(), [30.0], LOAD_W1)
+        self.assertEqual(plan.peak_km, 55.0)
+
+    def test_round_trips_through_store_fields(self):
+        plan, _ = progression.recalibrate_anchor(self._plan(), [43.0, 44.0, 45.0], LOAD_W1)
+        restored = progression.VolumePlan(1.0, LOAD_W0, 1.0).merged_with_store(plan.as_store_fields())
+        self.assertEqual(restored, plan)

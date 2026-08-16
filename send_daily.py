@@ -369,7 +369,8 @@ def main():
                 day, target_date, profile.race_date,
                 marathon_pace=profile.marathon_pace,
                 marathon_pace_hr=profile.marathon_pace_hr,
-                plan=progression.VolumePlan.from_profile(profile),
+                plan=progression.VolumePlan.from_store(
+                    profile, store.get_adaptation(profile.id)),
                 cycle_days=plan["cycle_days"],
             )
 

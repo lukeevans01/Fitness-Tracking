@@ -724,11 +724,15 @@ def _race_info() -> tuple[date, str, str]:
 
 
 def _volume_plan() -> "progression.VolumePlan":
-    """The profile's weekly-volume anchor, or the module default if it has none."""
+    """The live weekly-volume anchor: the store's recalibrated value, else the profile.
+
+    The weekly review writes the measured anchor into the store, so reading it here keeps
+    the dashboard showing the same target the emails prescribe.
+    """
     try:
         prof = json.loads(PROFILE_JSON.read_text(encoding="utf-8"))
         anchor_week = prof.get("weekly_volume_anchor_week")
-        return progression.VolumePlan(
+        from_profile = progression.VolumePlan(
             anchor_km=float(prof.get("weekly_volume_anchor_km")
                             or progression.DEFAULT_VOLUME_PLAN.anchor_km),
             anchor_week=(date.fromisoformat(anchor_week) if anchor_week
@@ -737,7 +741,11 @@ def _volume_plan() -> "progression.VolumePlan":
                           or progression.DEFAULT_VOLUME_PLAN.peak_km),
         )
     except Exception:
-        return progression.DEFAULT_VOLUME_PLAN
+        from_profile = progression.DEFAULT_VOLUME_PLAN
+    try:
+        return from_profile.merged_with_store(store.get_adaptation(_profile_id()))
+    except Exception:
+        return from_profile
 
 
 def _block_note(name: str, weeks: int, long_km: float, qmin: int,

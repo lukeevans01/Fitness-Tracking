@@ -71,6 +71,31 @@ def check_local_time_window():
 # Plan helpers
 # ──────────────────────────────────────────────────────────────────────────
 
+def _recent_weekly_km(today: date, weeks: int = progression.ANCHOR_WEEKS) -> list:
+    """Actual running km for each of the last `weeks` complete weeks, oldest first.
+
+    Weeks with no running contribute 0.0 rather than being skipped, so a lay-off shows up
+    in the anchor instead of being averaged away.
+    """
+    try:
+        from ingest import get_reader
+        activities = get_reader("activities")(ts.STRAVA_CSV)
+    except Exception as exc:
+        print(f"[warn] could not read activities to recalibrate the anchor: {exc}")
+        return []
+
+    this_monday = today - timedelta(days=today.weekday())
+    totals = []
+    for index in range(weeks, 0, -1):
+        start = this_monday - timedelta(days=7 * index)
+        end = start + timedelta(days=7)
+        totals.append(round(sum(
+            a.distance_km for a in activities
+            if a.kind == "run" and start <= a.date < end
+        ), 1))
+    return totals
+
+
 def _compute_standard_week(today: date, plan: dict, race_date: date | None = None,
                           volume_plan=None) -> str:
     """Return a compact day-by-day summary of the coming week (Mon–Sun after today).
@@ -589,11 +614,21 @@ def main():
     load = weekly_load.build_weekly_load(days=7, today=today, profile_id=profile.id)
     _update_weekly_counters(stats, week_start, profile.id, load.squash_sessions)
 
-    standard_week = _compute_standard_week(
-        today, plan, profile.race_date, progression.VolumePlan.from_profile(profile))
+    # Recalibrate the volume anchor against what was actually run, then persist it. This is
+    # what stops the anchor being a constant someone has to remember to edit: every reader
+    # picks the new value up from the store.
+    volume_plan, anchor_note = progression.recalibrate_anchor(
+        progression.VolumePlan.from_store(profile, store.get_adaptation(profile.id)),
+        _recent_weekly_km(today),
+        week_start - timedelta(days=week_start.weekday()),
+    )
+    store.set_adaptation(profile.id, volume_plan.as_store_fields())
+    print(f"[anchor] {anchor_note}")
+
+    standard_week = _compute_standard_week(today, plan, profile.race_date, volume_plan)
     training_text = ts.build_summary(days=14, today=today)
-    progression_note = progression.block_label(
-        week_start, profile.race_date, progression.VolumePlan.from_profile(profile))
+    progression_note = progression.block_label(week_start, profile.race_date, volume_plan)
+    progression_note += f"\nVolume anchor: {anchor_note}"
 
     week_dates = [today - timedelta(days=i) for i in range(6, -1, -1)]
     breakdown = ts.build_daily_breakdown(days=7, today=today)
