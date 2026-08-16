@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-13",
+  "generated_at": "2026-08-16",
   "empty": false,
   "profile_id": "luke",
-  "today": "2026-08-13",
+  "today": "2026-08-16",
   "window": {
     "start": "2026-07-13",
-    "end": "2026-10-08"
+    "end": "2026-10-11"
   },
   "days": [
     {
@@ -1076,7 +1076,7 @@
       "extras": "",
       "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
       "source": "template",
-      "status": "today",
+      "status": "completed",
       "completed": {
         "run": false,
         "lift": true
@@ -1122,7 +1122,7 @@
       "extras": "",
       "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -1142,7 +1142,7 @@
       "extras": "",
       "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
       "source": "template",
-      "status": "upcoming",
+      "status": "past",
       "completed": {
         "run": false,
         "lift": false
@@ -1167,7 +1167,7 @@
       "extras": "",
       "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
       "source": "template",
-      "status": "upcoming",
+      "status": "today",
       "completed": {
         "run": false,
         "lift": false
@@ -2939,6 +2939,97 @@
       "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
       "extras": "",
       "short_version": "Drop to 45 min Easy run (5:35-6:00/km, HR <150). Skip MP segments.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-10-09",
+      "day_label": "Friday",
+      "session_type": "Full Body Strength - Hinge Focus",
+      "session_kind": "strength",
+      "duration_min": 60,
+      "run": null,
+      "exercises": [
+        {
+          "name": "Romanian Deadlift",
+          "sets_reps": "3x6-8",
+          "weight": "81kg"
+        },
+        {
+          "name": "Front Squat",
+          "sets_reps": "3x8-10",
+          "weight": "70kg"
+        },
+        {
+          "name": "Dumbbell Bench Press",
+          "sets_reps": "3x8-10",
+          "weight": "25kg/hand"
+        },
+        {
+          "name": "Seated Cable Row",
+          "sets_reps": "3x8-10",
+          "weight": "60kg"
+        },
+        {
+          "name": "Woodchoppers (cable)",
+          "sets_reps": "3x10/side",
+          "weight": "moderate resistance"
+        }
+      ],
+      "details": "",
+      "purpose": "Develop posterior chain strength and core stability, crucial for running power and injury prevention.",
+      "warm_up": "5 min dynamic: hip hinges, glute bridges, band pull-aparts, bird-dog.",
+      "extras": "",
+      "short_version": "RDL 1x6-8, Front Squat 1x8-10, DB Bench Press 1x8-10, Seated Cable Row 1x8-10. Skip Woodchoppers.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-10-10",
+      "day_label": "Saturday",
+      "session_type": "Rest Day & Active Recovery",
+      "session_kind": "rest",
+      "duration_min": 40,
+      "run": null,
+      "exercises": [],
+      "details": "Full 40 min mobility session: deep squat hold 2 min, pigeon pose 90s/side, thread-the-needle 10/side, side lunge stretch 60s/side, ankle dorsiflexion mobilisation 2 min, supine hip flexor stretch 90s/side. Optional: 10 min foam roll (quads, IT band, upper back).",
+      "purpose": "Promote recovery, improve flexibility, and address specific mobility restrictions to prevent injury.",
+      "warm_up": "",
+      "extras": "",
+      "short_version": "20 min mobility (standard post-run template). Focus on hip flexors, calves, hamstrings.",
+      "source": "template",
+      "status": "upcoming",
+      "completed": {
+        "run": false,
+        "lift": false
+      }
+    },
+    {
+      "date": "2026-10-11",
+      "day_label": "Sunday",
+      "session_type": "Long Run - Aerobic Base",
+      "session_kind": "run",
+      "duration_min": 90,
+      "run": {
+        "pace": "5:25-5:45/km",
+        "hr_target": "150-160",
+        "distance": "~15-16 km",
+        "effort": "General aerobic, conversational but sustained. Focus on consistent HR."
+      },
+      "exercises": [],
+      "details": "",
+      "purpose": "Build aerobic endurance and time on feet, crucial for marathon performance.",
+      "warm_up": "10 min dynamic: leg swings (front/back + lateral) x10 each, hip circles x10, walking knee hugs x10m, walking lunges x10m, calf raises x15.",
+      "extras": "",
+      "short_version": "Drop to 60 min General Aerobic run (5:25-5:45/km, HR 150-160).",
       "source": "template",
       "status": "upcoming",
       "completed": {

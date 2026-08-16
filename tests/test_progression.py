@@ -11,7 +11,7 @@ Run from the fitness-emails dir:  python3 -m unittest tests.test_progression
 import re
 import sys
 import unittest
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 FITNESS_DIR = Path(__file__).parent.parent
@@ -62,27 +62,139 @@ class BlockForTests(unittest.TestCase):
         self.assertEqual(progression.block_for(date(2026, 10, 24), RACE), "build")
 
 
-class LongRunTests(unittest.TestCase):
-    def test_increases_from_base_through_build(self):
-        base = progression.long_run_km(BASE_DATE, RACE)
-        build = progression.long_run_km(BUILD_DATE, RACE)
-        self.assertGreater(build, base)
+# A volume plan matching Luke's Aug 2026 restart, used by the volume tests.
+PLAN = progression.VolumePlan(anchor_km=36.0, anchor_week=date(2026, 8, 17), peak_km=55.0)
+# Loading weeks relative to that anchor (elapsed 0, 1, 2), then the first down week.
+LOAD_W0 = date(2026, 8, 17)
+LOAD_W1 = date(2026, 8, 24)
+LOAD_W2 = date(2026, 8, 31)
+DOWN_W3 = date(2026, 9, 7)   # elapsed 3 -> three up, one down
+LOAD_W4 = date(2026, 9, 14)
 
-    def test_capped_at_peak(self):
-        self.assertEqual(progression.long_run_km(PEAK_DATE, RACE, peak_km=32.0), 32.0)
-        # Never exceeds the peak anywhere in the build.
-        for d in (BUILD_DATE, DELOAD_W8, NORMAL_W9, PEAK_DATE):
-            self.assertLessEqual(progression.long_run_km(d, RACE, peak_km=32.0), 32.0)
 
-    def test_deload_week_steps_down(self):
-        # The 8-weeks-out deload week is shorter than the older 9-weeks-out week.
+class WeeklyVolumeTests(unittest.TestCase):
+    def test_starts_at_the_anchor(self):
+        self.assertEqual(progression.weekly_volume_km(LOAD_W0, RACE, PLAN), 36.0)
+
+    def test_before_the_anchor_holds_at_the_anchor(self):
+        """A date earlier than the anchor must not extrapolate backwards."""
+        self.assertEqual(progression.weekly_volume_km(BASE_DATE, RACE, PLAN), 36.0)
+
+    def test_rises_across_loading_weeks(self):
+        vols = [progression.weekly_volume_km(d, RACE, PLAN) for d in (LOAD_W0, LOAD_W1, LOAD_W2)]
+        self.assertEqual(vols, sorted(vols))
+        self.assertGreater(vols[-1], vols[0])
+
+    def test_down_week_steps_back(self):
         self.assertLess(
-            progression.long_run_km(DELOAD_W8, RACE),
-            progression.long_run_km(NORMAL_W9, RACE),
+            progression.weekly_volume_km(DOWN_W3, RACE, PLAN),
+            progression.weekly_volume_km(LOAD_W2, RACE, PLAN),
         )
 
-    def test_base_holds_at_floor(self):
-        self.assertEqual(progression.long_run_km(BASE_DATE, RACE, base_km=12.0), 12.0)
+    def test_three_up_one_down_cadence(self):
+        flags = [progression.is_deload_week(d, PLAN)
+                 for d in (LOAD_W0, LOAD_W1, LOAD_W2, DOWN_W3, LOAD_W4)]
+        self.assertEqual(flags, [False, False, False, True, False])
+
+    def test_never_exceeds_the_peak(self):
+        d = PLAN.anchor_week
+        while d < RACE:
+            self.assertLessEqual(progression.weekly_volume_km(d, RACE, PLAN), PLAN.peak_km)
+            d += timedelta(days=7)
+
+    def test_loading_week_rise_stays_inside_the_ten_percent_guardrail(self):
+        """Compared against the previous *loading* week, not a recovery week."""
+        loads = []
+        d = PLAN.anchor_week
+        while progression.weeks_to_race(d, RACE) > progression._TAPER_WEEKS:
+            if not progression.is_deload_week(d, PLAN):
+                loads.append(progression.weekly_volume_km(d, RACE, PLAN))
+            d += timedelta(days=7)
+        for previous, nxt in zip(loads, loads[1:]):
+            self.assertLessEqual((nxt - previous) / previous, 0.10)
+
+
+class LongRunTests(unittest.TestCase):
+    def test_derived_from_weekly_volume(self):
+        volume = progression.weekly_volume_km(LOAD_W0, RACE, PLAN)
+        self.assertAlmostEqual(
+            progression.long_run_km(LOAD_W0, RACE, PLAN),
+            round(volume * progression._LONG_RUN_SHARE, 1),
+            places=1,
+        )
+
+    def test_never_exceeds_the_share_of_the_week(self):
+        d = PLAN.anchor_week
+        while progression.weeks_to_race(d, RACE) > progression._TAPER_WEEKS:
+            volume = progression.weekly_volume_km(d, RACE, PLAN)
+            self.assertLessEqual(
+                progression.long_run_km(d, RACE, PLAN),
+                volume * progression._LONG_RUN_SHARE + 0.1,
+            )
+            d += timedelta(days=7)
+
+    def test_capped_at_three_hours_on_feet(self):
+        big = progression.VolumePlan(anchor_km=90.0, anchor_week=LOAD_W0, peak_km=120.0)
+        d = LOAD_W0
+        while d < RACE:
+            self.assertLessEqual(
+                progression.long_run_km(d, RACE, big), progression._MAX_LONG_RUN_KM
+            )
+            d += timedelta(days=7)
+
+    def test_respects_the_floor(self):
+        tiny = progression.VolumePlan(anchor_km=8.0, anchor_week=LOAD_W0, peak_km=10.0)
+        self.assertGreaterEqual(
+            progression.long_run_km(LOAD_W0, RACE, tiny), progression._MIN_LONG_RUN_KM
+        )
+
+    def test_down_week_shortens_the_long_run(self):
+        self.assertLess(
+            progression.long_run_km(DOWN_W3, RACE, PLAN),
+            progression.long_run_km(LOAD_W2, RACE, PLAN),
+        )
+
+
+class SupportRunScaleTests(unittest.TestCase):
+    """The prescribed sessions must actually add up to the weekly target."""
+
+    def _cycle(self):
+        return [
+            {"day_num": 2, "session_kind": "run", "session_type": "Easy Recovery Run",
+             "run_details": {"distance": "~7.5-8 km"}},
+            {"day_num": 4, "session_kind": "run", "session_type": "Quality Run - Tempo",
+             "run_details": {"distance": "~10-11 km"}},
+            {"day_num": 7, "session_kind": "run", "session_type": "Long Run - Aerobic Base",
+             "run_details": {"distance": "~15-16 km"}},
+            {"day_num": 1, "session_kind": "strength", "session_type": "Full Body"},
+        ]
+
+    def test_week_sums_to_the_volume_target(self):
+        cycle = self._cycle()
+        for monday in (LOAD_W0, LOAD_W1, LOAD_W2, DOWN_W3, LOAD_W4):
+            scale = progression.support_run_scale(cycle, monday, RACE, PLAN)
+            support = sum(
+                progression._parse_km(d["run_details"]["distance"]) * scale
+                for d in cycle
+                if d["session_kind"] == "run" and not progression.is_long_run_session(d)
+            )
+            total = support + progression.long_run_km(monday, RACE, PLAN)
+            target = progression.weekly_volume_km(monday, RACE, PLAN)
+            self.assertAlmostEqual(total, target, delta=0.5, msg=f"week of {monday}")
+
+    def test_no_scaling_without_a_cycle(self):
+        self.assertEqual(progression.support_run_scale([], LOAD_W0, RACE, PLAN), 1.0)
+
+    def test_scale_is_bounded(self):
+        cycle = self._cycle()
+        absurd = progression.VolumePlan(anchor_km=400.0, anchor_week=LOAD_W0, peak_km=500.0)
+        self.assertLessEqual(progression.support_run_scale(cycle, LOAD_W0, RACE, absurd), 2.0)
+
+    def test_parse_km_handles_ranges_and_singles(self):
+        self.assertEqual(progression._parse_km("~7.5-8 km"), 7.75)
+        self.assertEqual(progression._parse_km("~16 km"), 16.0)
+        self.assertEqual(progression._parse_km(None), 0.0)
+        self.assertEqual(progression._parse_km("rest"), 0.0)
 
 
 class QualityMinutesTests(unittest.TestCase):
